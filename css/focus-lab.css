@@ -87,3 +87,47 @@ body { padding-bottom: 150px; }
 @media (prefers-reduced-motion: reduce) {
   .fl-raf, .fl-ballon, .fl-wacht { animation: none !important; }
 }
+
+/* ---------- Zoals artifact A ---------- */
+header.top, .wrap > .bar, #nav { display: none !important; }
+
+.fl-top { display: flex; align-items: center; gap: 16px; margin: 4px 0 18px; }
+.fl-top .fl-voortgang { flex: 1 1 auto; }
+.fl-lab { font-family: "Nunito", system-ui, sans-serif; font-weight: 800; font-size: 15px; color: #6b5a45; white-space: nowrap; }
+.fl-gp {
+  display: flex; align-items: baseline; gap: 4px; flex: 0 0 auto;
+  background: #fff; border: 2px solid #f0d9b5; border-radius: 999px; padding: 6px 14px;
+  font-family: "Nunito", system-ui, sans-serif; font-weight: 800; color: #a94a17;
+}
+.fl-gp b { font-size: 18px; }
+.fl-gp span { font-size: 13px; }
+
+/* Oefening zonder kader of gekleurde lijn */
+.ex, .ex.solved, .ex.t-ij, .ex.t-code, .ex.t-line {
+  background: transparent; border: 0 !important; padding: 0; gap: 16px; border-radius: 0;
+}
+.ex .head h3 { font-family: "Nunito", system-ui, sans-serif; font-size: 32px; font-weight: 800; line-height: 1.15; }
+.ex > div > p { font-size: 19px; font-weight: 600; color: #4a4034; }
+.ex .fl-proxy { display: none !important; }
+
+.opts { gap: 10px; }
+.opt {
+  align-items: center; gap: 14px; padding: 14px 16px;
+  background: #fff; border: 2px solid #e7e2d8; border-radius: 16px; box-shadow: 0 3px 0 #e7e2d8;
+  font-size: 18px; font-weight: 700;
+}
+.opt .k {
+  width: 32px; height: 32px; border-radius: 10px; background: #f3ece0; color: #8a4a0c;
+  display: flex; align-items: center; justify-content: center; font-family: "Nunito", system-ui, sans-serif; font-weight: 800;
+}
+.opt:not(:disabled):hover { border-color: #e8b893; }
+.opt[aria-pressed="true"] { border-color: #d9663a; background: #fbe3d6; box-shadow: 0 3px 0 #d9663a; }
+.opt.good { border-color: #1f7a3a; background: #d9f0df; box-shadow: 0 3px 0 #1f7a3a; color: #14532d; }
+
+.fl-knop:disabled { background: #e7e2d8; color: #9a8c78; box-shadow: none; cursor: not-allowed; }
+.fl-knop:disabled:active { transform: none; }
+
+@media (max-width: 720px) {
+  .ex .head h3 { font-size: 24px; }
+  .fl-top { gap: 10px; }
+}

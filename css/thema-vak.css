@@ -1,0 +1,37 @@
+/* Studyraf-thema over de vakpagina's (cursus, Oefenlab).
+   :root:root wint van de eigen :root-variabelen, ook van hun donkere modus. */
+:root:root {
+  color-scheme: light;
+
+  --f-display: "Nunito", ui-sans-serif, system-ui, sans-serif;
+  --f-body: "Nunito", ui-sans-serif, system-ui, sans-serif;
+
+  --bg: #f6f4ef;
+  --ink: #1b1f2b;
+  --muted: #6b5a45;
+  --line: #e7e2d8;
+
+  /* Hoofdaccent = terracotta van de Studyraf-banner */
+  --accent: #b8521f;
+  --accent-soft: #fbe3d6;
+  --leaf: #b8521f;
+  --leaf-soft: #fbe3d6;
+  --on-accent: #ffffff;
+
+  --java: #a94a17;
+  --java-soft: #fbe9dd;
+  --sun: #8a5a0c;
+  --sun-soft: #fff0d6;
+
+  /* Juist/fout blijven groen/rood: dat is betekenis, geen thema */
+  --ok: #1f7a3a;
+  --ok-soft: #d9f0df;
+  --bad: #b32b2b;
+  --bad-soft: #f9e1e1;
+
+  --code-bg: #2b1d14;
+  --code-ink: #f3e7dc;
+  --code-dim: #b39b86;
+}
+
+body { background: var(--bg); color: var(--ink); }

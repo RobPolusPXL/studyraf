@@ -139,3 +139,12 @@ h1, h2, h3, p { margin: 0; }
 .banner__gp { font-weight: 700; font-size: 16px; color: #ffe9d6; }
 .banner__gp strong { color: #fff; font-size: 20px; }
 .knop--wit { align-self: flex-start; background: #fff; color: #a94a17; box-shadow: 0 4px 0 #b8521f; }
+
+.vak__delen a { color: inherit; text-decoration: none; }
+.vak__delen a:hover, .vak__delen a:focus-visible { text-decoration: underline; }
+.vak__start {
+  margin-left: 10px; font-size: 14px; font-weight: 800;
+  color: var(--kleur); background: #fff;
+  padding: 8px 16px; border-radius: 999px; text-decoration: none;
+}
+.vak__start:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }

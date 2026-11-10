@@ -75,15 +75,31 @@ function renderVakken() {
     delen.className = "vak__delen";
     for (const deel of vak.delen) {
       const li = document.createElement("li");
-      li.textContent = deel;
+      const pad = vak.beschikbaar && vak.links?.[deel];
+      if (pad) {
+        const a = document.createElement("a");
+        a.href = `vakken/${vak.id}/${pad}`;
+        a.textContent = deel;
+        li.append(a);
+      } else {
+        li.textContent = deel;
+      }
       delen.append(li);
     }
 
     const voet = document.createElement("div");
     voet.className = "vak__voet";
     for (let i = 0; i < 6; i++) voet.append(document.createElement("span"));
-    const status = document.createElement("strong");
-    status.textContent = vak.beschikbaar ? "Start" : "Binnenkort";
+    let status;
+    if (vak.beschikbaar && vak.links?.[vak.start]) {
+      status = document.createElement("a");
+      status.className = "vak__start";
+      status.href = `vakken/${vak.id}/${vak.links[vak.start]}`;
+      status.textContent = "Start";
+    } else {
+      status = document.createElement("strong");
+      status.textContent = "Binnenkort";
+    }
     voet.append(status);
 
     kaart.append(titel, sub, delen, voet);

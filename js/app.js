@@ -1,6 +1,41 @@
 import { auth, provider } from "./firebase.js";
 import { onAuthStateChanged, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import { VAKKEN } from "./vakken.js";
+import { PUNTEN_NAAM, laadGP, geefGP } from "./gp.js";
+
+let huidigeGebruiker = null;
+
+function toonGP(stand, animeer = false) {
+  $("gp-totaal").textContent = stand.totaal.toLocaleString("nl-BE");
+  $("gp-vandaag").textContent = stand.vandaag.toLocaleString("nl-BE");
+  if (animeer) {
+    const teller = document.querySelector(".gp");
+    teller.classList.remove("gp--pop");
+    void teller.offsetWidth;
+    teller.classList.add("gp--pop");
+  }
+}
+
+for (const el of [document.getElementById("gp-naam"), ...document.querySelectorAll(".js-gp-naam")]) {
+  el.textContent = PUNTEN_NAAM;
+}
+
+const testKnop = document.getElementById("gp-test");
+if (new URLSearchParams(location.search).has("test")) {
+  testKnop.hidden = false;
+  testKnop.textContent = `Test: +10 ${PUNTEN_NAAM}`;
+  testKnop.addEventListener("click", async () => {
+    if (!huidigeGebruiker) return;
+    testKnop.disabled = true;
+    try {
+      toonGP(await geefGP(huidigeGebruiker.uid, 10), true);
+    } catch (err) {
+      console.error("GP toekennen mislukt", err);
+    } finally {
+      testKnop.disabled = false;
+    }
+  });
+}
 
 const $ = (id) => document.getElementById(id);
 const loginView = $("login");
@@ -71,7 +106,9 @@ $("login-btn").addEventListener("click", async () => {
 $("logout-btn").addEventListener("click", () => signOut(auth));
 
 onAuthStateChanged(auth, (user) => {
+  huidigeGebruiker = user;
   if (user) {
+    laadGP(user.uid).then((stand) => toonGP(stand)).catch((err) => console.error("GP laden mislukt", err));
     $("welkom").textContent = `Hoi ${voornaam(user)}.`;
     $("avatar").textContent = (voornaam(user)[0] || "?").toUpperCase();
     renderVakken();

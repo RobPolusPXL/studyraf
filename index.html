@@ -25,6 +25,10 @@
         <span>Studyraf</span>
       </div>
       <div class="hub__gebruiker">
+        <div class="gp" title="Je GP-totaal">
+          <span id="gp-totaal">0</span>
+          <span class="gp__naam" id="gp-naam">GP</span>
+        </div>
         <div id="avatar" class="avatar" aria-hidden="true"></div>
         <button id="logout-btn" class="knop knop--stil" type="button">Uitloggen</button>
       </div>
@@ -35,6 +39,8 @@
         <p class="banner__label">Vandaag</p>
         <h2 id="welkom"></h2>
         <p class="banner__sub">Eén les per dag is genoeg. Kies een vak om te beginnen.</p>
+        <p class="banner__gp">Vandaag: <strong id="gp-vandaag">0</strong> <span class="js-gp-naam">GP</span></p>
+        <button id="gp-test" class="knop knop--wit" type="button" hidden>Test: +10 GP</button>
       </div>
       <p class="banner__ballon">Ik hou je bij de les.</p>
       <img class="banner__raf" src="assets/raf/raf-neutral.png" alt="Raf, de giraf van Studyraf">

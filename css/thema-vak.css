@@ -7,6 +7,7 @@
   --f-body: "Nunito", ui-sans-serif, system-ui, sans-serif;
 
   --bg: #f6f4ef;
+  --surface: #ffffff;
   --ink: #1b1f2b;
   --muted: #6b5a45;
   --line: #e7e2d8;
@@ -20,6 +21,10 @@
 
   --java: #a94a17;
   --java-soft: #fbe9dd;
+  --sky: #1d5f8a;
+  --sky-soft: #e3eff6;
+  --plum: #7a3d9c;
+  --plum-soft: #f1e6f7;
   --sun: #8a5a0c;
   --sun-soft: #fff0d6;
 

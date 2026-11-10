@@ -1121,40 +1121,10 @@ window.addEventListener('hashchange',()=>{const k=LABS.findIndex(l=>l.id===locat
 .studyraf-balk a{color:#fff;text-decoration:none;padding:6px 4px}
 .studyraf-balk a:hover,.studyraf-balk a:focus-visible{text-decoration:underline}
 .studyraf-balk img{height:28px;width:auto;vertical-align:middle;margin-right:6px}
-.raf-fb{float:left;height:72px;width:auto;margin:-6px 12px 0 -4px}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../css/thema-vak.css">
-<script type="module">
-import { auth } from "../../js/firebase.js";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-import { geefGP } from "../../js/gp.js";
-
-let gebruiker = null;
-onAuthStateChanged(auth, (u) => { gebruiker = u; });
-
-function puntenVoor(id) {
-  const knip = id.lastIndexOf("-");
-  const lab = LABS.find((l) => l.id === id.slice(0, knip));
-  const oef = lab && lab.ex[Number(id.slice(knip + 1))];
-  return oef ? (XPT[oef.type] || 0) : 0;
-}
-
-// Elke nieuw opgeloste oefening levert GP op in Studyraf.
-const origSolve = window.solve;
-window.solve = function (id) {
-  const nieuw = !S.solved[id];
-  origSolve(id);
-  const punten = puntenVoor(id);
-  if (nieuw && gebruiker && punten > 0) geefGP(gebruiker.uid, punten).catch((e) => console.error("GP mislukt", e));
-};
-
-// Raf geeft de feedback.
-const origFb = window.fb;
-window.fb = function (box, ok, html) {
-  const pose = ok ? "celebrating" : "unimpressed";
-  origFb(box, ok, `<img class="raf-fb" src="../../assets/raf/raf-${pose}.png" alt="">` + html);
-};
-</script>
+<link rel="stylesheet" href="../../css/focus-lab.css">
+<script type="module" src="../../js/focus-lab.js"></script>
 </body></html>

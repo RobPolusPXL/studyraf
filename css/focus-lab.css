@@ -1,0 +1,89 @@
+/* Focusmodus Oefenlab */
+body { padding-bottom: 150px; }
+
+.ex .fb { display: none !important; }        /* feedback staat in de balk onderaan */
+.fl-stap[hidden] { display: none !important; }
+
+.fl-voortgang { display: flex; gap: 6px; }
+.fl-voortgang span { flex: 1 1 0; height: 12px; border-radius: 6px; background: #e7e2d8; }
+.fl-voortgang span.klaar { background: #1f7a3a; }
+.fl-voortgang span.nu { background: #d9663a; }
+.fl-voortgang span.klaar.nu { background: #1f7a3a; box-shadow: 0 0 0 3px #d9663a; }
+
+/* Balk onderaan */
+.fl-balk {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
+  display: flex; align-items: center; justify-content: space-between; gap: 20px;
+  padding: 18px max(24px, calc((100vw - 900px) / 2));
+  background: #f6f4ef; border-top: 2px solid #e7e2d8;
+  font-family: "Nunito", system-ui, sans-serif;
+  transition: background .2s;
+}
+.fl-balk[data-staat="juist"] { background: #d9f0df; border-top-color: #b7e0c3; }
+.fl-balk[data-staat="fout"] { background: #f9e1e1; border-top-color: #efc2c2; }
+.fl-tekst { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.fl-titel { font-weight: 800; font-size: 20px; color: #1b1f2b; }
+.fl-uitleg { font-weight: 600; font-size: 15px; color: #4a4034; }
+.fl-uitleg:empty { display: none; }
+.fl-balk[data-staat="juist"] .fl-titel { color: #1f6b36; }
+.fl-balk[data-staat="juist"] .fl-uitleg { color: #24553a; }
+.fl-balk[data-staat="fout"] .fl-titel { color: #9a2424; }
+.fl-balk[data-staat="fout"] .fl-uitleg { color: #6e2020; }
+.fl-uitleg code { font-family: var(--f-mono, monospace); font-size: .9em; }
+
+.fl-knoppen { display: flex; gap: 10px; flex: 0 0 auto; }
+.fl-knop {
+  font: inherit; font-weight: 800; font-size: 16px;
+  padding: 13px 26px; border: 0; border-radius: 14px; cursor: pointer;
+  background: #d9663a; color: #fff; box-shadow: 0 4px 0 #a94a17;
+}
+.fl-knop:active { transform: translateY(2px); box-shadow: 0 2px 0 #a94a17; }
+.fl-knop:focus-visible { outline: 3px solid #2b1707; outline-offset: 2px; }
+.fl-vorige { background: transparent; color: #6b5a45; box-shadow: none; padding: 13px 14px; }
+.fl-vorige:active { transform: none; box-shadow: none; }
+.fl-balk[data-staat="juist"] .fl-hoofd { background: #1f7a3a; box-shadow: 0 4px 0 #15532a; }
+.fl-balk[data-staat="fout"] .fl-hoofd { background: #b32b2b; box-shadow: 0 4px 0 #7e1e1e; }
+.fl-balk:not([data-staat="neutraal"]) .fl-vorige { display: none; }
+
+/* Raf bij feedback */
+.fl-raf, .fl-ballon { display: none; }
+.fl-balk[data-staat="juist"] .fl-raf, .fl-balk[data-staat="fout"] .fl-raf { display: block; }
+.fl-balk[data-staat="juist"] .fl-ballon, .fl-balk[data-staat="fout"] .fl-ballon { display: block; }
+.fl-raf {
+  position: absolute; left: 24px; bottom: calc(100% - 40px);
+  height: 250px; width: auto; transform-origin: 50% 100%; pointer-events: none;
+}
+.fl-ballon {
+  position: absolute; left: 24px; bottom: calc(100% + 222px); margin: 0; max-width: 200px;
+  background: #fff; color: #1b1f2b; font-weight: 800; font-size: 17px;
+  padding: 10px 16px; border-radius: 16px 16px 16px 4px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, .1); pointer-events: none;
+}
+
+@keyframes flOp { 0% { transform: translateY(120%) rotate(-6deg); } 60% { transform: translateY(-6%) rotate(3deg); } 80% { transform: translateY(2%) rotate(-1deg); } 100% { transform: none; } }
+@keyframes flWiebel { 0%, 100% { transform: rotate(0); } 20% { transform: rotate(-6deg); } 40% { transform: rotate(5deg); } 60% { transform: rotate(-3deg); } 80% { transform: rotate(2deg); } }
+@keyframes flNee { 0%, 100% { transform: translateX(0); } 15% { transform: translateX(-14px); } 30% { transform: translateX(12px); } 45% { transform: translateX(-9px); } 60% { transform: translateX(6px); } 75% { transform: translateX(-3px); } }
+@keyframes flBallon { 0% { opacity: 0; transform: scale(.6) translateY(10px); } 100% { opacity: 1; transform: none; } }
+.fl-raf.fl-anim-juist { animation: flOp .55s cubic-bezier(.2, .9, .3, 1.2) both, flWiebel .7s .55s ease-in-out; }
+.fl-raf.fl-anim-fout { animation: flOp .45s ease-out both, flNee .6s .45s ease-in-out; }
+.fl-ballon.fl-anim-juist, .fl-ballon.fl-anim-fout { animation: flBallon .3s .35s ease-out both; transform-origin: 20% 100%; }
+
+/* Raf die meedenkt */
+@keyframes flAdem { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+.fl-wacht {
+  position: fixed; right: max(16px, calc((100vw - 900px) / 2 - 220px)); bottom: 96px; z-index: 40;
+  height: 220px; width: auto; pointer-events: none; animation: flAdem 2.6s ease-in-out infinite;
+}
+.fl-wacht[hidden] { display: none; }
+
+@media (max-width: 1280px) { .fl-wacht { display: none; } }
+@media (max-width: 720px) {
+  body { padding-bottom: 190px; }
+  .fl-balk { flex-direction: column; align-items: stretch; gap: 12px; padding: 14px 16px; }
+  .fl-knoppen { justify-content: flex-end; }
+  .fl-raf { left: auto; right: 12px; height: 120px; bottom: calc(100% - 16px); }
+  .fl-balk[data-staat] .fl-ballon { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fl-raf, .fl-ballon, .fl-wacht { animation: none !important; }
+}

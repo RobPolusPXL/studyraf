@@ -69,7 +69,7 @@ h1, h2, h3, p { margin: 0; }
 .banner {
   position: relative;
   overflow: hidden;
-  background: var(--oranje);
+  background: #bfe0f2;
   border-radius: 28px;
   min-height: 280px;
   display: flex;
@@ -77,9 +77,9 @@ h1, h2, h3, p { margin: 0; }
   padding: 36px 48px;
 }
 .banner__tekst { position: relative; z-index: 1; max-width: 520px; display: flex; flex-direction: column; gap: 14px; }
-.banner__label { font-weight: 800; font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase; color: #5b3011; }
-.banner h2 { font-weight: 800; font-size: 44px; line-height: 1.1; color: var(--bruin); }
-.banner__sub { font-weight: 700; font-size: 18px; color: #4a2a0c; }
+.banner__label { font-weight: 800; font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase; color: #1e4f73; }
+.banner h2 { font-weight: 800; font-size: 44px; line-height: 1.1; color: #12324a; }
+.banner__sub { font-weight: 700; font-size: 18px; color: #24506f; }
 .banner__raf { position: absolute; right: 72px; bottom: -8px; height: 340px; width: auto; }
 .banner__ballon {
   position: absolute; right: 270px; top: 28px; max-width: 190px;

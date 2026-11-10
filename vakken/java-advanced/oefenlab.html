@@ -1,0 +1,1165 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Spring Boot Oefenlab · Studyraf</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600;700&display=swap">
+<style>
+/* Layout: één leeskolom per lab. Bovenaan uitleg met links naar de cursus, daaronder oefeningen. IntelliJ-opdrachten tonen één stap tegelijk. */
+:root{
+  --bg:#eef4ef; --surface:#ffffff; --ink:#15221a; --muted:#566659; --line:#d2ded4;
+  --accent:#2b8a3e; --accent-soft:#dff1e2; --on-accent:#ffffff;
+  --sky:#2361a6; --sky-soft:#e2ecf8;
+  --java:#c0561a; --java-soft:#fbe9dd;
+  --plum:#7a3d9c; --plum-soft:#f1e6f7;
+  --sun:#9a6b00; --sun-soft:#fbf1d4;
+  --ok:#1f7a3a; --ok-soft:#d9f0df; --bad:#b32b2b; --bad-soft:#f9e1e1;
+  --code-bg:#14201a; --code-ink:#dbe7df; --code-dim:#7b8f82;
+  --f-display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --f-body:"Source Sans 3",ui-sans-serif,system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0f1512; --surface:#16201b; --ink:#e3ece6; --muted:#9aaba0; --line:#2a3830;
+  --accent:#5cc472; --accent-soft:#173322; --on-accent:#0b1a10;
+  --sky:#7fb2ee; --sky-soft:#152840; --java:#f0925a; --java-soft:#3a2214;
+  --plum:#c597e3; --plum-soft:#2c1c38; --sun:#e8bb4a; --sun-soft:#352a10;
+  --ok:#5cc472; --ok-soft:#163020; --bad:#f07b7b; --bad-soft:#3a1818;
+  --code-bg:#0a100d; --code-ink:#dbe7df; --code-dim:#6d8174; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1512; --surface:#16201b; --ink:#e3ece6; --muted:#9aaba0; --line:#2a3830;
+  --accent:#5cc472; --accent-soft:#173322; --on-accent:#0b1a10;
+  --sky:#7fb2ee; --sky-soft:#152840; --java:#f0925a; --java-soft:#3a2214;
+  --plum:#c597e3; --plum-soft:#2c1c38; --sun:#e8bb4a; --sun-soft:#352a10;
+  --ok:#5cc472; --ok-soft:#163020; --bad:#f07b7b; --bad-soft:#3a1818;
+  --code-bg:#0a100d; --code-ink:#dbe7df; --code-dim:#6d8174; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.6}
+.wrap{max-width:900px;margin:0 auto;padding-block:20px 72px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 20px;padding-bottom:14px;border-bottom:2px solid var(--ink)}
+.brand{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.brand h1{font-family:var(--f-display);font-weight:800;font-size:1.8rem;letter-spacing:-.02em;margin:0}
+.brand h1 span{color:var(--accent)}
+.brand a{font-family:var(--f-mono);font-size:.8rem;color:var(--sky)}
+.xp{display:flex;align-items:center;gap:10px;font-family:var(--f-mono);font-size:.8rem;color:var(--muted)}
+.xp b{font-size:1.25rem;color:var(--accent);font-variant-numeric:tabular-nums}
+.bar{height:6px;background:var(--line);border-radius:3px;margin-top:12px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .4s}
+@media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+nav#nav{display:flex;gap:8px;overflow-x:auto;padding-block:14px;scrollbar-width:thin}
+nav#nav button{flex:0 0 auto;display:flex;align-items:center;gap:8px;font-family:var(--f-mono);font-size:.78rem;padding:7px 11px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+nav#nav .dot{width:10px;height:10px;border-radius:50%;border:2px solid var(--muted)}
+nav#nav button.part .dot{background:linear-gradient(90deg,var(--accent) 50%,transparent 50%);border-color:var(--accent)}
+nav#nav button.done .dot{background:var(--accent);border-color:var(--accent)}
+nav#nav button[aria-current="true"]{border-color:var(--accent);box-shadow:inset 0 -3px 0 var(--accent)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+main{display:flex;flex-direction:column;gap:18px;min-width:0}
+.eyebrow{font-family:var(--f-mono);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+h2{font-family:var(--f-display);font-weight:800;font-size:2rem;line-height:1.12;letter-spacing:-.02em;margin:4px 0 6px;text-wrap:balance}
+h3{font-family:var(--f-display);font-weight:700;font-size:1.18rem;margin:0 0 6px;text-wrap:balance}
+p{margin:0 0 10px;max-width:68ch}
+p:last-child{margin-bottom:0}
+code{font-family:var(--f-mono);font-size:.84em;background:var(--accent-soft);padding:1px 5px;border-radius:4px;overflow-wrap:anywhere}
+.lead{font-size:1.08rem;color:var(--muted)}
+.reads{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+a.rd{display:inline-flex;align-items:center;gap:6px;font-size:.88rem;font-weight:600;text-decoration:none;color:var(--sky);background:var(--sky-soft);border:1px solid color-mix(in srgb,var(--sky) 30%,transparent);padding:4px 10px;border-radius:999px}
+a.rd::before{content:"Cursus";font-family:var(--f-mono);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;opacity:.75}
+a.rd::after{content:"↗";font-size:.8em}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;min-width:0}
+.card ul,.card ol{margin:6px 0 10px;padding-left:22px;max-width:66ch}
+.card li{margin-bottom:4px}
+.tip{border-left:4px solid var(--sun);background:var(--sun-soft);padding:10px 14px;border-radius:0 8px 8px 0;margin:8px 0}
+.warn{border-left:4px solid var(--bad);background:var(--bad-soft);padding:10px 14px;border-radius:0 8px 8px 0;margin:8px 0}
+pre.code{margin:10px 0;background:var(--code-bg);color:var(--code-ink);border-radius:8px;padding:12px 14px;font-family:var(--f-mono);font-size:.8rem;line-height:1.6;overflow-x:auto;white-space:pre}
+pre.code em{font-style:normal;color:#f2a46b}
+pre.code b{color:#7fd38f;font-weight:600}
+.sect{font-family:var(--f-mono);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:12px 0 0;padding-top:14px;border-top:1px solid var(--line)}
+.ex{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:12px;min-width:0;border-left-width:5px}
+.ex.t-ij{border-left-color:var(--plum)} .ex.t-code{border-left-color:var(--java)} .ex.t-mc,.ex.t-sort,.ex.t-order,.ex.t-fill,.ex.t-line{border-left-color:var(--sky)}
+.ex.solved{border-color:var(--ok);border-left-color:var(--ok)}
+.ex .head{display:flex;justify-content:space-between;gap:12px;align-items:baseline;flex-wrap:wrap}
+.badge{font-family:var(--f-mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);display:flex;gap:8px;align-items:center}
+.badge .ty{padding:2px 7px;border-radius:5px;background:var(--sky-soft);color:var(--sky)}
+.t-ij .badge .ty{background:var(--plum-soft);color:var(--plum)}
+.t-code .badge .ty{background:var(--java-soft);color:var(--java)}
+.ex.solved .badge{color:var(--ok)}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;gap:10px;align-items:flex-start;text-align:left;font:inherit;padding:10px 12px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer;width:100%}
+.opt .k{font-family:var(--f-mono);font-weight:700;color:var(--muted);flex:0 0 auto}
+.opt[aria-pressed="true"]{border-color:var(--sky);background:var(--sky-soft)}
+.opt.good{border-color:var(--ok);background:var(--ok-soft)}
+.opt:disabled{cursor:default}
+.actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.btn{font:inherit;font-weight:700;padding:9px 16px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.btn.ij{background:var(--plum);border-color:var(--plum);color:#fff}
+.btn:disabled{opacity:.5;cursor:default}
+.fb{padding:11px 14px;border-radius:8px;font-size:.96rem}
+.fb.ok{background:var(--ok-soft);border-left:4px solid var(--ok)}
+.fb.bad{background:var(--bad-soft);border-left:4px solid var(--bad)}
+.pool,.seq{display:flex;flex-direction:column;gap:6px;min-height:44px;padding:8px;border:1px dashed var(--line);border-radius:8px}
+.chip{font:inherit;font-size:.94rem;padding:7px 11px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer;text-align:left}
+.seq .chip{border-color:var(--sky);background:var(--sky-soft)}
+.seq .chip .nr{font-family:var(--f-mono);font-weight:700;color:var(--sky);margin-right:8px}
+.lbl{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.sortrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 12px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}
+@media (max-width:620px){.sortrow{grid-template-columns:minmax(0,1fr)}}
+.sortrow:last-child{border-bottom:0}
+.sortrow.wrong .txt{color:var(--bad)}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{font:inherit;font-size:.84rem;padding:5px 10px;border-radius:999px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.seg button[aria-pressed="true"]{border-color:var(--sky);background:var(--sky-soft);font-weight:700}
+.codelines{background:var(--code-bg);border-radius:8px;padding:8px 0;overflow-x:auto}
+.cl{display:grid;grid-template-columns:34px minmax(0,1fr);width:100%;text-align:left;border:0;background:transparent;color:var(--code-ink);font-family:var(--f-mono);font-size:.8rem;line-height:1.75;padding:0 12px 0 0;cursor:pointer;white-space:pre}
+.cl .n{color:var(--code-dim);text-align:right;padding-right:10px;user-select:none}
+.cl[aria-pressed="true"]{background:#f0925a33}
+.cl.good{background:#5cc47233}
+pre.fill{white-space:pre;line-height:2}
+pre.fill input{font:inherit;font-size:.8rem;background:#ffffff14;color:#f2d57a;border:1px solid #ffffff33;border-radius:4px;padding:1px 5px;min-width:5ch}
+pre.fill input.ok{border-color:#5cc472;color:#7fd38f}
+pre.fill input.bad{border-color:#f07b7b}
+.reqs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px}
+.reqs li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:8px;font-size:.94rem}
+.reqs .st{font-family:var(--f-mono);font-weight:700;text-align:center;color:var(--muted)}
+.reqs li.ok .st{color:var(--ok)} .reqs li.bad .st{color:var(--bad)}
+.editor{background:var(--code-bg);border-radius:10px;overflow:hidden;border:1px solid var(--line)}
+.ebar{display:flex;justify-content:space-between;gap:10px;padding:7px 14px;border-bottom:1px solid #ffffff14;font-family:var(--f-mono);font-size:.74rem;color:var(--code-dim)}
+.ebar .path{color:var(--code-ink)}
+.ebody{display:grid;grid-template-columns:auto minmax(0,1fr)}
+.gutter{padding:12px 8px 12px 12px;text-align:right;color:var(--code-dim);font-family:var(--f-mono);font-size:.82rem;line-height:1.6;user-select:none;white-space:pre;font-variant-numeric:tabular-nums}
+textarea.code{width:100%;min-height:200px;resize:none;border:0;background:transparent;color:var(--code-ink);font-family:var(--f-mono);font-size:.82rem;line-height:1.6;padding:12px 14px 12px 6px;tab-size:4;white-space:pre;overflow:hidden;overflow-x:auto;caret-color:var(--accent)}
+textarea.code:focus{outline:none}
+details.sol{border:1px solid var(--line);border-radius:8px;background:var(--bg);padding:8px 12px}
+details.sol summary{cursor:pointer;font-family:var(--f-mono);font-size:.8rem;font-weight:600}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;counter-reset:st}
+.step{display:grid;grid-template-columns:34px minmax(0,1fr);gap:12px;align-items:start}
+.step .num{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-family:var(--f-mono);font-weight:700;font-size:.85rem;border:2px solid var(--plum);color:var(--plum)}
+.step.done .num{background:var(--plum);color:#fff}
+.step.done .body{color:var(--muted)}
+.step.done .body .stepact{display:none}
+.step .body{min-width:0}
+.step .body p{margin-bottom:6px}
+.kbd{font-family:var(--f-mono);font-size:.8em;border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:0 5px;background:var(--bg)}
+.ui{font-weight:700;color:var(--plum)}
+.see{border:1px dashed var(--plum);border-radius:8px;padding:8px 12px;font-size:.93rem;margin:6px 0}
+.see b{font-family:var(--f-mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--plum);display:block}
+details.help{font-size:.93rem;margin:4px 0 8px}
+details.help summary{cursor:pointer;color:var(--sun);font-weight:600}
+.stepact{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+input.ans{font:inherit;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);width:min(100%,320px)}
+.navbtm{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:8px}
+.score{text-align:center;padding:26px 18px}
+.score b{display:block;font-family:var(--f-display);font-weight:800;font-size:3.2rem;line-height:1.1;color:var(--accent);font-variant-numeric:tabular-nums}
+.muted{color:var(--muted);font-size:.9rem}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><h1>Spring Boot <span>Oefenlab</span></h1><a href="./cursus.html">Open de cursus ↗</a></div>
+    <div class="xp"><span>GP</span><b id="xp">0</b><span id="rank"></span></div>
+  </header>
+  <div class="bar" aria-hidden="true"><i id="bar"></i></div>
+  <nav id="nav" aria-label="Labs"></nav>
+  <main id="main"></main>
+</div>
+
+<script>
+const COURSE='./cursus.html';
+const R=(id,label)=>`<a class="rd" href="${COURSE}#${id}" target="_blank" rel="noopener">${label}</a>`;
+const K=k=>`<span class="kbd">${k}</span>`;
+const U=t=>`<span class="ui">${t}</span>`;
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const SEE=(t)=>`<div class="see"><b>Dit zou je moeten zien</b>${t}</div>`;
+const HELP=(t)=>`<details class="help"><summary>Lukt het niet?</summary>${t}</details>`;
+const PRE=(t)=>`<pre class="code">${esc(t)}</pre>`;
+
+/* ================= LABS ================= */
+const LABS=[
+
+/* ---------- LAB 1 ---------- */
+{id:'lab1',tag:'H1 · De start',title:'Je eerste Spring Boot-project',
+lead:'Vandaag schrijf je nog geen code. Je maakt een leeg project, je start het en je leert waar alles staat. Alles wat volgt bouwt hierop, dus neem je tijd.',
+read:[['h1-1','1.1 Enterprise toepassingen'],['h1-2','1.2 Spring Initializr'],['h1-3','1.3 Project uitvoeren']],
+blocks:[
+{h:'Wat is Spring Boot?',html:`<p>Java is een taal. Wil je er een webshop of een API mee bouwen, dan heb je veel extra's nodig: een webserver, iets dat JSON maakt, een koppeling met een databank. <strong>Spring</strong> is een framework dat die stukken levert.</p><p><strong>Spring Boot</strong> is Spring met slimme standaardinstellingen. Je zegt welke stukken je wilt, en het werkt meteen, zonder lange configuratie.</p>`},
+{h:'Waarvoor gebruiken bedrijven het?',html:`<p>Voor <em>enterprise toepassingen</em>: software die jaren meegaat, veel gebruikers aankan, veilig is en met andere systemen praat. Denk aan een bankapp of een planningssysteem van bpost.</p>`},
+{h:'Hoe begin je?',html:`<p>Een projectstructuur maak je niet met de hand. <strong>Spring Initializr</strong> genereert ze. In IntelliJ Ultimate zit die wizard ingebouwd: je vult een paar velden in en krijgt een kant-en-klaar project.</p>`},
+{h:'Drie plekken om te onthouden',html:`<ul><li><code>pom.xml</code> – de lijst van bibliotheken (<em>dependencies</em>) die je project gebruikt.</li><li><code>DemoApplication.java</code> – de klasse met <code>main</code>: hier start alles.</li><li><code>application.properties</code> – instellingen, bv. op welke poort je app draait.</li></ul>`}
+],
+ex:[
+{type:'mc',title:'Wat is Spring Boot?',q:'Kies de beste omschrijving.',opts:[
+ {t:'Een nieuwe programmeertaal die Java vervangt',no:'Je blijft gewoon Java schrijven. Spring Boot is iets dat je ermee gebruikt.'},
+ {t:'Een framework bovenop Spring dat met slimme standaardinstellingen sneller een toepassing laat bouwen'},
+ {t:'Een databank voor Java-programma\'s',no:'Spring Boot kan met databanken praten, maar is er zelf geen.'},
+ {t:'Een plugin voor IntelliJ',no:'IntelliJ helpt je, maar Spring Boot werkt ook zonder IntelliJ.'}],a:1,
+ why:'Spring = het framework. Spring Boot = Spring + auto-configuratie, zodat je bijna niets zelf moet instellen.'},
+{type:'mc',title:'Spring Initializr',q:'Wat doet Spring Initializr voor jou?',opts:[
+ {t:'Het start je applicatie op',no:'Dat doet de main-methode. Initializr komt daarvoor.'},
+ {t:'Het genereert een leeg project met de juiste mappen, pom.xml en startklasse'},
+ {t:'Het schrijft je controllers',no:'Die schrijf je zelf. Initializr maakt enkel het lege project.'}],a:1,
+ why:'Initializr maakt het skelet: mappen, pom.xml met de gekozen dependencies, en een klasse met main.'},
+{type:'mc',title:'Enterprise-kenmerk',q:'Een webshop moet op Black Friday tien keer meer bezoekers aankunnen dan normaal. Welk kenmerk van een enterprise toepassing is dat?',opts:[
+ {t:'Schaalbaarheid'},{t:'Lange levensduur',no:'Lange levensduur gaat over jaren onderhoud, niet over drukte.'},{t:'Integratie',no:'Integratie is praten met andere systemen.'},{t:'Gebruikerservaring',no:'UX gaat over intuïtieve schermen.'}],a:0,
+ why:'Schaalbaarheid: meer gebruikers en meer data aankunnen zonder de app te herschrijven.'},
+{type:'ij',title:'Maak het project demo',q:'Je maakt je eerste project in IntelliJ. Eén stap tegelijk: vink een stap af en de volgende verschijnt.',steps:[
+ `<p>Open IntelliJ IDEA. Staat er al een project open? Kies ${U('File → New → Project…')}. Zie je het welkomstscherm? Klik ${U('New Project')}.</p>`,
+ `<p>Kies in de lijst links ${U('Spring Boot')}. (Staat er "Spring Initializr"? Dat is hetzelfde.)</p>${HELP('<p>Zie je geen Spring Boot? Dan heb je waarschijnlijk IntelliJ <em>Community</em>. Als student heb je gratis recht op Ultimate via je PXL-mail. Werk in afwachting via <a href="https://start.spring.io" target="_blank" rel="noopener">start.spring.io</a>: vul daar dezelfde velden in, klik Generate, pak de zip uit en open de map in IntelliJ.</p>')}`,
+ `<p>Vul de velden in, precies zo:</p><ul><li>Name: <code>demo</code></li><li>Language: <strong>Java</strong></li><li>Type: <strong>Maven</strong></li><li>Group: <code>be.pxl</code></li><li>Artifact: <code>demo</code></li><li>Package name: <code>be.pxl.demo</code></li><li>JDK: een <strong>21</strong>, Java: <strong>21</strong></li><li>Packaging: <strong>Jar</strong></li></ul>${HELP('<p>Staat er bij JDK geen 21? Klik op de lijst → <em>Download JDK…</em> → versie 21, eender welke vendor (bv. Eclipse Temurin).</p>')}`,
+ `<p>Klik ${U('Next')}. Bovenaan staat ${U('Spring Boot')} met een versie. Kies de hoogste versie die met <strong>3.</strong> begint en <em>geen</em> SNAPSHOT of M1 bevat.</p>${HELP('<p>SNAPSHOT en M1 zijn testversies. Begint de hoogste met 4.? Kies dan de hoogste 3.x eronder: de cursus is geschreven voor Spring Boot 3.</p>')}`,
+ `<p>Kies <strong>geen</strong> dependencies. Laat alles leeg en klik ${U('Create')}.</p>`,
+ `<p>IntelliJ opent het project. Rechtsonder zie je een voortgangsbalk: Maven downloadt bibliotheken. Wacht tot die weg is. De eerste keer kan dat een paar minuten duren.</p>${HELP('<p>Vraagt IntelliJ "Trust project?" → klik <em>Trust Project</em>.</p>')}`,
+ `<p>Open links het ${U('Project')}-venster (${K('Alt')}+${K('1')}, op Mac ${K('⌘')}+${K('1')}). Klap open: <code>demo → src → main → java → be.pxl.demo</code>.</p>${SEE('<p>Een klasse <code>DemoApplication</code>, en in <code>src/main/resources</code> een bestand <code>application.properties</code>. Bovenaan in demo staat <code>pom.xml</code>.</p>')}`
+],done:'Je project bestaat. Klaar voor de volgende opdracht: het starten.'},
+{type:'ij',title:'Start je project',q:'Nu laat je het draaien.',steps:[
+ `<p>Dubbelklik op <code>DemoApplication</code> om de klasse te openen. Je ziet de annotatie <code>@SpringBootApplication</code> en een <code>main</code>-methode.</p>`,
+ `<p>Naast de regel <code>public class DemoApplication</code> staat links in de marge een <strong>groen driehoekje</strong>. Klik erop en kies ${U("Run 'DemoApplication'")}.</p>`,
+ `<p>Onderaan opent het ${U('Run')}-venster. Bekijk de uitvoer.</p>${SEE('<p>Bovenaan het Spring-logo in tekens, dan een paar regels met <code>INFO</code>, waaronder <code>Started DemoApplication in 0.7 seconds</code> (het getal verschilt), en helemaal onderaan <code>Process finished with exit code 0</code>.</p>')}${HELP('<p>Rode tekst met <em>"release version 21 not supported"</em>? Kijk in <em>File → Project Structure → Project</em> of SDK en language level op 21 staan.</p>')}`
+],answer:{q:'Hoeveel seconden staat er achter "Started DemoApplication in"? Typ het getal.',re:/^\d+([.,]\d+)?$/,err:'Typ enkel het getal, bv. 0.734'},done:'Je eerste Spring Boot-app draait.'},
+{type:'mc',title:'Waarom stopt het meteen?',q:'Je app toont "Process finished with exit code 0" en stopt. Wat betekent dat?',opts:[
+ {t:'Er ging iets mis bij het opstarten',no:'Exit code 0 betekent juist: alles ging goed. Een fout geeft een andere code en rode tekst.'},
+ {t:'De app had niets te doen en stopte netjes'},
+ {t:'Poort 8080 was bezet',no:'Er is nog geen webserver, dus er wordt geen poort gebruikt.'}],a:1,
+ why:'Er is nog geen webserver en geen code die iets doet. In lab 4 voeg je een webserver toe, en dan blijft de app draaien.'},
+{type:'sort',title:'Welk bestand doet wat?',q:'Kies voor elke zin het juiste bestand of de juiste map.',cats:['pom.xml','DemoApplication','application.properties','src/test/java'],rows:[
+ ['Hier staat de main-methode',1],['Hier zet je server.port=8081',2],['Hier voeg je een bibliotheek toe',0],['Hier komen je JUnit-testen',3]],
+ why:'pom.xml = dependencies. DemoApplication = startpunt. application.properties = instellingen. src/test/java = testen.'}
+]},
+
+/* ---------- LAB 2 ---------- */
+{id:'lab2',tag:'H1 · Bouwstenen',title:'Annotaties en pom.xml',
+lead:'Je kijkt naar wat er in je project staat. Wat betekent dat @-teken, en wat staat er in pom.xml?',
+read:[['h1-3','1.3 Annotaties'],['h1-4','1.4 pom.xml']],
+blocks:[
+{h:'Annotaties: een etiket op je code',html:`<p>Een annotatie begint met <code>@</code> en plakt extra informatie op een klasse, methode of veld. Je kent er al één: <code>@Override</code>. Die zegt tegen de compiler: "deze methode overschrijft er een van de superklasse; geef een fout als dat niet klopt".</p><p>Spring leest annotaties en doet er iets mee. <code>@SpringBootApplication</code> zegt: "dit is het startpunt, configureer alles automatisch".</p>`},
+{h:'pom.xml: je boodschappenlijst',html:`<p>In <code>pom.xml</code> staan de <strong>dependencies</strong>: bibliotheken die Maven voor je downloadt. Spring bundelt ze in <strong>starters</strong>, allemaal met de naam <code>spring-boot-starter-…</code>.</p>${PRE(`<parent>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>3.x.x</version>          ← de Spring Boot-versie
+</parent>
+<dependency>
+    <artifactId>spring-boot-starter-test</artifactId>
+    <scope>test</scope>               ← enkel voor testen
+</dependency>`)}<div class="tip">Na een wijziging in pom.xml: klik op het Maven-icoon rechtsboven (<em>Load Maven Changes</em>).</div>`}
+],
+ex:[
+{type:'mc',title:'@Override',q:'Wat doet @Override?',opts:[
+ {t:'Het maakt een methode sneller',no:'Annotaties veranderen hier niets aan de snelheid.'},
+ {t:'Het laat de compiler controleren dat de methode echt een methode van de superklasse overschrijft'},
+ {t:'Het verbergt de methode van de superklasse voor altijd',no:'De methode van de superklasse bestaat nog; super.methode() kan je nog oproepen.'}],a:1,
+ why:'Typ je de naam verkeerd (bv. maakGeluiid), dan geeft @Override een compileerfout in plaats van stilletjes een nieuwe methode te maken.'},
+{type:'fill',title:'De startklasse',q:'Vul de ontbrekende annotatie en methode-aanroep in.',code:`@__0__
+public class DemoApplication {
+    public static void main(String[] args) {
+        SpringApplication.__1__(DemoApplication.class, args);
+    }
+}`,ans:[/^SpringBootApplication$/,/^run$/],w:[22,5],why:'@SpringBootApplication markeert het startpunt; SpringApplication.run(...) start Spring op.'},
+{type:'sort',title:'Starter of niet?',q:'Welke artifactId\'s zijn Spring Boot-starters?',cats:['starter','geen starter'],rows:[
+ ['spring-boot-starter-web',0],['spring-boot-starter-validation',0],['mysql-connector-j',1],['spring-boot-starter-data-jpa',0],['spring-boot-maven-plugin',1]],
+ why:'Een starter heet altijd spring-boot-starter-*. De MySQL-driver is een gewone bibliotheek; de maven-plugin is een build-plugin.'},
+{type:'mc',title:'scope test',q:'spring-boot-starter-test staat met <code>&lt;scope&gt;test&lt;/scope&gt;</code>. Wat betekent dat?',opts:[
+ {t:'De bibliotheek wordt enkel gebruikt om testen te compileren en uit te voeren'},
+ {t:'De bibliotheek is nog in testfase',no:'Scope zegt waar een dependency gebruikt wordt, niet hoe stabiel ze is.'},
+ {t:'De bibliotheek test automatisch je code bij het opstarten',no:'Testen draaien enkel als jij (of de build) ze uitvoert.'}],a:0,
+ why:'Je echte applicatie heeft JUnit niet nodig. Scope test houdt het erbuiten.'},
+{type:'ij',title:'Speuren in pom.xml',q:'Open je demo-project en zoek twee dingen op.',steps:[
+ `<p>Dubbelklik op <code>pom.xml</code> (helemaal bovenaan in het project, niet in src).</p>`,
+ `<p>Zoek de regel <code>&lt;java.version&gt;</code>. Staat er <code>21</code>?</p>${HELP('<p>Staat er iets anders? Pas het aan naar 21 en klik op het Maven-icoon rechtsboven.</p>')}`,
+ `<p>Zoek bovenaan het blok <code>&lt;parent&gt;</code>. Daarin staat <code>&lt;version&gt;</code>: dat is je Spring Boot-versie.</p>`
+],answer:{q:'Welke Spring Boot-versie staat er? (bv. 3.5.6)',re:/^3\.\d+\.\d+$/,err:'Een versie in de vorm 3.x.y'},done:'Je weet nu waar versie en Java-niveau staan.'}
+]},
+
+/* ---------- LAB 3 ---------- */
+{id:'lab3',tag:'H1 · IoC',title:'Beans, IoC en dependency injection',
+lead:'Het belangrijkste idee van Spring: jij maakt de objecten niet meer zelf, Spring doet het en geeft ze aan wie ze nodig heeft.',
+read:[['h1-5','1.5 IoC en DI'],['h1-5-3','1.5.3 Application context'],['h1-5-4','1.5.4 IoC in werking']],
+blocks:[
+{h:'Het probleem',html:`<p>Een <code>Car</code> die in zijn constructor <code>engine = new Engine()</code> doet, zit vast aan die ene motor. Elektrisch maken? Herschrijven. Testen met een nepmotor? Kan niet. Dat heet <strong>nauwe koppeling</strong>.</p>`},
+{h:'De oplossing in drie woorden',html:`<ul><li><strong>Inversion of Control</strong>: de controle over het maken van objecten draait om. Niet jouw klasse maar Spring maakt ze.</li><li><strong>Dependency injection</strong>: Spring geeft (injecteert) die objecten aan jouw klasse, meestal via de constructor.</li><li><strong>Bean</strong>: een object dat Spring beheert. Ze zitten allemaal in één doos: de <strong>application context</strong>.</li></ul>`},
+{h:'Hoe maak je een bean?',html:`<p>Twee manieren:</p>${PRE(`@Component                       // op je eigen klasse: Spring doet "new"
+public class WeatherService { ... }
+
+@Bean                            // op een methode: jij doet "new"
+public Pet myPet() { return new Pet("Scott", "Scotch Collie"); }`)}<p>Een bean die <code>CommandLineRunner</code> implementeert, krijgt zijn <code>run</code>-methode automatisch aangeroepen na het opstarten. Handig om iets te testen.</p>`}
+],
+ex:[
+{type:'line',title:'Waar zit de koppeling?',q:'Klik op de regel die Car vastlijmt aan één soort motor.',code:`public class Car {
+    private Engine engine;
+
+    public Car() {
+        engine = new Engine();
+    }
+
+    public void drive() {
+        engine.start();
+    }
+}`,bad:[4],why:'Regel 5: Car kiest zelf zijn motor met new. Met constructor injection (public Car(Engine engine)) beslist iemand anders.'},
+{type:'mc',title:'Wie maakt het object?',q:'Bij Inversion of Control: wie roept <code>new</code> op voor je beans?',opts:[
+ {t:'De klasse die het object nodig heeft',no:'Dat is net de oude manier, zonder IoC.'},{t:'De Spring-container (application context)'},{t:'De main-methode, voor elke bean apart',no:'main roept enkel SpringApplication.run op. De rest doet de container.'}],a:1,
+ why:'De container maakt en beheert de objecten. Jouw klasse vraagt ze enkel in haar constructor.'},
+{type:'order',title:'Wat gebeurt er bij het opstarten?',q:'Zet in de juiste volgorde. Klik op een stap om ze toe te voegen; klik nog eens om ze terug te zetten.',items:[
+ 'SpringApplication.run() wordt aangeroepen','De application context wordt aangemaakt','Alle beans worden gemaakt en in de context gestoken','De run-methode van elke CommandLineRunner wordt uitgevoerd'],
+ why:'Eerst de doos, dan de inhoud, dan pas de CommandLineRunners.'},
+{type:'sort',title:'@Bean of @Component?',q:'Bij welke annotatie hoort de uitspraak?',cats:['@Bean','@Component'],rows:[
+ ['Staat boven een klasse',1],['Staat boven een methode die een object teruggeeft',0],['Jij schrijft zelf new …()',0],['Spring roept zelf de constructor op',1],['Handig voor een klasse uit een bibliotheek die je niet kunt aanpassen',0]],
+ why:'@Component: op je eigen klasse, Spring maakt het object. @Bean: op een methode, jij maakt het object.'},
+{type:'code',title:'Een CommandLineRunner',q:'Schrijf in het package <code>be.pxl.demo.beans</code> een klasse <code>WelcomeMessage</code> die bij het opstarten <code>Welcome to Java Advanced</code> afdrukt.',file:'src/main/java/be/pxl/demo/beans/WelcomeMessage.java',
+start:`package be.pxl.demo.beans;
+
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
+
+public class WelcomeMessage {
+
+}`,
+reqs:[[/@Component\s+public\s+class\s+WelcomeMessage/,'De klasse moet een bean zijn: zet @Component erboven.'],
+ [/class\s+WelcomeMessage\s+implements\s+CommandLineRunner/,'Laat de klasse CommandLineRunner implementeren.'],
+ [/public\s+void\s+run\s*\(\s*String\s*\.\.\.\s*\w+\s*\)/,'Overschrijf public void run(String... args).'],
+ [/System\.out\.println\s*\(\s*"Welcome to Java Advanced"\s*\)/,'Druk exact "Welcome to Java Advanced" af.']],
+sol:`@Component
+public class WelcomeMessage implements CommandLineRunner {
+    @Override
+    public void run(String... args) {
+        System.out.println("Welcome to Java Advanced");
+    }
+}`},
+{type:'ij',title:'Pet, WeatherService en WelcomeMessage',q:'Nu bouw je het voorbeeld uit de cursus na in je demo-project.',steps:[
+ `<p>Rechtsklik op <code>be.pxl.demo</code> → ${U('New → Package')} → typ <code>domain</code>. Doe hetzelfde voor <code>beans</code> en <code>service</code>.</p>`,
+ `<p>Maak in <code>domain</code> de klasse <code>Pet</code> met velden <code>name</code> en <code>breed</code>, een constructor, getters en een <code>toString()</code>.</p>${HELP(`<p>Typ enkel de velden. Druk dan ${K('Alt')}+${K('Insert')} (Mac ${K('⌘')}+${K('N')}) → Constructor, opnieuw → Getter, opnieuw → toString(). De code staat in ${R('h1-5-4','1.5.4')}.</p>`)}`,
+ `<p>Voeg in <code>DemoApplication</code> onder de <code>main</code>-methode deze methode toe:</p>${PRE(`@Bean
+public Pet myPet() {
+    return new Pet("Scott", "Scotch Collie");
+}`)}<p>Rode <code>@Bean</code>? Zet je cursor erop en druk ${K('Alt')}+${K('Enter')} → Import class.</p>`,
+ `<p>Maak in <code>service</code> de klasse <code>WeatherService</code> met <code>@Component</code> en een methode <code>printWeather()</code> die <code>The weather is sunny with a 20% chance of rain</code> afdrukt.</p>`,
+ `<p>Zet je <code>WelcomeMessage</code> uit de vorige oefening in <code>beans</code>. Geef ze twee velden <code>private final Pet myPet;</code> en <code>private final WeatherService weatherService;</code> en een constructor die beide ontvangt.</p>${HELP('<p>Final velden moeten in de constructor ingevuld worden. Alt+Insert → Constructor → selecteer beide velden.</p>')}`,
+ `<p>Druk in <code>run</code> drie dingen af: de welkomstzin, <code>myPet</code>, en roep <code>weatherService.printWeather()</code> op. Start de app.</p>${SEE(`${PRE(`Welcome to Java Advanced
+Pet{name='Scott', breed='Scotch Collie'}
+The weather is sunny with a 20% chance of rain`)}`)}`
+],done:'Je hebt dependency injection gebruikt zonder één keer new WeatherService() te schrijven.'},
+{type:'mc',title:'Verkeerd package',q:'Je zet <code>WeatherService</code> per ongeluk in package <code>be.pxl.weather</code> (niet onder <code>be.pxl.demo</code>). Wat gebeurt er bij het opstarten?',opts:[
+ {t:'Niets bijzonders, Spring vindt de klasse toch',no:'@ComponentScan zoekt enkel in het package van de main-klasse en de subpackages.'},
+ {t:'De app start niet: WelcomeMessage vraagt een WeatherService, maar die bean bestaat niet'},
+ {t:'De app start, maar printWeather() drukt niets af',no:'Spring kan WelcomeMessage niet eens maken zonder WeatherService.'}],a:1,
+ why:'Je krijgt "Parameter 1 of constructor in WelcomeMessage required a bean of type WeatherService that could not be found."'},
+{type:'ij',title:'Kijk achter de schermen',q:'Je laat Spring vertellen wat het doet.',steps:[
+ `<p>Open <code>src/main/resources/application.properties</code> en voeg deze regel toe:</p>${PRE('logging.level.org.springframework=debug')}`,
+ `<p>Start de app. Er verschijnen honderden regels. Klik in het Run-venster en druk ${K('Ctrl')}+${K('F')} (Mac ${K('⌘')}+${K('F')}). Zoek op <code>Autowiring</code>.</p>${SEE('<p>Een regel zoals <code>Autowiring by type from bean name \'welcomeMessage\' via constructor to bean named \'myPet\'</code>.</p>')}`,
+ `<p>Zet de regel in application.properties daarna in commentaar met <code>#</code> ervoor, anders wordt je console onleesbaar.</p>`
+],done:'Je zag Spring de beans aan elkaar koppelen.'}
+]},
+
+/* ---------- LAB 4 ---------- */
+{id:'lab4',tag:'H2 · REST',title:'Je eerste REST-endpoint',
+lead:'Je app krijgt een webserver en een eerste adres dat je kunt oproepen. Vanaf nu blijft je app draaien.',
+read:[['h2-1','2.1 HTTP-methoden'],['h2-2','2.2 Starter Web'],['h2-3','2.3 RestController']],
+blocks:[
+{h:'REST in één alinea',html:`<p>Je app biedt <strong>resources</strong> aan (liedjes, huizen, superhelden). Elk heeft een adres: <code>/playlist/songs</code>. Andere programma's werken ermee via vier HTTP-methoden: <strong>GET</strong> ophalen, <strong>POST</strong> aanmaken, <strong>PUT</strong> wijzigen, <strong>DELETE</strong> verwijderen.</p>`},
+{h:'Wat zit er in spring-boot-starter-web?',html:`<ul><li><strong>Tomcat</strong>: een webserver die mee opstart (poort 8080).</li><li><strong>Spring MVC</strong>: stuurt elk verzoek naar de juiste methode.</li><li><strong>Jackson</strong>: zet Java-objecten om naar JSON en terug.</li></ul>`},
+{h:'Een controller',html:`${PRE(`@RestController                  // deze bean beantwoordt HTTP-verzoeken
+@RequestMapping("/greetings")    // basispad
+public class GreetingController {
+    @GetMapping("/hello")        // GET /greetings/hello
+    public String doGreeting() { return "Howdy-doody!"; }
+}`)}<p>Het verzoek komt binnen bij de <strong>DispatcherServlet</strong>. Die kijkt in de <strong>HandlerMapping</strong> welke methode bij <code>GET /greetings/hello</code> hoort, roept ze op en stuurt het resultaat terug.</p>`},
+{h:'Testen met de IntelliJ HTTP Client',html:`<p>Maak in de root van je project een bestand <code>requests.http</code>. Elk verzoek begint met <code>###</code>. Klik op het groene pijltje ernaast.</p>${PRE(`### Begroeting
+GET http://localhost:8080/greetings/hello`)}`}
+],
+ex:[
+{type:'sort',title:'Welke HTTP-methode?',q:'Kies de juiste methode voor elke actie.',cats:['GET','POST','PUT','DELETE'],rows:[
+ ['Een nieuw liedje toevoegen',1],['Alle liedjes opvragen',0],['De prijs van huis HAS_001 aanpassen',2],['Superheld 3 wissen',3],['Eén product met id 123 bekijken',0]],
+ why:'GET haalt op, POST maakt nieuw, PUT werkt bij, DELETE verwijdert.'},
+{type:'ij',title:'Webserver toevoegen',q:'Je demo-project krijgt Spring Web.',steps:[
+ `<p>Open <code>pom.xml</code>. Voeg binnen <code>&lt;dependencies&gt;</code> toe:</p>${PRE(`<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>`)}`,
+ `<p>Klik rechtsboven op het Maven-icoon (${U('Load Maven Changes')}) of druk ${K('Ctrl')}+${K('Shift')}+${K('O')}. Wacht tot het downloaden klaar is.</p>`,
+ `<p>Start de app. Kijk naar het einde van de console.</p>${SEE('<p><code>Tomcat started on port 8080 (http)</code>. Het programma stopt nu <em>niet</em> meer: de server wacht op verzoeken.</p>')}`,
+ `<p>Open je browser op <code>http://localhost:8080</code>.</p>${SEE('<p>Een <strong>Whitelabel Error Page</strong> met status 404. Prima: de server draait, er is alleen nog geen endpoint.</p>')}`
+],done:'Je app is nu een webserver.'},
+{type:'mc',title:'Port 8080 already in use',q:'Je start de app een tweede keer en krijgt <code>Port 8080 was already in use</code>. Wat is de snelste oplossing?',opts:[
+ {t:'Je computer herstarten',no:'Werkt, maar veel te omslachtig.'},
+ {t:'De vorige run stoppen met het rode vierkantje in het Run-venster'},
+ {t:'spring-boot-starter-web opnieuw toevoegen',no:'De dependency is het probleem niet; een andere run bezet de poort.'}],a:1,
+ why:'Meestal draait je vorige run nog. Alternatief: server.port=8081 in application.properties.'},
+{type:'fill',title:'GreetingController',q:'Vul de annotaties in zodat <code>GET /greetings/hello</code> werkt.',code:`@__0__
+@RequestMapping("__1__")
+public class GreetingController {
+
+    @__2__("/hello")
+    public String doGreeting() {
+        return "Peek-a-boo!";
+    }
+}`,ans:[/^RestController$/,/^\/greetings$/,/^GetMapping$/],w:[15,11,11],why:'@RestController + @RequestMapping("/greetings") op de klasse, @GetMapping("/hello") op de methode.'},
+{type:'ij',title:'GreetingController maken en testen',q:'Oefening 2.1, deel 1.',steps:[
+ `<p>Maak het package <code>be.pxl.demo.api</code>.</p>`,
+ `<p>Maak daarin <code>GreetingController</code>. Neem de code over uit ${R('h2-3','2.3 RestController')} (gebruik de kopieerknop).</p>${HELP('<p>Rode woorden zoals List, ArrayList, Random, PostConstruct? Cursor erop, Alt+Enter → Import. Kies bij PostConstruct de versie uit <code>jakarta.annotation</code>.</p>')}`,
+ `<p>Herstart de app (groene cirkelpijl in het Run-venster, of stop + start). Open in de browser <code>http://localhost:8080/greetings/hello</code>. Vernieuw een paar keer.</p>${SEE('<p>Telkens een willekeurige begroeting, bv. <code>Howdy-doody!</code></p>')}`,
+ `<p>Maak in de root van het project (naast pom.xml) het bestand <code>requests.http</code>: rechtsklik op demo → ${U('New → HTTP Request')} of ${U('New → File')}. Typ:</p>${PRE(`### Begroeting
+GET http://localhost:8080/greetings/hello`)}<p>Klik op het groene pijltje links van GET.</p>${SEE('<p>Onderaan een venster met <code>HTTP/1.1 200</code> en de begroeting.</p>')}`
+],done:'Je hebt een endpoint en je kan het testen in IntelliJ.'},
+{type:'code',title:'GET /greetings/daytime',q:'Oefening 2.1, deel 2. Voeg een methode toe die de datum teruggeeft zoals <em>Maandag 18 september 2023</em>.',file:'GreetingController.java (stukje)',
+start:`@GetMapping("/daytime")
+public String getDaytime() {
+    // 1. haal de datum van vandaag op
+    // 2. formatteer met DateTimeFormatter, in het Nederlands
+    // 3. maak de eerste letter een hoofdletter
+    return "";
+}`,
+reqs:[[/@GetMapping\s*\(\s*"\/daytime"\s*\)/,'Houd @GetMapping("/daytime").'],
+ [/LocalDate(Time)?\.now\s*\(\s*\)/,'Gebruik LocalDate.now() voor de datum van vandaag.'],
+ [/DateTimeFormatter\.ofPattern\s*\(\s*"EEEE d MMMM yyyy"/,'Gebruik het patroon "EEEE d MMMM yyyy" (EEEE = volledige dagnaam).'],
+ [/(Locale\.forLanguageTag\s*\(\s*"nl|new\s+Locale\s*\(\s*"nl|Locale\.of\s*\(\s*"nl)/,'Geef een Nederlandse Locale mee, bv. Locale.forLanguageTag("nl-BE").'],
+ [/toUpperCase\s*\(/,'Maak de eerste letter hoofdletter (substring(0,1).toUpperCase() + substring(1)).'],
+ [/return\s+(?!"")[^;]+;/,'Geef de opgebouwde tekst terug.']],
+sol:`@GetMapping("/daytime")
+public String getDaytime() {
+    DateTimeFormatter f = DateTimeFormatter.ofPattern("EEEE d MMMM yyyy", Locale.forLanguageTag("nl-BE"));
+    String tekst = LocalDate.now().format(f);
+    return tekst.substring(0, 1).toUpperCase() + tekst.substring(1);
+}`},
+{type:'mc',title:'Wie stuurt het verzoek door?',q:'Welk onderdeel van Spring MVC ontvangt elk HTTP-verzoek en zoekt de juiste controllermethode?',opts:[
+ {t:'Tomcat',no:'Tomcat ontvangt de netwerkverbinding, maar weet niets van je controllers.'},{t:'De DispatcherServlet, met hulp van de HandlerMapping'},{t:'Jackson',no:'Jackson zet enkel om tussen JSON en Java.'}],a:1,
+ why:'DispatcherServlet = de receptionist. HandlerMapping = de kaart van URL → methode.'}
+]},
+
+/* ---------- LAB 5 ---------- */
+{id:'lab5',tag:'H2 · CRUD',title:'MusicPlaylist: alle vier de verbs',
+lead:'Je bouwt een volledige mini-API: liedjes toevoegen, opvragen, filteren, aanpassen en verwijderen. Controller en service werken samen.',
+read:[['h2-4','2.4 MusicPlaylist'],['h2-4-1','2.4.1 POST'],['h2-4-3','2.4.3 @PathVariable'],['h2-4-5','2.4.5 DELETE']],
+blocks:[
+{h:'Twee lagen',html:`<p><strong>Controller</strong> (<code>@RestController</code>): ontvangt het verzoek en zet JSON om. <strong>Service</strong> (<code>@Service</code>): bewaart de liedjes en bevat de logica. De controller krijgt de service via constructor injection.</p><p>Een <code>@Service</code> is een singleton: er is precies één, dus iedereen deelt dezelfde playlist.</p>`},
+{h:'Gegevens uit het verzoek halen',html:`<ul><li><code>@RequestBody Song song</code> – de JSON uit de body wordt een Song-object.</li><li><code>@PathVariable Genre genre</code> – een stuk uit het pad, bv. <code>/playlist/songs/<b>POP</b></code>.</li></ul><p>Jackson maakt eerst een leeg Song-object (<code>new Song()</code>) en vult dan de velden via de setters. Daarom heeft Song een lege constructor en setters nodig.</p>`}
+],
+ex:[
+{type:'ij',title:'Project MusicPlaylist opzetten',q:'Oefening 2.2.',steps:[
+ `<p>${U('File → New → Project → Spring Boot')}. Name <code>MusicPlaylist</code>, Group <code>be.pxl</code>, Package <code>be.pxl.demo</code>, Maven, Java 21. ${U('Next')}.</p>`,
+ `<p>Zoek bij de dependencies naar <strong>Spring Web</strong> en vink het aan. ${U('Create')}. Kies <em>New Window</em> als IntelliJ het vraagt.</p>`,
+ `<p>Maak de packages <code>domain</code>, <code>service</code> en <code>api</code> onder <code>be.pxl.demo</code>.</p>`,
+ `<p>Maak in <code>domain</code> de enum <code>Genre</code> (POP, ROCK, RNB, JAZZ, CLASSICAL, OTHER) en de klasse <code>Song</code> zoals in ${R('h2-4-1','2.4.1')}, met lege constructor, getters en setters.</p>${HELP('<p>New → Java Class → kies "Enum" in het lijstje voor Genre.</p>')}`,
+ `<p>Maak <code>MusicPlaylistService</code> in <code>service</code> met een lijst en de methode <code>addSong</code>. Maak <code>MusicPlaylistController</code> in <code>api</code> met de POST-methode.</p>`,
+ `<p>Start de app. Maak <code>requests.http</code>:</p>${PRE(`### Liedje toevoegen
+POST http://localhost:8080/playlist/songs
+Content-Type: application/json
+
+{
+  "title": "Hello",
+  "artist": "Adele",
+  "duration_seconds": 293,
+  "genre": "POP"
+}`)}<p>Voer het uit.</p>${SEE('<p>In de HTTP Client: <code>HTTP/1.1 200</code>. In de console van je app: <code>Adding song [Hello]</code>.</p>')}${HELP('<p>415 Unsupported Media Type? De regel Content-Type ontbreekt. 400 Bad Request? Controleer de JSON (komma\'s, aanhalingstekens) en de lege regel voor de {.</p>')}`
+],done:'POST werkt.'},
+{type:'mc',title:'Waarom een lege constructor?',q:'Je verwijdert <code>public Song() { }</code> uit Song en houdt enkel de constructor met vier parameters. Wat gebeurt er bij een POST?',opts:[
+ {t:'Niets, Jackson gebruikt de andere constructor',no:'Jackson weet niet in welke volgorde de JSON-velden bij de parameters horen.'},
+ {t:'Jackson kan geen Song maken uit de JSON en je krijgt een fout'},
+ {t:'Het liedje wordt toegevoegd, maar alle velden zijn null',no:'Zonder lege constructor komt Jackson niet zo ver.'}],a:1,
+ why:'Jackson maakt eerst new Song() en vult dan elk veld met een setter.'},
+{type:'order',title:'De reis van een POST',q:'Wat gebeurt er van boven naar beneden bij <code>POST /playlist/songs</code>?',items:[
+ 'De HTTP Client stuurt JSON naar poort 8080','Tomcat ontvangt het verzoek','De DispatcherServlet zoekt via de HandlerMapping de methode addSong','Jackson zet de JSON om naar een Song-object','addSong in de controller roept musicPlaylistService.addSong op','Het liedje staat in de lijst; de client krijgt 200 OK'],
+ why:'Netwerk → Tomcat → DispatcherServlet → Jackson → jouw code → antwoord.'},
+{type:'code',title:'GET per genre',q:'Schrijf de controllermethode voor <code>GET /playlist/songs/{genre}</code>.',file:'MusicPlaylistController.java (stukje)',
+start:`// GET /playlist/songs/POP  → enkel POP-liedjes
+
+public List<Song> getSongsByGenre(Genre genre) {
+    return musicPlaylistService.getSongsByGenre(genre);
+}`,
+reqs:[[/@GetMapping\s*\(\s*"\/?\{genre\}"\s*\)/,'Zet @GetMapping("/{genre}") boven de methode.'],
+ [/@PathVariable\s+Genre\s+genre/,'Haal het genre uit het pad met @PathVariable.'],
+ [/return\s+musicPlaylistService\.getSongsByGenre\s*\(\s*genre\s*\)/,'Geef het resultaat van de service terug.']],
+sol:`@GetMapping("/{genre}")
+public List<Song> getSongsByGenre(@PathVariable Genre genre) {
+    return musicPlaylistService.getSongsByGenre(genre);
+}`},
+{type:'line',title:'Zoek de kopieerfout',q:'Deze controller werkt, maar bevat een verwarrende kopieerfout uit de PDF. Klik op de regel.',code:`@RestController
+@RequestMapping("/playlist/songs")
+public class MusicPlaylistController {
+    private final MusicPlaylistService service;
+
+    public MusicPlaylistController(MusicPlaylistService service) {
+        this.service = service;
+    }
+
+    @PutMapping("/{index}")
+    public void updateSong(@PathVariable int index, @RequestBody Song song) {
+        service.updateSong(index, song);
+    }
+
+    @DeleteMapping("/{index}")
+    public void updateSong(@PathVariable int index) {
+        service.deleteSong(index);
+    }
+}`,bad:[15],why:'Regel 16: de DELETE-methode heet ook updateSong. Dat compileert (overloading: andere parameters), maar wie de code leest denkt dat ze iets wijzigt. Noem ze deleteSong.'},
+{type:'ij',title:'PUT, DELETE en GET testen',q:'Vul je service en controller aan en test alles in één .http-bestand.',steps:[
+ `<p>Voeg in de service <code>getSongs</code>, <code>getSongsByGenre</code>, <code>updateSong</code> en <code>deleteSong</code> toe, en in de controller de bijhorende methodes. Alles staat in ${R('h2-4-2','2.4.2 – 2.4.5')}.</p>`,
+ `<p>Herstart. Voeg in requests.http twee liedjes toe (één POP, één RNB) en voer beide POST's uit.</p>`,
+ `<p>Voeg toe en voer uit:</p>${PRE(`### Alle liedjes
+GET http://localhost:8080/playlist/songs
+
+### Enkel POP
+GET http://localhost:8080/playlist/songs/POP`)}${SEE('<p>Eerst een JSON-array met beide liedjes, daarna enkel het POP-liedje.</p>')}`,
+ `<p>Wijzig liedje 0 en verwijder liedje 1:</p>${PRE(`### Liedje 0 wijzigen
+PUT http://localhost:8080/playlist/songs/0
+Content-Type: application/json
+
+{ "title": "Hello (live)", "artist": "Adele", "duration_seconds": 300, "genre": "POP" }
+
+### Liedje 1 verwijderen
+DELETE http://localhost:8080/playlist/songs/1`)}<p>Voer daarna opnieuw "Alle liedjes" uit.</p>${SEE('<p>Eén liedje over: <code>Hello (live)</code>.</p>')}`,
+ `<p>Probeer <code>DELETE http://localhost:8080/playlist/songs/99</code>.</p>${SEE('<p>Status <code>500</code>. In de console een <code>IndexOutOfBoundsException</code>. Dat los je op in lab 7.</p>')}`
+],done:'Je API kan alle vier de verbs.'},
+{type:'mc',title:'Singleton',q:'Twee mensen voegen tegelijk een liedje toe via je API. Hoeveel playlists bestaan er in je app?',opts:[
+ {t:'Eén: de service is een singleton'},{t:'Twee: één per gebruiker',no:'Spring maakt standaard één exemplaar van elke bean.'},{t:'Elk verzoek maakt een nieuwe',no:'Dan zou je liedje meteen weer verdwenen zijn.'}],a:0,
+ why:'De standaard-scope is singleton: één gedeelde MusicPlaylistService.'}
+]},
+
+/* ---------- LAB 6 ---------- */
+{id:'lab6',tag:'H2–H3 · Huizenjacht',title:'Huizenjacht en HashMap',
+lead:'Je eerste eigen API zonder voorbeeldcode. Daarna maak je ze slimmer met een Map.',
+read:[['h2-5','2.5 Huizenjacht'],['h3-2','3.2 Interface Map'],['h3-3','3.3 HashMap gebruiken']],
+blocks:[
+{h:'Map in het kort',html:`<p>Een <code>Map&lt;K, V&gt;</code> koppelt een unieke sleutel aan een waarde. Met een <code>Map&lt;String, House&gt;</code> waarvan de sleutel de code is, vind je een huis met één regel: <code>houses.get("HAS_001")</code>. Geen lus nodig.</p>${PRE(`Map<String, Integer> scores = new HashMap<>();
+scores.put("Alice", 25);
+scores.get("Alice");          // 25
+scores.get("Eve");            // null
+scores.containsKey("Bob");    // false
+scores.remove("Alice");`)}`},
+{h:'Aanpak voor Huizenjacht',html:`<ol><li>Enum <code>Status</code> en klasse <code>House</code> in <code>domain</code>.</li><li><code>HouseService</code> met één gedeelde lijst.</li><li><code>HouseController</code> met POST, PUT, GET, DELETE.</li><li>Testen in requests.http.</li></ol>`}
+],
+ex:[
+{type:'mc',title:'get met onbekende sleutel',q:'<code>Map&lt;String, House&gt; houses</code> bevat geen sleutel "XYZ". Wat geeft <code>houses.get("XYZ")</code>?',opts:[
+ {t:'null'},{t:'Een NoSuchElementException',no:'Map.get gooit geen exception; het geeft null.'},{t:'Een leeg House-object',no:'Een Map maakt nooit zelf objecten aan.'}],a:0,
+ why:'Daarom controleer je vaak eerst met containsKey, of je checkt het resultaat op null.'},
+{type:'fill',title:'Map-methodes',q:'Vul de juiste methodes in.',code:`Map<String, House> houses = new HashMap<>();
+houses.__0__(house.getCode(), house);        // toevoegen
+House h = houses.__1__("HAS_001");           // opzoeken
+boolean bestaat = houses.__2__("GNK_002");   // bestaat de sleutel?
+houses.__3__("HAS_001");                     // verwijderen
+Collection<House> alle = houses.__4__();     // alle huizen`,ans:[/^put$/,/^get$/,/^containsKey$/,/^remove$/,/^values$/],w:[4,4,12,7,7],why:'put, get, containsKey, remove, values.'},
+{type:'ij',title:'Oefening 2.3 – Huizenjacht',q:'Bouw de API stap voor stap.',steps:[
+ `<p>Nieuw Spring Boot-project <code>huizenjacht</code> met <strong>Spring Web</strong>, package <code>be.pxl.huizenjacht</code>.</p>`,
+ `<p>Maak in <code>domain</code> de enum <code>Status</code> met <code>FOR_SALE</code> en <code>SOLD</code>.</p>`,
+ `<p>Maak <code>House</code> met de velden code, name, status, city, price. Lege constructor, getters en setters. Zet in de lege constructor <code>status = Status.FOR_SALE;</code> zodat een nieuw huis altijd te koop staat.</p>`,
+ `<p>Maak <code>HouseService</code> (<code>@Service</code>) met <code>private final List&lt;House&gt; houses = new ArrayList&lt;&gt;();</code> en methodes <code>addHouse</code>, <code>getHouses</code>, <code>updateHouse(String code, House data)</code>, <code>deleteHouse(String code)</code>.</p>${HELP('<p>Voor update en delete moet je het huis met die code zoeken. Hoe vind je in een lijst het element waarvan getCode() gelijk is aan code? Denk aan een for-lus en equals().</p>')}`,
+ `<p>Maak <code>HouseController</code> met <code>@RequestMapping("/houses")</code> en vier methodes: <code>@PostMapping</code>, <code>@GetMapping</code>, <code>@PutMapping("/{code}")</code>, <code>@DeleteMapping("/{code}")</code>.</p>`,
+ `<p>Test met requests.http: voeg HAS_001 en GNK_001 toe, wijzig GNK_001 naar SOLD, verwijder HAS_001, vraag alles op.</p>${SEE('<p>Eén huis over: GNK_001 met status SOLD.</p>')}`
+],done:'Huizenjacht v1 werkt.'},
+{type:'code',title:'HouseService met HashMap',q:'Oefening 3.1. Herschrijf de service met een Map, met de code als sleutel.',file:'service/HouseService.java',
+start:`@Service
+public class HouseService {
+    // TODO: een Map in plaats van een List
+
+    public void addHouse(House house) {
+    }
+
+    public Collection<House> getHouses() {
+        return null;
+    }
+
+    public void deleteHouse(String code) {
+    }
+}`,
+reqs:[[/Map\s*<\s*String\s*,\s*House\s*>\s+\w+\s*=\s*new\s+HashMap\s*<\s*>\s*\(\s*\)/,'Declareer Map<String, House> houses = new HashMap<>();'],
+ [/\.put\s*\(\s*house\.getCode\s*\(\s*\)\s*,\s*house\s*\)/,'In addHouse: put met house.getCode() als sleutel.'],
+ [/return\s+\w+\.values\s*\(\s*\)/,'In getHouses: geef values() terug.'],
+ [/\.remove\s*\(\s*code\s*\)/,'In deleteHouse: remove(code).']],
+sol:`@Service
+public class HouseService {
+    private final Map<String, House> houses = new HashMap<>();
+
+    public void addHouse(House house) { houses.put(house.getCode(), house); }
+
+    public Collection<House> getHouses() { return houses.values(); }
+
+    public void deleteHouse(String code) { houses.remove(code); }
+}`},
+{type:'mc',title:'Dubbele code',q:'Je doet twee keer POST met code HAS_001. Wat zit er daarna in de Map?',opts:[
+ {t:'Twee huizen met code HAS_001',no:'Een sleutel is uniek in een Map.'},{t:'Eén huis: het tweede overschrijft het eerste'},{t:'Eén huis: put weigert de tweede',no:'put weigert niet; het vervangt de oude waarde.'}],a:1,
+ why:'put met een bestaande sleutel vervangt de waarde. Wil je dat verbieden, controleer dan eerst met containsKey.'}
+]},
+
+/* ---------- LAB 7 ---------- */
+{id:'lab7',tag:'H4 · Fouten',title:'Foutafhandeling',
+lead:'Wat als het misgaat? Je leert exceptions lezen, opvangen en zelf maken, en de juiste HTTP-status teruggeven.',
+read:[['h4-1','4.1 Compile vs runtime'],['h4-2','4.2 try/catch'],['h4-3','4.3 Hiërarchie'],['h4-4','4.4 finally'],['h4-5','4.5 Eigen exceptions']],
+blocks:[
+{h:'Twee soorten fouten',html:`<p><strong>Compile-time</strong>: de code compileert niet (rode kronkel, app start niet). <strong>Runtime</strong>: de code draait, maar faalt onderweg (rode stacktrace). Een stacktrace lees je van boven: type, boodschap, en dan de regel waar het misging.</p>`},
+{h:'Checked of unchecked?',html:`<p><strong>Unchecked</strong> = <code>RuntimeException</code> en kinderen. Meestal een bug; je bent niet verplicht ze op te vangen. <strong>Checked</strong> = de rest van <code>Exception</code>. De compiler dwingt <code>try/catch</code> of <code>throws</code>.</p>`},
+{h:'Volgorde van catch-blokken',html:`<p>Java neemt het eerste passende blok. Zet dus het specifieke (<code>ArrayIndexOutOfBoundsException</code>) vóór het algemene (<code>Exception</code>). <code>finally</code> draait altijd.</p>`}
+],
+ex:[
+{type:'sort',title:'Compile-time of runtime?',q:'Wanneer merk je deze fout?',cats:['compile-time','runtime'],rows:[
+ ['Je vergeet een puntkomma',0],['Je deelt door een variabele die 0 is',1],['Je roept een methode op die niet bestaat',0],['Je gebruikt een lijst die nooit met new werd gemaakt',1],['Je steekt een String in een int-variabele',0]],
+ why:'Alles wat de compiler kan zien, is compile-time. Waarden die pas bij het draaien bekend zijn, geven runtime-fouten.'},
+{type:'line',title:'Oefening 4.2',q:'Bij <code>addSong()</code> krijg je een exception. Klik op de regel die het eigenlijke probleem veroorzaakt.',code:`@Service
+public class MusicPlaylistService {
+    private List<Song> playlist;
+
+    public void addSong(Song song) {
+        playlist.add(song);
+    }
+}`,bad:[2],why:'Regel 3: de lijst wordt nooit aangemaakt, dus playlist is null. Bij playlist.add krijg je een NullPointerException. Oplossing: = new ArrayList<>();'},
+{type:'sort',title:'Checked of unchecked?',q:'Moet de compiler je dwingen om ze af te handelen?',cats:['checked','unchecked'],rows:[
+ ['NullPointerException',1],['NoSuchAlgorithmException',0],['IllegalStateException',1],['IOException',0],['ArithmeticException',1]],
+ why:'Alles onder RuntimeException is unchecked. NoSuchAlgorithmException en IOException zijn checked.'},
+{type:'mc',title:'Oefening 4.4',q:'Je zet <code>catch (Exception e)</code> vóór <code>catch (ArrayIndexOutOfBoundsException e)</code>. Wat gebeurt er?',opts:[
+ {t:'Het werkt, maar het tweede blok wordt nooit gebruikt',no:'Bijna: Java weigert dit zelfs te compileren.'},{t:'Compileerfout: het tweede catch-blok is onbereikbaar'},{t:'Java wisselt ze automatisch om',no:'Java past je code nooit zelf aan.'}],a:1,
+ why:'"exception ArrayIndexOutOfBoundsException has already been caught" – unreachable code.'},
+{type:'mc',title:'Oefening 4.5',q:'Je hebt enkel <code>catch (ArrayIndexOutOfBoundsException e)</code> en een <code>finally</code>, en je deelt door 0. Wat zie je?',opts:[
+ {t:'Enkel de stacktrace',no:'finally draait altijd, ook als geen catch past.'},{t:'De tekst uit finally, daarna de stacktrace van de ArithmeticException'},{t:'De tekst uit finally, en het programma loopt gewoon verder',no:'De exception is niet opgevangen, dus het programma stopt na finally.'}],a:1,
+ why:'finally draait, daarna gaat de niet-opgevangen exception verder en stopt het programma.'},
+{type:'sort',title:'Welke statuscode?',q:'Kies de passende HTTP-status.',cats:['200','201','204','400','404','500'],rows:[
+ ['Nieuwe superheld aangemaakt',1],['Huis met code XYZ bestaat niet',4],['Titel van het liedje is leeg',3],['Liedje verwijderd, niets terug te geven',2],['NullPointerException in je service',5],['Lijst van huizen opgehaald',0]],
+ why:'201 Created, 404 Not Found, 400 Bad Request, 204 No Content, 500 Internal Server Error, 200 OK.'},
+{type:'code',title:'Je eigen exception',q:'Maak een unchecked exception <code>SongNotFoundException</code> met een constructor die een boodschap doorgeeft.',file:'exception/SongNotFoundException.java',
+start:`package be.pxl.demo.exception;
+
+public class SongNotFoundException {
+
+}`,
+reqs:[[/class\s+SongNotFoundException\s+extends\s+RuntimeException/,'Erf van RuntimeException (dan is ze unchecked).'],
+ [/public\s+SongNotFoundException\s*\(\s*String\s+\w+\s*\)/,'Voorzie een constructor met een String-parameter.'],
+ [/super\s*\(\s*\w+\s*\)/,'Geef de boodschap door met super(message).']],
+sol:`public class SongNotFoundException extends RuntimeException {
+    public SongNotFoundException(String message) {
+        super(message);
+    }
+}`},
+{type:'code',title:'404 in plaats van 500',q:'Pas <code>deleteSong</code> in de service aan: gooi een <code>SongNotFoundException</code> als de index niet bestaat.',file:'MusicPlaylistService.java (stukje)',
+start:`public void deleteSong(int index) {
+    myPlaylist.remove(index);
+}`,
+reqs:[[/if\s*\(\s*index\s*<\s*0\s*\|\|\s*index\s*>=\s*myPlaylist\.size\s*\(\s*\)\s*\)|if\s*\(\s*index\s*>=\s*myPlaylist\.size\s*\(\s*\)\s*\|\|\s*index\s*<\s*0\s*\)/,'Controleer eerst: index < 0 || index >= myPlaylist.size().'],
+ [/throw\s+new\s+SongNotFoundException\s*\(/,'Gooi een new SongNotFoundException(...) als de index fout is.'],
+ [/myPlaylist\.remove\s*\(\s*index\s*\)/,'Verwijder het liedje als de index goed is.']],
+sol:`public void deleteSong(int index) {
+    if (index < 0 || index >= myPlaylist.size()) {
+        throw new SongNotFoundException("No song at index " + index);
+    }
+    myPlaylist.remove(index);
+}
+
+// en boven de exception-klasse:
+@ResponseStatus(HttpStatus.NOT_FOUND)
+public class SongNotFoundException extends RuntimeException { ... }`,
+note:'<div class="tip">Zet <code>@ResponseStatus(HttpStatus.NOT_FOUND)</code> boven je exception-klasse. Dan krijgt de client automatisch 404. Test opnieuw <code>DELETE …/songs/99</code>.</div>'}
+]},
+
+/* ---------- LAB 8 ---------- */
+{id:'lab8',tag:'H5 · Validatie',title:'Spring Validation',
+lead:'Laat Spring controleren of binnenkomende data klopt, en geef duidelijke foutboodschappen terug.',
+read:[['h5-1','5.1 Annotaties'],['h5-2','5.2 @Valid'],['h5-3','5.3 Exception handler']],
+blocks:[
+{h:'Drie stappen',html:`<ol><li>Dependency <code>spring-boot-starter-validation</code>.</li><li>Annotaties op de velden: <code>@NotBlank</code>, <code>@Min</code>, <code>@NotNull</code>…</li><li><code>@Valid</code> naast <code>@RequestBody</code>. Zonder <code>@Valid</code> gebeurt er niets.</li></ol>`},
+{h:'Mooie foutboodschappen',html:`<p>Een <code>@RestControllerAdvice</code>-klasse vangt exceptions van alle controllers op. Met <code>@ExceptionHandler(MethodArgumentNotValidException.class)</code> zet je de fouten om naar een nette lijst.</p>`}
+],
+ex:[
+{type:'sort',title:'Welke annotatie?',q:'Kies de beste regel.',cats:['@NotBlank','@NotNull','@NotEmpty','@Min','@Email'],rows:[
+ ['String title: mag niet leeg of enkel spaties zijn',0],['Genre genre: moet ingevuld zijn',1],['List<String> tags: minstens één element',2],['int area: minstens 50',3],['String contact: moet een e-mailadres zijn',4]],
+ why:'@NotBlank voor Strings, @NotNull voor objecten/enums, @NotEmpty voor lijsten, @Min voor getallen, @Email voor adressen.'},
+{type:'fill',title:'Song valideren',q:'Vul aan.',code:`public class Song {
+    @__0__(message = "title.not.blank")
+    private String title;
+
+    @__1__(value = 10, message = "Invalid duration_seconds: must be equal to or exceed 10.")
+    private int durationSeconds;
+
+    @__2__
+    private Genre genre;
+}
+
+@PostMapping
+public void addSong(@RequestBody @__3__ Song song) { ... }`,ans:[/^NotBlank$/,/^Min$/,/^NotNull$/,/^Valid$/],w:[9,4,8,6],why:'@NotBlank, @Min, @NotNull, en @Valid om de controle aan te zetten.'},
+{type:'mc',title:'@Valid vergeten',q:'Alle annotaties staan op Song, maar je vergat <code>@Valid</code> in de controller. Je POST een liedje met lege titel. Wat gebeurt er?',opts:[
+ {t:'400 Bad Request',no:'Zonder @Valid wordt er niets gecontroleerd.'},{t:'Het liedje wordt gewoon toegevoegd'},{t:'Compileerfout',no:'Het compileert prima; het controleert alleen niets.'}],a:1,
+ why:'@Valid is de schakelaar. Zonder die schakelaar zijn de annotaties enkel versiering.'},
+{type:'code',title:'GlobalExceptionHandler',q:'Schrijf de handler die bij validatiefouten een lijst van boodschappen teruggeeft met status 400.',file:'config/GlobalExceptionHandler.java',
+start:`public class GlobalExceptionHandler {
+
+    public ResponseEntity<List<String>> handleValidationErrors(MethodArgumentNotValidException ex) {
+        List<String> errors = new ArrayList<>();
+        // overloop ex.getBindingResult().getAllErrors()
+        return null;
+    }
+}`,
+reqs:[[/@RestControllerAdvice\s+public\s+class\s+GlobalExceptionHandler/,'Zet @RestControllerAdvice boven de klasse.'],
+ [/@ExceptionHandler\s*\(\s*MethodArgumentNotValidException\.class\s*\)/,'Zet @ExceptionHandler(MethodArgumentNotValidException.class) boven de methode.'],
+ [/getAllErrors\s*\(\s*\)/,'Overloop ex.getBindingResult().getAllErrors().'],
+ [/getDefaultMessage\s*\(\s*\)/,'Voeg per fout error.getDefaultMessage() toe aan de lijst.'],
+ [/HttpStatus\.BAD_REQUEST|ResponseEntity\.badRequest\s*\(\s*\)/,'Geef status 400 terug (HttpStatus.BAD_REQUEST).']],
+sol:`@RestControllerAdvice
+public class GlobalExceptionHandler {
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<List<String>> handleValidationErrors(MethodArgumentNotValidException ex) {
+        List<String> errors = new ArrayList<>();
+        for (ObjectError error : ex.getBindingResult().getAllErrors()) {
+            errors.add(error.getDefaultMessage());
+        }
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
+}`},
+{type:'ij',title:'Validatie in MusicPlaylist',q:'Zet het in je project en probeer het uit.',steps:[
+ `<p>Voeg <code>spring-boot-starter-validation</code> toe aan pom.xml en laad Maven opnieuw.</p>`,
+ `<p>Zet de annotaties op Song en <code>@Valid</code> in addSong. Imports komen uit <code>jakarta.validation</code>.</p>`,
+ `<p>Maak het package <code>config</code> met je GlobalExceptionHandler. Herstart.</p>`,
+ `<p>Stuur dit:</p>${PRE(`### Fout liedje
+POST http://localhost:8080/playlist/songs
+Content-Type: application/json
+
+{ "title": "", "artist": "Bruno Mars", "duration_seconds": -2, "genre": "OTHER" }`)}${SEE(`<p><code>HTTP/1.1 400</code> en een lijst zoals</p>${PRE(`[
+  "title.not.blank",
+  "Invalid duration_seconds: must be equal to or exceed 10."
+]`)}<p>(volgorde kan verschillen)</p>`)}`
+],done:'Foute data komt niet meer in je playlist.'},
+{type:'ij',title:'Oefening 5.1 – Huizenjacht v3',q:'De grote uitbreiding. Werk ze stap voor stap af in je huizenjacht-project.',steps:[
+ `<p>Maak de enum <code>EPCScore</code> (code in ${R('h5-3','5.3')}). Voeg aan House de velden <code>int area</code> en <code>EPCScore epcScore</code> toe.</p>`,
+ `<p>Verwijder het veld <code>price</code> en de setter. Maak een methode <code>getPrice()</code>: <code>area * 2356.75 * epcScore.getPercentage()</code>, en ×1.25 als city "Hasselt" of "Genk" is.</p>${HELP('<p>Zet 2356.75 in een constante: <code>public static final double BASE_PRICE = 2356.75;</code>. Jackson toont getPrice() automatisch als veld "price" in de JSON.</p>')}`,
+ `<p>Voeg <code>markAsSold()</code> toe: FOR_SALE → SOLD, anders <code>throw new IllegalStateException("House is already marked as sold.")</code>.</p>`,
+ `<p>Maak een klasse <code>HouseRequest</code> voor POST met validatie: code, name, city <code>@NotBlank</code>; area <code>@Min(50)</code>; epcScore <code>@NotNull</code>. Maak <code>HouseUpdateRequest</code> voor PUT met enkel name, area, city, epcScore.</p>${HELP('<p>Waarom twee klassen? Bij PUT mag je de code en status niet aanpassen. Een aparte request-klasse maakt dat onmogelijk.</p>')}`,
+ `<p>Voeg <code>PUT /houses/{code}/sold</code> toe die <code>markAsSold()</code> oproept. Vang <code>IllegalStateException</code> op in je GlobalExceptionHandler en geef 400 terug.</p>`,
+ `<p>Test: huis in Genk van 100 m² met EPC B.</p>${SEE('<p>price = 100 × 2356.75 × 1 × 1.25 = <code>294593.75</code>. Twee keer /sold → de tweede keer 400.</p>')}`
+],done:'Huizenjacht berekent prijzen en bewaakt zijn regels.'}
+]},
+
+/* ---------- LAB 9 ---------- */
+{id:'lab9',tag:'H6 · Testen',title:'Unit testen met JUnit',
+lead:'Je schrijft code die je code controleert. Groen is goed.',
+read:[['h6-3','6.3 Waar komen testen'],['h6-4','6.4 Eerste test'],['h6-5','6.5 3A-patroon'],['h6-8','6.8 Exceptions testen']],
+blocks:[
+{h:'Het 3A-patroon',html:`${PRE(`@Test
+public void testSetCity() {
+    House house = new House("ABC123", "3-bedroom house", 150, EPCScore.B);  // Arrange
+    house.setCity("Genk");                                                 // Act
+    assertEquals("Genk", house.getCity());                                 // Assert
+}`)}`},
+{h:'Waar en hoe',html:`<p>Testklasse in <code>src/test/java</code>, zelfde package als de klasse, naam eindigt op <code>Test</code>. Elke testmethode krijgt <code>@Test</code>. Gedeelde opzet in een methode met <code>@BeforeEach</code>.</p><p>Doubles vergelijk je met een marge: <code>assertEquals(verwacht, echt, 0.001)</code>.</p>`}
+],
+ex:[
+{type:'order',title:'Arrange, Act, Assert',q:'Zet de regels van deze test in de juiste volgorde.',items:[
+ 'House house = new House("ABC123", "huis", 150, EPCScore.B);','house.setArea(200);','assertEquals(200, house.getArea());'],
+ why:'Eerst opzetten, dan de actie, dan controleren.'},
+{type:'mc',title:'Waar staat HouseTest?',q:'House staat in <code>src/main/java/be/pxl/domain</code>. Waar hoort HouseTest?',opts:[
+ {t:'src/main/java/be/pxl/domain',no:'Testen horen niet tussen je echte code.'},{t:'src/test/java/be/pxl/domain'},{t:'src/test/java/tests',no:'Hetzelfde package als de geteste klasse is de afspraak.'}],a:1,
+ why:'Zelfde package, maar onder src/test/java.'},
+{type:'fill',title:'Asserts kiezen',q:'Vul de juiste assert in.',code:`assert__0__(house.getCity());                     // stad nog niet ingevuld
+assert__1__(Status.FOR_SALE, house.getStatus());
+assert__2__(IllegalStateException.class, () -> house.markAsSold());
+assertEquals(expected, house.getPrice(), __3__);   // marge voor doubles`,ans:[/^Null$/,/^Equals$/,/^Throws$/,/^0?\.0*1$|^1e-\d+$/i],w:[6,6,6,6],why:'assertNull, assertEquals, assertThrows, en een kleine delta zoals 0.001.'},
+{type:'code',title:'Test voor markAsSold',q:'Schrijf een test die controleert dat een tweede keer markAsSold() een IllegalStateException gooit. <code>house</code> wordt al aangemaakt in @BeforeEach.',file:'HouseTest.java (stukje)',
+start:`
+public void testMarkAsSoldWhenAlreadySold() {
+
+}`,
+reqs:[[/@Test\s+public\s+void\s+testMarkAsSoldWhenAlreadySold/,'Zet @Test boven de methode.'],
+ [/house\.markAsSold\s*\(\s*\)\s*;[\s\S]*assertThrows/,'Arrange/Act: roep eerst één keer house.markAsSold() op.'],
+ [/assertThrows\s*\(\s*IllegalStateException\.class\s*,\s*\(\s*\)\s*->\s*house\.markAsSold\s*\(\s*\)\s*\)/,'Assert: assertThrows(IllegalStateException.class, () -> house.markAsSold()).']],
+sol:`@Test
+public void testMarkAsSoldWhenAlreadySold() {
+    house.markAsSold();
+    assertThrows(IllegalStateException.class, () -> house.markAsSold());
+}`},
+{type:'ij',title:'HouseTest laten draaien',q:'Je eerste groene testen.',steps:[
+ `<p>Open <code>House</code> in je huizenjacht-project. Zet je cursor op de klassenaam en druk ${K('Alt')}+${K('Enter')} → ${U('Create Test')}. Kies <strong>JUnit5</strong>, vink <code>setUp/@Before</code> aan. OK.</p>`,
+ `<p>Maak het veld <code>private House house;</code> en vul het in <code>@BeforeEach setUp()</code>: <code>new House("ABC123", "3-bedroom house", 150, EPCScore.B)</code> (pas aan aan jouw constructor).</p>`,
+ `<p>Schrijf <code>testConstructor</code>, een test per setter (oefening 6.1), <code>testGetPrice</code>, <code>testGetPriceWithCity</code> en <code>testMarkAsSoldWhenAlreadySold</code>.</p>${HELP(`<p>Alle voorbeelden staan in ${R('h6-7','6.7')} en ${R('h6-8','6.8')}.</p>`)}`,
+ `<p>Klik op het groene dubbele pijltje naast <code>class HouseTest</code> → ${U('Run')}.</p>${SEE('<p>Onderaan een lijst testen met groene vinkjes en "Tests passed".</p>')}`,
+ `<p>Maak bewust een fout: verander in House de 1.25 naar 1.20. Run opnieuw.</p>${SEE('<p>testGetPriceWithCity faalt, met <em>expected</em> en <em>actual</em> naast elkaar. Zet de 1.25 terug.</p>')}`
+],done:'Je testen vangen een bug voor jij hem zag.'},
+{type:'mc',title:'Waarom @BeforeEach?',q:'Een test roept <code>house.markAsSold()</code> op. De volgende test verwacht status FOR_SALE. Waarom lukt dat?',opts:[
+ {t:'JUnit voert testen in willekeurige volgorde uit',no:'Dat klopt wel, maar is niet de reden.'},{t:'@BeforeEach maakt voor elke test een nieuw House-object'},{t:'markAsSold wordt teruggedraaid na elke test',no:'JUnit draait niets terug; het maakt gewoon opnieuw aan.'}],a:1,
+ why:'Elke test start met een vers object, dus testen beïnvloeden elkaar niet.'}
+]},
+
+/* ---------- LAB 10 ---------- */
+{id:'lab10',tag:'H7 · Streams',title:'Lambda\'s en Streams',
+lead:'Korter en leesbaarder werken met lijsten. Eerst lambda\'s, dan streams.',
+read:[['h7-1','7.1 Lambda\'s'],['h7-2','7.2 Iterators'],['h7-3','7.3 Operaties'],['h7-5','7.5 Method references']],
+blocks:[
+{h:'Lambda',html:`<p>Een interface met één abstracte methode (een <strong>functionele interface</strong>) kun je invullen met een lambda: <code>parameters -&gt; resultaat</code>.</p>${PRE(`StringConverter up = s -> s.toUpperCase();
+Predicate<String> isLang = s -> s.length() > 5;`)}`},
+{h:'Stream',html:`<p><strong>Bron</strong> → nul of meer <strong>intermediate</strong> stappen → één <strong>terminal</strong> stap. Zonder terminal stap gebeurt er niets (lazy).</p>${PRE(`playlist.stream()                         // bron
+        .filter(s -> s.getGenre() == POP)  // intermediate
+        .map(Song::getTitle)               // intermediate
+        .toList();                         // terminal`)}`}
+],
+ex:[
+{type:'mc',title:'Functionele interface',q:'Welke interface is een functionele interface?',opts:[
+ {t:'interface A { void a(); void b(); }',no:'Twee abstracte methodes.'},{t:'interface B { int calc(int n); default void log() {} }'},{t:'interface C { }',no:'Nul abstracte methodes.'}],a:1,
+ why:'Precies één abstracte methode. Default-methodes tellen niet mee.'},
+{type:'fill',title:'Oefening 7.1',q:'Maak twee lambda\'s met <code>interface Calculator { int calculate(int n); }</code>.',code:`Calculator kwadraat  = n -> __0__;
+Calculator derdeMacht = n -> __1__;
+System.out.println(kwadraat.__2__(4));    // 16`,ans:[/^n\s*\*\s*n$/,/^n\s*\*\s*n\s*\*\s*n$/,/^calculate$/],w:[6,10,10],why:'n * n, n * n * n, en je roept de methode van de interface op: calculate.'},
+{type:'sort',title:'Welke functionele interface?',q:'Bij welke ingebouwde interface hoort de lambda?',cats:['Function','Consumer','Predicate','Supplier'],rows:[
+ ['s -> s.length()',0],['name -> System.out.println(name)',1],['p -> p.getPoints() > 100',2],['() -> new Random()',3]],
+ why:'Function: in → uit. Consumer: in → niets. Predicate: in → boolean. Supplier: niets → uit.'},
+{type:'mc',title:'Lazy',q:'Wat drukt dit af?<pre class="code">Stream.of("a", "b").peek(x -> System.out.println(x)).map(String::toUpperCase);</pre>',opts:[
+ {t:'a b',no:'Geen terminal operation, dus peek wordt nooit uitgevoerd.'},{t:'A B',no:'Er wordt niets afgedrukt van map.'},{t:'Niets'}],a:2,
+ why:'Intermediate operations zijn lazy. Pas met toList(), forEach() of count() komt de stroom op gang.'},
+{type:'mc',title:'Voorspel het resultaat',q:'<pre class="code">Stream.of("zebra", "dog", "dolphine", "dog")\n      .distinct()\n      .filter(a -> a.contains("o"))\n      .map(String::length)\n      .toList();</pre>',opts:[
+ {t:'[3, 8]'},{t:'[3, 8, 3]',no:'distinct() haalt de tweede "dog" weg.'},{t:'[dog, dolphine]',no:'map(String::length) zet om naar lengtes.'},{t:'[5, 3, 8]',no:'zebra bevat geen o.'}],a:0,
+ why:'distinct → zebra, dog, dolphine. filter op "o" → dog, dolphine. map length → 3, 8.'},
+{type:'fill',title:'Method references',q:'Schrijf korter met <code>::</code>.',code:`.map(s -> s.toUpperCase())        →  .map(__0__)
+.forEach(x -> System.out.println(x)) →  .forEach(__1__)
+.map(name -> new Person(name))      →  .map(__2__)`,ans:[/^String::toUpperCase$/,/^System\.out::println$/,/^Person::new$/],w:[19,19,11],why:'Unbounded instance (String::toUpperCase), bounded instance (System.out::println), constructor (Person::new).'},
+{type:'code',title:'Service met een stream',q:'Herschrijf <code>getSongsByGenre</code> met een stream.',file:'MusicPlaylistService.java (stukje)',
+start:`public List<Song> getSongsByGenre(Genre genre) {
+    List<Song> result = new ArrayList<>();
+    for (Song song : myPlaylist) {
+        if (song.getGenre() == genre) result.add(song);
+    }
+    return result;
+}`,
+reqs:[[/return\s+myPlaylist\.stream\s*\(\s*\)/,'Begin met return myPlaylist.stream()'],
+ [/\.filter\s*\(\s*\w+\s*->\s*\w+\.getGenre\s*\(\s*\)\s*==\s*genre\s*\)/,'Filter met song -> song.getGenre() == genre'],
+ [/\.toList\s*\(\s*\)/,'Sluit af met .toList()'],
+ [/^(?![\s\S]*\bfor\s*\()/,'Verwijder de for-lus.']],
+sol:`public List<Song> getSongsByGenre(Genre genre) {
+    return myPlaylist.stream()
+            .filter(song -> song.getGenre() == genre)
+            .toList();
+}`},
+{type:'ij',title:'Oefening 7.3 – StudentList',q:'Je krijgt de klasse StudentList van je lector (be.pxl.ja.oefening1). Werk de vragen één per één af met streams.',steps:[
+ `<p>Maak een klasse <code>StudentStreams</code> met een <code>main</code>. Haal de lijst op met <code>StudentList.createStudents()</code>.</p>`,
+ `<p>Toon alle gegevens van de student met naam Carol. Tip: <code>filter</code> + <code>findFirst()</code> geeft een Optional.</p>`,
+ `<p>Hoeveel studenten studeerden af in 2017? Tip: <code>filter</code> + <code>count()</code>.</p>`,
+ `<p>Wat is de hoogste score ooit, en van wie? Tip: <code>max(Comparator.comparing(Student::getScore))</code>.</p>`,
+ `<p>Alle namen in één String, gescheiden door komma's: <code>map(Student::getName).collect(Collectors.joining(", "))</code>.</p>`,
+ `<p>Een Map met per afstudeerjaar de gemiddelde score: <code>Collectors.groupingBy(Student::getGraduationYear, Collectors.averagingDouble(Student::getScore))</code>.</p>${HELP('<p>De getter-namen hangen af van de StudentList van je lector. Kijk in die klasse hoe ze heten.</p>')}`,
+ `<p>Doe de rest van de lijst uit ${R('h7-5','oefening 7.3')}: jarigen vandaag, de oudste, de jongste van 2018, en de sortering.</p>`
+],done:'Je hebt alle stream-operaties toegepast op echte data.'}
+]},
+
+/* ---------- LAB 11 ---------- */
+{id:'lab11',tag:'H8 · 3 lagen',title:'Drie lagen en Spring Data JPA',
+lead:'Je app krijgt een databank. Elke klasse krijgt een vaste plek in één van drie lagen.',
+read:[['h8','8 Drie lagen'],['h8-2','8.2 Entiteit'],['h8-3','8.3 Repository'],['h8-4','8.4 Service'],['h8-6','8.6 Swagger en H2']],
+blocks:[
+{h:'De lagen',html:`<ul><li><strong style="color:var(--sky)">API</strong> – <code>@RestController</code>, praat met DTO's.</li><li><strong style="color:var(--accent)">Service</strong> – <code>@Service</code>, business-logica, zet DTO's om naar entiteiten.</li><li><strong style="color:var(--java)">Persistence</strong> – <code>@Repository</code>, praat met de databank.</li></ul>`},
+{h:'Repository zonder code',html:`${PRE(`public interface SuperheroRepository extends JpaRepository<Superhero, Long> { }`)}<p>Spring schrijft de implementatie. Je krijgt <code>save</code>, <code>findById</code>, <code>findAll</code>, <code>delete</code> gratis.</p>`}
+],
+ex:[
+{type:'sort',title:'Welke laag?',q:'Waar hoort elke klasse?',cats:['API','Service','Persistence','Domein'],rows:[
+ ['SuperheroController',0],['SuperheroServiceImpl',1],['SuperheroRepository',2],['Superhero (@Entity)',3],['SuperheroDTO',0],['ResourceNotFoundException wordt hier gegooid',1]],
+ why:'Controller en DTO\'s aan de API-kant, logica en exceptions in de service, repository in persistence, entiteit in het domein.'},
+{type:'mc',title:'Waarom DTO\'s?',q:'Waarom geeft de service geen Superhero-entiteit terug aan de controller?',opts:[
+ {t:'Entiteiten kunnen niet naar JSON',no:'Dat kan wel, maar is niet verstandig.'},{t:'Zo bepaal je zelf wat naar buiten gaat en lekt je databankstructuur niet'},{t:'DTO\'s zijn sneller',no:'Snelheid is niet het punt.'}],a:1,
+ why:'Een DTO is een contract met de buitenwereld. Je entiteit kan veranderen zonder dat je API breekt.'},
+{type:'fill',title:'De entiteit',q:'Vul de JPA-annotaties in.',code:`@__0__
+@Table(name = "superheroes")
+public class Superhero {
+    @__1__
+    @GeneratedValue(strategy = GenerationType.__2__)
+    private Long id;
+    private String superheroName;
+
+    public Superhero() { }   // JPA heeft een lege constructor nodig
+}`,ans:[/^Entity$/,/^Id$/,/^IDENTITY$/],w:[7,3,9],why:'@Entity, @Id en GenerationType.IDENTITY (de databank kiest de id).'},
+{type:'mc',title:'JpaRepository<Superhero, Long>',q:'Wat betekent <code>Long</code> hier?',opts:[
+ {t:'Het aantal superhelden',no:'Het is een type, geen getal.'},{t:'Het type van de primaire sleutel (id) van Superhero'},{t:'Dat de tabel lang mag worden',no:'Nee.'}],a:1,
+ why:'JpaRepository<Entiteit, TypeVanDeId>.'},
+{type:'ij',title:'superhero-backend opzetten',q:'Oefeningen 8.1 tot 8.5.',steps:[
+ `<p>Nieuw project <code>superhero-backend</code>, package <code>be.pxl.superhero</code>, met <strong>Spring Web</strong>, <strong>Validation</strong>, <strong>Spring Data JPA</strong> en <strong>H2 Database</strong>.</p>`,
+ `<p>Maak de packages <code>domain</code>, <code>repository</code>, <code>service</code>, <code>service.impl</code>, <code>api</code>, <code>exception</code>.</p>`,
+ `<p>Maak <code>Superhero</code> in domain en <code>SuperheroRepository</code> in repository.</p>`,
+ `<p>Maak <code>SuperheroDTO</code> en <code>SuperheroRequest</code> in api, de interface <code>SuperheroService</code>, de implementatie in impl, en <code>ResourceNotFoundException</code>.</p>${HELP(`<p>Alles staat in ${R('h8-4','8.4')}. Werk van onder naar boven: eerst wat geen andere klassen nodig heeft.</p>`)}`,
+ `<p>Maak <code>SuperheroController</code>. Start de app.</p>`,
+ `<p>Test met requests.http: maak Superman aan (POST), haal alles op, haal id 1 op, en haal id 99 op.</p>${SEE('<p>POST geeft <code>201</code> met body <code>1</code>. GET /superheroes/99 geeft <code>404</code>.</p>')}`
+],done:'Je eerste app met drie lagen en een databank.'},
+{type:'code',title:'findSuperheroById',q:'Schrijf de service-methode. Bestaat de held niet, gooi dan een ResourceNotFoundException.',file:'SuperheroServiceImpl.java (stukje)',
+start:`public SuperheroDTO findSuperheroById(Long superheroId) {
+    return null;
+}`,
+reqs:[[/superheroRepository\.findById\s*\(\s*superheroId\s*\)/,'Zoek met superheroRepository.findById(superheroId).'],
+ [/\.map\s*\(\s*(SuperheroDTO::new|\w+\s*->\s*new\s+SuperheroDTO\s*\(\s*\w+\s*\))\s*\)/,'Zet de Optional<Superhero> om met .map(SuperheroDTO::new).'],
+ [/\.orElseThrow\s*\(\s*\(\s*\)\s*->\s*new\s+ResourceNotFoundException\s*\(/,'Gooi met .orElseThrow(() -> new ResourceNotFoundException(...)).']],
+sol:`public SuperheroDTO findSuperheroById(Long superheroId) {
+    return superheroRepository.findById(superheroId)
+            .map(SuperheroDTO::new)
+            .orElseThrow(() -> new ResourceNotFoundException("Superhero", "id", superheroId));
+}`},
+{type:'ij',title:'Context path, Swagger en H2-console',q:'Oefeningen 8.6 en 8.7.',steps:[
+ `<p>Zet in application.properties <code>server.servlet.context-path=/api</code>. Pas de URL's in requests.http aan naar <code>/api/superheroes</code>. Herstart en test.</p>`,
+ `<p>Voeg de springdoc-dependency toe (zie ${R('h8-6','8.6')}). Herstart. Open <code>http://localhost:8080/api/swagger-ui.html</code>.</p>${SEE('<p>Een pagina met al je endpoints. Klik op POST → Try it out → Execute.</p>')}${HELP('<p>Witte pagina of fout bij opstarten? Dan past de springdoc-versie niet bij je Spring Boot-versie. Zoek op Maven Central de nieuwste 2.x van springdoc-openapi-starter-webmvc-ui.</p>')}`,
+ `<p>Zet <code>spring.h2.console.enabled=true</code>. Herstart en kopieer uit de console de JDBC-URL (<code>jdbc:h2:mem:…</code>). Open <code>/api/h2-console</code>, plak de URL, user <code>sa</code>, wachtwoord leeg.</p>${SEE('<p>Een tabel SUPERHEROES. <code>SELECT * FROM SUPERHEROES</code> toont je helden.</p>')}`
+],done:'Je kan je API documenteren en in de databank kijken.'}
+]},
+
+/* ---------- LAB 12 ---------- */
+{id:'lab12',tag:'H9 · JPA',title:'MySQL, queries en many-to-many',
+lead:'Van een tijdelijke H2-databank naar een echte MySQL in Docker. Daarna missies koppelen aan superhelden.',
+read:[['h9-1','9.1 ORM en JPA'],['h9-2','9.2 Datasource'],['h9-5','9.5 Levenscyclus'],['h9-6','9.6 Queries'],['h9-7','9.7 Many-to-many'],['h9-8','9.8 Transacties']],
+blocks:[
+{h:'Wie doet wat?',html:`<p><strong>JPA</strong> is de specificatie (regels). <strong>Hibernate</strong> is de implementatie (het werk). <strong>Spring Data JPA</strong> zit erboven en schrijft je repositories.</p>`},
+{h:'Bidirectioneel = twee kanten bijwerken',html:`<p>Superhero is eigenaar (<code>@ManyToMany</code>), Mission de inverse kant (<code>@ManyToMany(mappedBy = "missions")</code>). Voeg je een missie toe aan een held, voeg dan ook de held toe aan de missie.</p>`}
+],
+ex:[
+{type:'order',title:'Van code naar databank',q:'Zet de lagen in volgorde, van jouw code naar de databank.',items:['Jouw repository-interface','Spring Data JPA','JPA (specificatie)','Hibernate (implementatie)','JDBC-driver (mysql-connector-j)','MySQL-databank'],
+ why:'Elke laag vertaalt naar de volgende.'},
+{type:'sort',title:'ddl-auto',q:'Welke waarde past?',cats:['none','validate','update','create-drop'],rows:[
+ ['Productie, schema beheerd door Flyway',0],['Productie, maar controleer of entiteiten bij de tabellen passen',1],['Ontwikkelen, data bewaren tussen runs',2],['Testen: alles weg na afsluiten',3]],
+ why:'none/validate in productie, update tijdens ontwikkeling, create-drop voor testen.'},
+{type:'ij',title:'Oefening 9.1 – MySQL in Docker',q:'Docker Desktop moet geïnstalleerd zijn en draaien.',steps:[
+ `<p>Vervang in pom.xml de H2-dependency door <code>mysql-connector-j</code> (scope runtime). Laad Maven.</p>`,
+ `<p>Maak de map <code>src/main/docker</code> en daarin <code>docker-compose.yml</code> met de inhoud uit ${R('h9-2','9.2')}.</p>`,
+ `<p>Open in IntelliJ de ${U('Terminal')} (${K('Alt')}+${K('F12')}). Typ <code>cd src/main/docker</code> en dan <code>docker compose up -d</code>.</p>${SEE('<p><code>Container docker-superhero-db-1 Started</code>.</p>')}${HELP('<p>"docker: command not found"? Start Docker Desktop eerst. Poort 3306 bezet? Er draait al een MySQL op je pc; verander links in ports naar "3307:3306" en in de URL naar :3307.</p>')}`,
+ `<p>Zet de datasource-properties in application.properties (URL, user, password, <code>ddl-auto=update</code>, <code>show-sql=true</code>). Verwijder de h2-console-regel.</p>`,
+ `<p>Start de app, maak een superheld aan, <strong>herstart</strong> en haal alles op.</p>${SEE('<p>De superheld is er nog na de herstart. In de console zie je <code>Hibernate: insert into superheroes …</code>.</p>')}`
+],done:'Je data overleeft nu een herstart.'},
+{type:'sort',title:'Toestand van een entiteit',q:'In welke toestand zit de entiteit?',cats:['New','Managed','Removed','Detached'],rows:[
+ ['Superhero s = new Superhero("Clark","Kent","Superman");',0],['Net opgehaald met findById binnen een @Transactional-methode',1],['delete() opgeroepen, transactie nog niet gecommit',2],['Na de transactie: het object bestaat nog in Java, JPA volgt het niet meer',3]],
+ why:'New → (save) Managed → (delete) Removed. Na de transactie wordt managed detached.'},
+{type:'fill',title:'Query-methode',q:'Oefening 9.5. Spring Data maakt de query uit de naam.',code:`public interface SuperheroRepository extends JpaRepository<Superhero, Long> {
+    __0__<Superhero> findBy__1__(String superheroName);
+}`,ans:[/^Optional$/,/^SuperheroName$/],w:[8,14],why:'Optional<Superhero> findBySuperheroName(String superheroName). De naam na findBy moet overeenkomen met het veld.'},
+{type:'code',title:'addMission',q:'Schrijf <code>addMission</code> in Superhero. Gooi een IllegalArgumentException als de missie voltooid is, en werk beide kanten bij.',file:'domain/Superhero.java (stukje)',
+start:`@ManyToMany
+private List<Mission> missions = new ArrayList<>();
+
+public void addMission(Mission mission) {
+
+}`,
+reqs:[[/if\s*\(\s*mission\.isCompleted\s*\(\s*\)\s*\)\s*\{?\s*throw\s+new\s+IllegalArgumentException/,'Controleer mission.isCompleted() en gooi een IllegalArgumentException.'],
+ [/missions\.add\s*\(\s*mission\s*\)/,'Voeg de missie toe aan missions.'],
+ [/mission\.addSuperhero\s*\(\s*this\s*\)/,'Werk de andere kant bij: mission.addSuperhero(this).']],
+sol:`public void addMission(Mission mission) {
+    if (mission.isCompleted()) {
+        throw new IllegalArgumentException("This mission was already completed.");
+    }
+    if (onMission(mission)) {
+        throw new IllegalArgumentException("This mission was already assigned.");
+    }
+    missions.add(mission);
+    mission.addSuperhero(this);
+}`},
+{type:'mc',title:'Geen save() nodig?',q:'In <code>addSuperheroToMission</code> met <code>@Transactional</code> roep je nergens <code>save()</code> op. Toch staat de koppeling in de databank. Waarom?',opts:[
+ {t:'findById slaat automatisch op',no:'findById leest enkel.'},{t:'Beide entiteiten zijn managed; bij de commit schrijft JPA alle wijzigingen weg'},{t:'Dat is een bug; je moet altijd save() oproepen',no:'Bij managed entiteiten is dat niet nodig.'}],a:1,
+ why:'Dirty checking: JPA merkt wijzigingen aan managed entiteiten en schrijft ze weg bij de commit.'},
+{type:'ij',title:'Missies (9.2, 9.3, 9.6)',q:'De grote opdracht van dit hoofdstuk.',steps:[
+ `<p>Entiteit <code>Mission</code> met id, name (<code>@Column(unique = true)</code>) en completed.</p>`,
+ `<p><code>MissionRepository</code>, <code>MissionService</code> + impl, <code>MissionDTO</code>, <code>MissionRequest</code>, <code>MissionController</code> met CRUD op <code>/missions</code>.</p>`,
+ `<p>Bij aanmaken: bestaat de naam al? Gooi een eigen exception (bv. <code>DuplicateMissionException</code>) en geef 409 Conflict of 400 terug via je GlobalExceptionHandler.</p>${HELP('<p>Welke query-methode heb je nodig om te controleren of een naam al bestaat? Denk aan existsBy…</p>')}`,
+ `<p>Voeg de many-to-many toe (${R('h9-7','9.7')}) en een endpoint <code>POST /superheroes/{heroId}/missions/{missionId}</code> dat <code>addSuperheroToMission</code> oproept.</p>`,
+ `<p>Test: maak een held en een missie, koppel ze. Kijk in de IntelliJ Database-tool.</p>${SEE('<p>Een koppeltabel <code>superheroes_missions</code> met één rij.</p>')}`
+],done:'Superhelden gaan op missie.'}
+]},
+
+/* ---------- LAB 13 ---------- */
+{id:'lab13',tag:'H10 · Relaties',title:'Relaties, N+1 en lazy loading',
+lead:'Alle soorten relaties op een rij, en twee valkuilen die elke Spring-ontwikkelaar ooit tegenkomt.',
+read:[['h10-1','10.1 One-to-one'],['h10-2','10.2 Many-to-one'],['h10-3','10.3 Many-to-many'],['h10-4','10.4 N+1'],['h10-5','10.5 Lazy en OSIV']],
+blocks:[
+{h:'Eigenaar en inverse kant',html:`<p>De <strong>eigenaar</strong> heeft de foreign key (of beheert de koppeltabel). De <strong>inverse kant</strong> verwijst ernaar met <code>mappedBy</code>. Bij many-to-one is de many-kant altijd eigenaar.</p>`},
+{h:'Twee valkuilen',html:`<ul><li><strong>N+1</strong>: 1 query voor de lijst, en N extra voor elk gekoppeld object. Oplossen met <code>@EntityGraph</code>.</li><li><strong>LazyInitializationException</strong>: een lazy lijst gebruiken zonder open sessie. Oplossen met <code>@Transactional</code> op de service-methode.</li></ul>`}
+],
+ex:[
+{type:'sort',title:'Welke annotatie?',q:'Kies de annotatie aan de kant van de eerste klasse.',cats:['@OneToOne','@ManyToOne','@OneToMany','@ManyToMany'],rows:[
+ ['Researcher → zijn ContactInformation',0],['Researcher → het ene Project waaraan hij werkt',1],['Project → al zijn Researchers',2],['Researcher → meerdere Projects, project heeft meerdere researchers',3],['PostComment → de Post waarbij hij hoort',1]],
+ why:'Lees het als "veel van mij horen bij één van jou" (ManyToOne) of omgekeerd (OneToMany).'},
+{type:'mc',title:'Waar staat de foreign key?',q:'Researcher heeft <code>@ManyToOne Project project</code>. Project heeft <code>@OneToMany(mappedBy = "project")</code>. In welke tabel staat de kolom <code>project_id</code>?',opts:[
+ {t:'researcher'},{t:'project',no:'De inverse kant (mappedBy) heeft geen kolom.'},{t:'In een aparte koppeltabel',no:'Dat is enkel bij many-to-many.'}],a:0,
+ why:'De eigenaar (@ManyToOne) krijgt de foreign key.'},
+{type:'mc',title:'EnumType.STRING',q:'Waarom <code>@Enumerated(EnumType.STRING)</code> en niet de standaard?',opts:[
+ {t:'Strings nemen minder plaats in',no:'Eerder meer.'},{t:'Zo breekt je data niet als je de volgorde van de enum wijzigt of een waarde toevoegt'},{t:'Anders kan JPA geen enums opslaan',no:'Standaard slaat JPA de positie (ordinal) op.'}],a:1,
+ why:'Standaard bewaart JPA 0, 1, 2… Wijzig je de volgorde, dan krijgen oude rijen een andere betekenis.'},
+{type:'mc',title:'Tel de queries',q:'Er zijn 7 comments verdeeld over 3 posts. Je haalt alle comments op en leest bij elk <code>getPost().getTitle()</code>. Hoeveel queries zonder EntityGraph?',opts:[
+ {t:'1',no:'Dat is wat je wilt, maar niet wat je krijgt.'},{t:'4'},{t:'8',no:'Hibernate haalt elke post maar één keer op (cache in de persistence context).'}],a:1,
+ why:'1 query voor de comments + 1 per verschillende post (3) = 4. N+1 met N = 3.'},
+{type:'fill',title:'N+1 oplossen',q:'Vul de EntityGraph in.',code:`public interface PostCommentRepository extends JpaRepository<PostComment, Long> {
+    @Override
+    @__0__(type = EntityGraph.EntityGraphType.FETCH, attributePaths = {"__1__"})
+    List<PostComment> findAll();
+}`,ans:[/^EntityGraph$/,/^post$/],w:[12,5],why:'@EntityGraph met attributePaths = {"post"}: de post wordt in dezelfde query meegehaald (left join).'},
+{type:'mc',title:'LazyInitializationException',q:'Je zet <code>spring.jpa.open-in-view=false</code>. <code>getPost()</code> in je service geeft nu "could not initialize proxy - no Session". Wat is de beste oplossing?',opts:[
+ {t:'open-in-view terug op true zetten',no:'Dat verbergt het probleem en is slecht voor de prestaties.'},{t:'@Transactional(readOnly = true) op de service-methode'},{t:'De relatie op FetchType.EAGER zetten',no:'Werkt, maar laadt dan altijd alles. Zelden een goed idee.'}],a:1,
+ why:'Binnen de transactie is de sessie open, dus de lazy lijst kan geladen worden.'},
+{type:'line',title:'Wat ontbreekt?',q:'Deze <code>setProject</code> laat de relatie half achter. Klik op de regel waarna iets ontbreekt.',code:`public void setProject(Project project) {
+    if (this.project != null) {
+        if (this.project.equals(project)) {
+            return;
+        }
+        this.project.removeResearcher(this);
+    }
+    this.project = project;
+}`,bad:[7],why:'Na regel 8 ontbreekt project.addResearcher(this). Anders weet het project niet dat deze onderzoeker erbij hoort.'},
+{type:'ij',title:'N+1 met je eigen ogen',q:'Een klein demo-project om het probleem te zien en op te lossen.',steps:[
+ `<p>Nieuw project <code>relations-demo</code> met Web, Data JPA en H2. Maak <code>Post</code> en <code>PostComment</code> (code in ${R('h10-4','10.4')}), repositories, <code>PostService</code> en <code>PostController</code>.</p>`,
+ `<p>Zet <code>spring.jpa.show-sql=true</code>. Start, roep <code>GET /posts/init</code> en daarna <code>GET /posts</code> op.</p>${SEE('<p>Eén select op post_comment en daarna drie selects op post.</p>')}`,
+ `<p>Voeg de <code>@EntityGraph</code> toe aan PostCommentRepository. Herstart, init, en roep <code>GET /posts</code> opnieuw op.</p>${SEE('<p>Eén select met <code>left join post</code>.</p>')}`,
+ `<p>Maak de relatie bidirectioneel en voeg <code>GET /posts/{id}</code> toe (${R('h10-5','10.5')}). Zet <code>spring.jpa.open-in-view=false</code>. Test.</p>${SEE('<p>Een <code>LazyInitializationException</code> in de console.</p>')}`,
+ `<p>Zet <code>@Transactional(readOnly = true)</code> op <code>getPost</code>. Herstart en test.</p>${SEE('<p>De post met zijn reacties, zonder fout.</p>')}`
+],done:'Je herkent en verhelpt de twee klassieke JPA-valkuilen.'}
+]}
+];
+
+/* ================= ENGINE ================= */
+const XPT={mc:10,sort:15,order:15,fill:15,line:15,code:25,ij:30};
+const TYN={mc:'meerkeuze',sort:'sorteren',order:'volgorde',fill:'invullen',line:'zoek de regel',code:'code schrijven',ij:'in IntelliJ'};
+const RANKS=[[0,'Starter'],[150,'Bean-bakker'],[400,'Controller'],[750,'Service-held'],[1150,'Repository-ridder'],[1600,'Spring-meester']];
+let S={solved:{},ijstep:{},cur:0};
+try{const raw=localStorage.getItem('sbLab.v1');if(raw)S=Object.assign(S,JSON.parse(raw));}catch(e){}
+const save=()=>{try{localStorage.setItem('sbLab.v1',JSON.stringify(S))}catch(e){}};
+const TOTAL=LABS.reduce((a,l)=>a+l.ex.reduce((b,x)=>b+XPT[x.type],0),0);
+function xp(){let t=0;LABS.forEach(l=>l.ex.forEach((x,i)=>{if(S.solved[l.id+'-'+i])t+=XPT[x.type]}));return t}
+function hud(){const v=xp();document.getElementById('xp').textContent=v;let r=RANKS[0][1];RANKS.forEach(([m,n])=>{if(v>=m)r=n});document.getElementById('rank').textContent='· '+r;document.getElementById('bar').style.width=(v/TOTAL*100)+'%';nav()}
+function solve(id){if(!S.solved[id]){S.solved[id]=true;save();hud();const el=document.getElementById('ex-'+id);if(el){el.classList.add('solved');el.querySelector('.badge .st').textContent='opgelost · +'+XPT[el.dataset.type]+' GP'}}}
+function el(tag,cls,html){const e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e}
+function fb(box,ok,html){box.className='fb '+(ok?'ok':'bad');box.innerHTML=html;box.hidden=false}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+function nav(){const n=document.getElementById('nav');n.innerHTML='';LABS.forEach((l,i)=>{const done=l.ex.filter((x,k)=>S.solved[l.id+'-'+k]).length;const b=el('button',done===l.ex.length?'done':done?'part':'','<span class="dot"></span>Lab '+(i+1));b.type='button';b.title=l.title;b.setAttribute('aria-current',i===S.cur?'true':'false');b.onclick=()=>go(i);n.appendChild(b)})}
+function go(i){S.cur=i;save();render();try{history.replaceState(null,'','#'+LABS[i].id)}catch(e){}window.scrollTo({top:0})}
+
+function render(){
+ const L=LABS[S.cur],m=document.getElementById('main');m.innerHTML='';
+ const head=el('div');head.innerHTML=`<div class="eyebrow">Lab ${S.cur+1} · ${L.tag}</div><h2>${L.title}</h2><p class="lead">${L.lead}</p><div class="reads">${L.read.map(r=>R(r[0],r[1])).join('')}</div>`;m.appendChild(head);
+ L.blocks.forEach(b=>{const c=el('section','card');c.innerHTML=`<h3>${b.h}</h3>${b.html}`;m.appendChild(c)});
+ m.appendChild(el('div','sect','Oefeningen · '+L.ex.length));
+ L.ex.forEach((x,i)=>m.appendChild(build(L,x,i)));
+ const all=L.ex.every((x,i)=>S.solved[L.id+'-'+i]);
+ if(all){const c=el('section','card score');c.innerHTML=`<b>✓</b><p>Lab ${S.cur+1} is af.</p>`;m.appendChild(c)}
+ const nb=el('div','navbtm');
+ if(S.cur>0){const p=el('button','btn','← Lab '+S.cur);p.type='button';p.onclick=()=>go(S.cur-1);nb.appendChild(p)}else nb.appendChild(el('span'));
+ if(S.cur<LABS.length-1){const n=el('button','btn primary','Lab '+(S.cur+2)+' →');n.type='button';n.onclick=()=>go(S.cur+1);nb.appendChild(n)}
+ m.appendChild(nb);nav();
+}
+
+function build(L,x,i){
+ const id=L.id+'-'+i,solved=!!S.solved[id];
+ const box=el('article','ex t-'+x.type+(solved?' solved':''));box.id='ex-'+id;box.dataset.type=x.type;
+ const head=el('div','head');head.innerHTML=`<h3>${i+1}. ${x.title}</h3><span class="badge"><span class="ty">${TYN[x.type]}</span><span class="st">${solved?'opgelost · +'+XPT[x.type]+' GP':XPT[x.type]+' GP'}</span></span>`;box.appendChild(head);
+ if(x.q){const q=el('div','',`<p>${x.q}</p>`);box.appendChild(q)}
+ const f=el('div','fb');f.hidden=true;
+ ({mc,sort,order,fill,line,code,ij})[x.type](box,x,id,f,solved);
+ if(x.note)box.appendChild(el('div','',x.note));
+ box.appendChild(f);
+ return box;
+}
+
+function mc(box,x,id,f,solved){
+ let pick=-1;const o=el('div','opts');const btns=[];
+ x.opts.forEach((op,k)=>{const b=el('button','opt',`<span class="k">${'ABCDEF'[k]}</span><span>${op.t}</span>`);b.type='button';b.setAttribute('aria-pressed','false');
+  b.onclick=()=>{pick=k;btns.forEach(z=>z.setAttribute('aria-pressed','false'));b.setAttribute('aria-pressed','true');chk.disabled=false};btns.push(b);o.appendChild(b)});
+ box.appendChild(o);
+ const a=el('div','actions');const chk=el('button','btn primary','Controleer');chk.type='button';chk.disabled=true;a.appendChild(chk);box.appendChild(a);
+ const win=()=>{btns.forEach((z,k)=>{z.disabled=true;if(k===x.a)z.classList.add('good')});chk.hidden=true;fb(f,true,'<strong>Juist.</strong> '+x.why)};
+ chk.onclick=()=>{if(pick===x.a){win();solve(id)}else fb(f,false,'<strong>Nog niet.</strong> '+(x.opts[pick].no||'Kijk nog eens naar de uitleg hierboven.'))};
+ if(solved)win();
+}
+
+function sort(box,x,id,f,solved){
+ const ans=x.rows.map(()=>-1);const wrap=el('div');const rows=[];
+ x.rows.forEach((r,k)=>{const row=el('div','sortrow');row.appendChild(el('div','txt',r[0].replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c])).replace(/(@\w+|\w+\(\)|[\w.]+::\w+)/g,'<code>$1</code>')));
+  const seg=el('div','seg');x.cats.forEach((c,ci)=>{const b=el('button','',esc(c));b.type='button';b.setAttribute('aria-pressed','false');b.onclick=()=>{ans[k]=ci;[...seg.children].forEach(z=>z.setAttribute('aria-pressed','false'));b.setAttribute('aria-pressed','true');row.classList.remove('wrong')};seg.appendChild(b)});
+  row.appendChild(seg);rows.push(row);wrap.appendChild(row)});
+ box.appendChild(wrap);
+ const a=el('div','actions');const chk=el('button','btn primary','Controleer');chk.type='button';a.appendChild(chk);box.appendChild(a);
+ const win=()=>{rows.forEach((row,k)=>{[...row.querySelector('.seg').children].forEach((b,ci)=>{b.setAttribute('aria-pressed',ci===x.rows[k][1]?'true':'false');b.disabled=true})});chk.hidden=true;fb(f,true,'<strong>Alles juist.</strong> '+x.why)};
+ chk.onclick=()=>{if(ans.includes(-1)){fb(f,false,'Kies eerst bij elke regel een antwoord.');return}let w=0;rows.forEach((row,k)=>{const bad=ans[k]!==x.rows[k][1];row.classList.toggle('wrong',bad);if(bad)w++});if(!w){win();solve(id)}else fb(f,false,`<strong>${w} ${w===1?'regel klopt':'regels kloppen'} nog niet</strong> (rood gemarkeerd).`)};
+ if(solved)win();
+}
+
+function order(box,x,id,f,solved){
+ let seq=[];const pool=shuffle(x.items.map((t,k)=>k));
+ const lp=el('div','lbl','Nog te plaatsen');const pl=el('div','pool');const ls=el('div','lbl','Jouw volgorde');const sq=el('div','seq');
+ const draw=()=>{pl.innerHTML='';sq.innerHTML='';pool.filter(k=>!seq.includes(k)).forEach(k=>{const c=el('button','chip',esc(x.items[k]));c.type='button';c.onclick=()=>{seq.push(k);draw()};pl.appendChild(c)});
+  seq.forEach((k,n)=>{const c=el('button','chip',`<span class="nr">${n+1}</span>${esc(x.items[k])}`);c.type='button';c.onclick=()=>{seq=seq.filter(z=>z!==k);draw()};sq.appendChild(c)});chk.disabled=seq.length!==x.items.length};
+ box.append(lp,pl,ls,sq);
+ const a=el('div','actions');const chk=el('button','btn primary','Controleer');chk.type='button';const rs=el('button','btn','Opnieuw');rs.type='button';rs.onclick=()=>{seq=[];draw()};a.append(chk,rs);box.appendChild(a);
+ const win=()=>{seq=x.items.map((t,k)=>k);draw();[...sq.children].forEach(c=>c.disabled=true);chk.hidden=true;rs.hidden=true;lp.hidden=true;pl.hidden=true;fb(f,true,'<strong>Juist.</strong> '+x.why)};
+ chk.onclick=()=>{const firstBad=seq.findIndex((k,n)=>k!==n);if(firstBad<0){win();solve(id)}else fb(f,false,`Plaats ${firstBad+1} klopt nog niet. Klik op een stap om ze terug te zetten.`)};
+ draw();if(solved)win();
+}
+
+function fill(box,x,id,f,solved){
+ const pre=el('pre','code fill');const inputs=[];
+ pre.innerHTML=esc(x.code).replace(/__(\d)__/g,(m,d)=>`<input data-i="${d}" aria-label="Invulveld ${+d+1}" autocomplete="off" spellcheck="false" style="width:${(x.w&&x.w[d]||8)+2}ch">`);
+ box.appendChild(pre);pre.querySelectorAll('input').forEach(inp=>{inp.id='in-'+id+'-'+inp.dataset.i;inputs.push(inp)});
+ const a=el('div','actions');const chk=el('button','btn primary','Controleer');chk.type='button';a.appendChild(chk);box.appendChild(a);
+ const win=()=>{inputs.forEach(inp=>{inp.classList.add('ok');inp.disabled=true});chk.hidden=true;fb(f,true,'<strong>Juist.</strong> '+x.why)};
+ chk.onclick=()=>{let w=0;inputs.forEach(inp=>{const ok=x.ans[+inp.dataset.i].test(inp.value.trim().replace(/^@/,''));inp.classList.toggle('ok',ok);inp.classList.toggle('bad',!ok);if(!ok)w++});if(!w){win();solve(id)}else fb(f,false,`${w} ${w===1?'veld klopt':'velden kloppen'} nog niet. Let op hoofdletters.`)};
+ if(solved){inputs.forEach(inp=>{inp.value=''});win()}
+}
+
+function line(box,x,id,f,solved){
+ const sel=new Set();const wrap=el('div','codelines');const btns=[];
+ x.code.split('\n').forEach((t,k)=>{const b=el('button','cl',`<span class="n">${k+1}</span><span>${esc(t)||' '}</span>`);b.type='button';b.setAttribute('aria-pressed','false');b.onclick=()=>{if(sel.has(k))sel.delete(k);else sel.add(k);b.setAttribute('aria-pressed',sel.has(k)?'true':'false')};btns.push(b);wrap.appendChild(b)});
+ box.appendChild(wrap);
+ const a=el('div','actions');const chk=el('button','btn primary','Controleer');chk.type='button';a.appendChild(chk);box.appendChild(a);
+ const win=()=>{btns.forEach((b,k)=>{b.disabled=true;b.setAttribute('aria-pressed','false');if(x.bad.includes(k))b.classList.add('good')});chk.hidden=true;fb(f,true,'<strong>Gevonden.</strong> '+x.why)};
+ chk.onclick=()=>{if(!sel.size){fb(f,false,'Klik eerst op een regel.');return}const ok=sel.size===x.bad.length&&x.bad.every(k=>sel.has(k));if(ok){win();solve(id)}else fb(f,false,'Dat is niet de regel die het probleem veroorzaakt. Lees de code nog eens van boven naar beneden.')};
+ if(solved)win();
+}
+
+function code(box,x,id,f,solved){
+ const ed=el('div','editor');ed.innerHTML=`<div class="ebar"><span class="path">${esc(x.file)}</span><span>Java</span></div>`;
+ const body=el('div','ebody');const gut=el('div','gutter');const ta=el('textarea','code');ta.id='ta-'+id;ta.spellcheck=false;ta.setAttribute('aria-label','Code-editor');
+ let saved=null;try{saved=localStorage.getItem('sbLab.code.'+id)}catch(e){}
+ ta.value=saved!=null?saved:x.start;
+ const sync=()=>{const n=ta.value.split('\n').length;gut.textContent=Array.from({length:n},(_,k)=>k+1).join('\n');ta.style.height='auto';ta.style.height=Math.max(200,ta.scrollHeight)+'px';try{localStorage.setItem('sbLab.code.'+id,ta.value)}catch(e){}};
+ ta.addEventListener('input',sync);
+ ta.addEventListener('keydown',e=>{if(e.key==='Tab'&&!e.shiftKey){e.preventDefault();const s=ta.selectionStart;ta.setRangeText('    ',s,ta.selectionEnd,'end');sync()}});
+ body.append(gut,ta);ed.appendChild(body);box.appendChild(ed);
+ const ul=el('ul','reqs');const lis=x.reqs.map(r=>{const li=el('li','',`<span class="st">·</span><span>${esc(r[1])}</span>`);ul.appendChild(li);return li});
+ box.appendChild(el('div','lbl','Wat er gecontroleerd wordt'));box.appendChild(ul);
+ const a=el('div','actions');const chk=el('button','btn primary','Controleer');chk.type='button';const rs=el('button','btn','Beginsituatie');rs.type='button';rs.onclick=()=>{ta.value=x.start;sync()};a.append(chk,rs);box.appendChild(a);
+ const sol=el('details','sol',`<summary>Toon een mogelijke oplossing</summary><pre class="code">${esc(x.sol)}</pre>`);box.appendChild(sol);
+ chk.onclick=()=>{const src=ta.value.replace(/\/\*[\s\S]*?\*\//g,'').replace(/\/\/.*$/gm,'');let w=0;x.reqs.forEach((r,k)=>{const ok=r[0].test(src);lis[k].className=ok?'ok':'bad';lis[k].querySelector('.st').textContent=ok?'✓':'✗';if(!ok)w++});
+  if(!w){fb(f,true,'<strong>Alle controles slagen.</strong> Zet deze code nu ook in IntelliJ en voer ze uit.');solve(id)}else fb(f,false,`${w} ${w===1?'controle faalt':'controles falen'}. Begin bij de eerste ✗.`)};
+ requestAnimationFrame(sync);
+}
+
+function ij(box,x,id,f,solved){
+ const ol=el('ol','steps');const items=[];
+ let at=solved?x.steps.length:(S.ijstep[id]||0);
+ x.steps.forEach((s,k)=>{const li=el('li','step');li.innerHTML=`<span class="num">${k+1}</span><div class="body">${s}<div class="stepact"></div></div>`;
+  const act=li.querySelector('.stepact');const b=el('button','btn ij',k===x.steps.length-1?'Gedaan':'Gedaan, volgende stap');b.type='button';b.onclick=()=>{at=k+1;S.ijstep[id]=at;save();draw();if(at===x.steps.length&&!x.answer){finish();solve(id)}else if(items[at])items[at].querySelector('.btn')?.focus()};act.appendChild(b);items.push(li);ol.appendChild(li)});
+ box.appendChild(ol);
+ let ansWrap=null;
+ if(x.answer){ansWrap=el('div','');ansWrap.innerHTML=`<p><strong>Controlevraag.</strong> ${x.answer.q}</p>`;const row=el('div','actions');const inp=el('input','ans');inp.id='ans-'+id;inp.autocomplete='off';inp.setAttribute('aria-label','Antwoord');const ok=el('button','btn primary','Controleer');ok.type='button';
+  ok.onclick=()=>{if(x.answer.re.test(inp.value.trim())){finish();solve(id)}else fb(f,false,x.answer.err||'Dat lijkt niet te kloppen.')};inp.addEventListener('keydown',e=>{if(e.key==='Enter')ok.click()});row.append(inp,ok);ansWrap.appendChild(row);box.appendChild(ansWrap)}
+ const restart=el('button','btn','Stappen opnieuw tonen');restart.type='button';restart.hidden=true;restart.onclick=()=>{at=0;S.ijstep[id]=0;save();draw();f.hidden=true};box.appendChild(restart);
+ function finish(){if(ansWrap)ansWrap.hidden=true;restart.hidden=false;fb(f,true,'<strong>Goed gedaan.</strong> '+(x.done||''))}
+ function draw(){items.forEach((li,k)=>{li.hidden=k>at;li.classList.toggle('done',k<at)});if(ansWrap)ansWrap.hidden=at<x.steps.length;restart.hidden=at<x.steps.length}
+ draw();if(solved)finish();
+}
+
+/* start */
+(function(){const h=(location.hash||'').slice(1);const k=LABS.findIndex(l=>l.id===h);if(k>=0)S.cur=k;if(S.cur>=LABS.length)S.cur=0;render();hud()})();
+window.addEventListener('hashchange',()=>{const k=LABS.findIndex(l=>l.id===location.hash.slice(1));if(k>=0&&k!==S.cur){S.cur=k;render()}});
+</script>
+
+<style>
+.studyraf-terug{position:fixed;left:16px;bottom:16px;z-index:9999;background:#d9663a;color:#fff;font:800 14px Nunito,system-ui,sans-serif;padding:10px 16px;border-radius:999px;text-decoration:none;box-shadow:0 4px 0 #a94a17}
+.studyraf-terug:focus-visible{outline:3px solid #2b1707;outline-offset:2px}
+.raf-fb{float:left;height:72px;width:auto;margin:-6px 12px 0 -4px}
+</style>
+<a class="studyraf-terug" href="../../index.html">&larr; Studyraf</a>
+<script type="module">
+import { auth } from "../../js/firebase.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import { geefGP } from "../../js/gp.js";
+
+let gebruiker = null;
+onAuthStateChanged(auth, (u) => { gebruiker = u; });
+
+function puntenVoor(id) {
+  const knip = id.lastIndexOf("-");
+  const lab = LABS.find((l) => l.id === id.slice(0, knip));
+  const oef = lab && lab.ex[Number(id.slice(knip + 1))];
+  return oef ? (XPT[oef.type] || 0) : 0;
+}
+
+// Elke nieuw opgeloste oefening levert GP op in Studyraf.
+const origSolve = window.solve;
+window.solve = function (id) {
+  const nieuw = !S.solved[id];
+  origSolve(id);
+  const punten = puntenVoor(id);
+  if (nieuw && gebruiker && punten > 0) geefGP(gebruiker.uid, punten).catch((e) => console.error("GP mislukt", e));
+};
+
+// Raf geeft de feedback.
+const origFb = window.fb;
+window.fb = function (box, ok, html) {
+  const pose = ok ? "celebrating" : "unimpressed";
+  origFb(box, ok, `<img class="raf-fb" src="../../assets/raf/raf-${pose}.png" alt="">` + html);
+};
+</script>
+</body></html>

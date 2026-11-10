@@ -1,5 +1,6 @@
 /* Focusmodus Oefenlab */
-body { padding-bottom: 150px; }
+body { padding-bottom: var(--fl-balk-h, 110px); }
+.wrap { padding-bottom: 16px !important; }
 
 .ex .fb { display: none !important; }        /* feedback staat in de balk onderaan */
 .fl-stap[hidden] { display: none !important; }
@@ -78,7 +79,6 @@ body { padding-bottom: 150px; }
 
 @media (max-width: 1280px) { .fl-wacht { display: none; } }
 @media (max-width: 720px) {
-  body { padding-bottom: 190px; }
   .fl-balk { flex-direction: column; align-items: stretch; gap: 12px; padding: 14px 16px; }
   .fl-knoppen { justify-content: flex-end; }
   .fl-raf { left: auto; right: 12px; height: 120px; bottom: calc(100% - 16px); }

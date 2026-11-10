@@ -47,6 +47,11 @@ wachtRaf.src = raf("thinking");
 wachtRaf.alt = "";
 document.body.append(wachtRaf, balk);
 
+// Ruimte onderaan = echte hoogte van de balk, zodat er nooit een overbodige scrollbalk komt.
+new ResizeObserver(() => {
+  document.body.style.setProperty("--fl-balk-h", `${Math.ceil(balk.getBoundingClientRect().height)}px`);
+}).observe(balk);
+
 const rafImg = balk.querySelector(".fl-raf");
 const ballon = balk.querySelector(".fl-ballon");
 const titel = balk.querySelector(".fl-titel");

@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Studyraf</title>
+  <link rel="icon" href="assets/raf/raf-neutral.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <main id="login" class="login" hidden>
+    <img class="login__raf" src="assets/raf/raf-neutral.png" alt="Raf, de giraf van Studyraf">
+    <h1>Studyraf</h1>
+    <p class="login__tekst">Al je vakken, één plek. Raf houdt je bij de les.</p>
+    <button id="login-btn" class="knop" type="button">Inloggen met Google</button>
+    <p id="login-error" class="fout" role="alert" hidden></p>
+  </main>
+
+  <main id="hub" class="hub" hidden>
+    <header class="hub__kop">
+      <div class="hub__merk">
+        <img src="assets/raf/raf-neutral.png" alt="" class="hub__raf">
+        <span>Studyraf</span>
+      </div>
+      <div class="hub__gebruiker">
+        <div class="gp" title="Je GP-totaal">
+          <span id="gp-totaal">0</span>
+          <span class="gp__naam" id="gp-naam">GP</span>
+        </div>
+        <div id="avatar" class="avatar" aria-hidden="true"></div>
+        <button id="logout-btn" class="knop knop--stil" type="button">Uitloggen</button>
+      </div>
+    </header>
+
+    <section class="banner">
+      <div class="banner__tekst">
+        <p class="banner__label">Vandaag</p>
+        <h2 id="welkom"></h2>
+        <p class="banner__sub">Eén les per dag is genoeg. Kies een vak om te beginnen.</p>
+        <p class="banner__gp">Vandaag: <strong id="gp-vandaag">0</strong> <span class="js-gp-naam">GP</span></p>
+        <button id="gp-test" class="knop knop--wit" type="button" hidden>Test: +10 GP</button>
+      </div>
+      <p class="banner__ballon">Ik hou je bij de les.</p>
+      <img class="banner__raf" src="assets/raf/raf-neutral.png" alt="Raf, de giraf van Studyraf">
+    </section>
+
+    <div class="vakken__kop">
+      <h2>Jouw vakken</h2>
+      <span id="aantal"></span>
+    </div>
+    <section id="vakken" class="vakken" aria-label="Vakken"></section>
+  </main>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

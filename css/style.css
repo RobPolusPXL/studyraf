@@ -1,0 +1,141 @@
+:root {
+  --bg: #f6f4ef;
+  --tekst: #1b1f2b;
+  --stil: #6b5a45;
+  --oranje: #f4a21e;
+  --oranje-donker: #b8640f;
+  --bruin: #2b1707;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Nunito", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--tekst);
+  line-height: 1.45;
+}
+
+[hidden] { display: none !important; }
+
+h1, h2, h3, p { margin: 0; }
+
+.knop {
+  font: inherit;
+  font-weight: 800;
+  padding: 14px 22px;
+  border: 0;
+  border-radius: 14px;
+  background: var(--oranje);
+  color: var(--bruin);
+  box-shadow: 0 4px 0 var(--oranje-donker);
+  cursor: pointer;
+}
+.knop:active { transform: translateY(2px); box-shadow: 0 2px 0 var(--oranje-donker); }
+.knop:focus-visible { outline: 3px solid var(--bruin); outline-offset: 2px; }
+.knop--stil { background: transparent; color: var(--stil); box-shadow: none; padding: 10px 14px; }
+
+/* Login */
+.login {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 32px 20px;
+  text-align: center;
+}
+.login__raf { height: min(46vh, 380px); width: auto; }
+.login h1 { font-size: 44px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; }
+.login__tekst { color: var(--stil); max-width: 32ch; margin-bottom: 8px; }
+.fout { color: #b3261e; }
+
+/* Hub */
+.hub { max-width: 1180px; margin: 0 auto; padding: 24px 32px 64px; display: flex; flex-direction: column; gap: 28px; }
+.hub__kop { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.hub__merk { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 22px; }
+.hub__raf { height: 44px; width: auto; }
+.hub__gebruiker { display: flex; align-items: center; gap: 6px; }
+.avatar {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: var(--tekst); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800;
+}
+
+.gp {
+  display: flex; align-items: baseline; gap: 4px;
+  background: #fff; border: 2px solid #f0d9b5; border-radius: 999px;
+  padding: 6px 14px; margin-right: 6px;
+  font-weight: 800; font-size: 18px; color: #a94a17;
+}
+.gp__naam { font-size: 13px; letter-spacing: 0.06em; }
+.gp--pop { animation: gp-pop 0.4s ease-out; }
+@keyframes gp-pop { 50% { transform: scale(1.15); } }
+
+/* Banner */
+.banner {
+  position: relative;
+  overflow: hidden;
+  background: #d9663a;
+  border-radius: 28px;
+  min-height: 280px;
+  display: flex;
+  align-items: center;
+  padding: 36px 48px;
+}
+.banner__tekst { position: relative; z-index: 1; max-width: 520px; display: flex; flex-direction: column; gap: 14px; }
+.banner__label { font-weight: 800; font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase; color: #ffe3bd; }
+.banner h2 { font-weight: 800; font-size: 44px; line-height: 1.1; color: #ffffff; }
+.banner__sub { font-weight: 700; font-size: 18px; color: #ffe9d6; }
+.banner__raf { position: absolute; right: 72px; bottom: -8px; height: 340px; width: auto; }
+.banner__ballon {
+  position: absolute; right: 270px; top: 28px; max-width: 190px;
+  background: #fff; color: var(--tekst);
+  font-weight: 700; font-size: 15px;
+  padding: 12px 16px;
+  border-radius: 16px 16px 16px 4px;
+}
+
+/* Vakken */
+.vakken__kop { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.vakken__kop h2 { font-weight: 800; font-size: 28px; }
+.vakken__kop span { font-weight: 700; color: var(--stil); }
+
+.vakken { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 16px; }
+
+.vak {
+  position: relative;
+  overflow: hidden;
+  background: var(--kleur);
+  color: #fff;
+  border-radius: 22px;
+  padding: 22px;
+  min-height: 210px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.vak__patroon { position: absolute; right: -14px; top: -14px; width: 170px; height: 130px; fill: #000; opacity: 0.16; }
+.vak h3 { position: relative; font-weight: 800; font-size: 26px; line-height: 1.1; margin-top: 52px; max-width: 220px; }
+.vak__sub { position: relative; font-weight: 600; font-size: 16px; }
+.vak__delen { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.vak__delen li { font-size: 13px; font-weight: 700; background: rgba(255, 255, 255, 0.2); padding: 3px 10px; border-radius: 999px; }
+.vak__voet { margin-top: auto; display: flex; align-items: center; gap: 4px; }
+.vak__voet span { flex: 1 1 0; height: 6px; border-radius: 3px; background: rgba(255, 255, 255, 0.3); }
+.vak__voet strong { margin-left: 10px; font-size: 14px; font-weight: 800; }
+
+/* Smalle schermen */
+@media (max-width: 720px) {
+  .hub { padding: 16px 16px 48px; }
+  .banner { padding: 28px 24px 120px; min-height: 0; }
+  .banner h2 { font-size: 34px; }
+  .banner__raf { right: 16px; height: 190px; }
+  .banner__ballon { display: none; }
+}
+
+.banner__gp { font-weight: 700; font-size: 16px; color: #ffe9d6; }
+.banner__gp strong { color: #fff; font-size: 20px; }
+.knop--wit { align-self: flex-start; background: #fff; color: #a94a17; box-shadow: 0 4px 0 #b8521f; }

@@ -7,6 +7,13 @@ const loginView = $("login");
 const hubView = $("hub");
 const loginError = $("login-error");
 
+// Lapjes van Raf als patroon in de hoek van elke kaart (statisch, geen gebruikersdata).
+const PATROON = `<svg class="vak__patroon" viewBox="0 0 170 130" aria-hidden="true">
+  <path d="M44 12 L90 0 L104 36 L62 50 Z"/>
+  <path d="M112 56 L156 46 L166 90 L122 102 Z"/>
+  <path d="M18 72 L52 64 L60 96 L28 104 Z"/>
+</svg>`;
+
 function voornaam(user) {
   const naam = user.displayName || user.email || "";
   return naam.split(" ")[0].split("@")[0];
@@ -15,9 +22,13 @@ function voornaam(user) {
 function renderVakken() {
   const lijst = $("vakken");
   lijst.replaceChildren();
+  $("aantal").textContent = `${VAKKEN.length} vakken`;
+
   for (const vak of VAKKEN) {
     const kaart = document.createElement("article");
     kaart.className = "vak" + (vak.beschikbaar ? "" : " vak--binnenkort");
+    kaart.style.setProperty("--kleur", vak.kleur);
+    kaart.insertAdjacentHTML("afterbegin", PATROON);
 
     const titel = document.createElement("h3");
     titel.textContent = vak.naam;
@@ -33,11 +44,14 @@ function renderVakken() {
       delen.append(li);
     }
 
-    const status = document.createElement("span");
-    status.className = "vak__status";
+    const voet = document.createElement("div");
+    voet.className = "vak__voet";
+    for (let i = 0; i < 6; i++) voet.append(document.createElement("span"));
+    const status = document.createElement("strong");
     status.textContent = vak.beschikbaar ? "Start" : "Binnenkort";
+    voet.append(status);
 
-    kaart.append(titel, sub, delen, status);
+    kaart.append(titel, sub, delen, voet);
     lijst.append(kaart);
   }
 }
@@ -58,7 +72,8 @@ $("logout-btn").addEventListener("click", () => signOut(auth));
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    $("welkom").textContent = `Hoi ${voornaam(user)}. Kies een vak.`;
+    $("welkom").textContent = `Hoi ${voornaam(user)}.`;
+    $("avatar").textContent = (voornaam(user)[0] || "?").toUpperCase();
     renderVakken();
     loginView.hidden = true;
     hubView.hidden = false;

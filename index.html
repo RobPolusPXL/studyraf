@@ -24,9 +24,26 @@
         <img src="assets/raf/raf-neutral.png" alt="" class="hub__raf">
         <span>Studyraf</span>
       </div>
-      <button id="logout-btn" class="knop knop--stil" type="button">Uitloggen</button>
+      <div class="hub__gebruiker">
+        <div id="avatar" class="avatar" aria-hidden="true"></div>
+        <button id="logout-btn" class="knop knop--stil" type="button">Uitloggen</button>
+      </div>
     </header>
-    <h2 id="welkom"></h2>
+
+    <section class="banner">
+      <div class="banner__tekst">
+        <p class="banner__label">Vandaag</p>
+        <h2 id="welkom"></h2>
+        <p class="banner__sub">Eén les per dag is genoeg. Kies een vak om te beginnen.</p>
+      </div>
+      <p class="banner__ballon">Ik hou je bij de les.</p>
+      <img class="banner__raf" src="assets/raf/raf-neutral.png" alt="Raf, de giraf van Studyraf">
+    </section>
+
+    <div class="vakken__kop">
+      <h2>Jouw vakken</h2>
+      <span id="aantal"></span>
+    </div>
     <section id="vakken" class="vakken" aria-label="Vakken"></section>
   </main>
 

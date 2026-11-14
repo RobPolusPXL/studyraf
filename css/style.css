@@ -198,3 +198,9 @@ h1, h2, h3, p { margin: 0; }
     max-width: min(210px, calc(100% - var(--raf-rechts) - var(--raf-h) * .59 - 14px - 22px));
   }
 }
+
+.vak__offline {
+  position: absolute; top: 16px; left: 16px; z-index: 1;
+  background: #1b1f2b; color: #fff; font-size: 12px; font-weight: 800;
+  padding: 4px 10px; border-radius: 999px; letter-spacing: .02em;
+}

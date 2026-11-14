@@ -1,11 +1,13 @@
-// Eén vak = één kaart in de hub. `beschikbaar: true` zodra de cursus in de repo staat.
+// Eén vak = één kaart in de hub.
+// beschikbaar: true  -> de cursus staat in de repo.
+// online: false      -> live (GitHub Pages, main) verborgen; lokaal blijft het bruikbaar om te testen.
 export const VAKKEN = [
-  { id: "java-advanced", naam: "Java Advanced", sub: "Spring Boot", kleur: "#a94a17", delen: ["Cursus", "Oefenlab"], links: { Cursus: "cursus.html", Oefenlab: "oefenlab.html" }, start: "Oefenlab", beschikbaar: true },
+  { id: "java-advanced", naam: "Java Advanced", sub: "Spring Boot", kleur: "#a94a17", delen: ["Cursus", "Oefenlab"], links: { Cursus: "cursus.html", Oefenlab: "oefenlab.html" }, start: "Oefenlab", beschikbaar: true, online: true },
   { id: "dotnet-advanced", naam: ".NET Advanced", sub: "C# en .NET", kleur: "#4b3bb0", delen: ["Cursus", "Oefenlab"], beschikbaar: false },
   { id: "devops", naam: "DevOps", sub: "CI/CD en GitHub Actions", kleur: "#1f5fbf", delen: ["Cursus", "Oefenlab", "Pipeline Lab"], beschikbaar: false },
   { id: "docker", naam: "Docker", sub: "Containers", kleur: "#11698c", delen: ["Cursus"], beschikbaar: false },
   { id: "cloud-essentials", naam: "Cloud Essentials", sub: "AWS en cloudbasis", kleur: "#17695f", delen: ["Cursus"], beschikbaar: false },
-  { id: "project-management", naam: "Project Management", sub: "PERT en MS Project", kleur: "#7a4a12", delen: ["Cursus", "Oefenlab", "PE-stappenplan"], links: { Cursus: "cursus.html", Oefenlab: "oefenlab.html", "PE-stappenplan": "stappenplan.html" }, start: "Oefenlab", beschikbaar: true },
+  { id: "project-management", naam: "Project Management", sub: "PERT en MS Project", kleur: "#7a4a12", delen: ["Cursus", "Oefenlab", "PE-stappenplan"], links: { Cursus: "cursus.html", Oefenlab: "oefenlab.html", "PE-stappenplan": "stappenplan.html" }, start: "Oefenlab", beschikbaar: true, online: true },
   { id: "software-analysis", naam: "Software Analysis", sub: "Analyse en modellering", kleur: "#6b5024", delen: ["Cursus"], beschikbaar: false },
   { id: "comm-skills-2", naam: "Communication Skills 2", sub: "Engels voor IT", kleur: "#a32b5c", delen: ["Lab"], beschikbaar: false }
 ];

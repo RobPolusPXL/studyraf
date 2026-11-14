@@ -1,6 +1,7 @@
 import { auth, provider } from "./firebase.js";
 import { onAuthStateChanged, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import { VAKKEN } from "./vakken.js";
+import { isBruikbaar, isOnline } from "./omgeving.js";
 import { PUNTEN_NAAM, laadGP, geefGP, vandaag } from "./gp.js";
 import { dezeWeek } from "./streak.js";
 
@@ -90,7 +91,8 @@ function renderVakken() {
 
   for (const vak of VAKKEN) {
     const kaart = document.createElement("article");
-    kaart.className = "vak" + (vak.beschikbaar ? "" : " vak--binnenkort");
+    const bruikbaar = isBruikbaar(vak);
+    kaart.className = "vak" + (bruikbaar ? "" : " vak--binnenkort");
     kaart.style.setProperty("--kleur", vak.kleur);
     kaart.insertAdjacentHTML("afterbegin", PATROON);
 
@@ -104,7 +106,7 @@ function renderVakken() {
     delen.className = "vak__delen";
     for (const deel of vak.delen) {
       const li = document.createElement("li");
-      const pad = vak.beschikbaar && vak.links?.[deel];
+      const pad = bruikbaar && vak.links?.[deel];
       if (pad) {
         const a = document.createElement("a");
         a.href = `vakken/${vak.id}/${pad}`;
@@ -120,7 +122,7 @@ function renderVakken() {
     voet.className = "vak__voet";
     for (let i = 0; i < 6; i++) voet.append(document.createElement("span"));
     let status;
-    if (vak.beschikbaar && vak.links?.[vak.start]) {
+    if (bruikbaar && vak.links?.[vak.start]) {
       status = document.createElement("a");
       status.className = "vak__start";
       status.href = `vakken/${vak.id}/${vak.links[vak.start]}`;
@@ -131,6 +133,12 @@ function renderVakken() {
     }
     voet.append(status);
 
+    if (bruikbaar && !isOnline(vak)) {
+      const label = document.createElement("span");
+      label.className = "vak__offline";
+      label.textContent = "Offline op main";
+      kaart.append(label);
+    }
     kaart.append(titel, sub, delen, voet);
     lijst.append(kaart);
   }

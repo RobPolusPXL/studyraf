@@ -1,11 +1,40 @@
 import { auth, provider } from "./firebase.js";
 import { onAuthStateChanged, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import { VAKKEN } from "./vakken.js";
-import { PUNTEN_NAAM, laadGP, geefGP } from "./gp.js";
+import { PUNTEN_NAAM, laadGP, geefGP, vandaag } from "./gp.js";
+import { dezeWeek } from "./streak.js";
 
 let huidigeGebruiker = null;
 
+function toonReeks(stand) {
+  const n = stand.reeks;
+  document.getElementById("reeks-getal").textContent = n;
+  document.getElementById("reeks-tekst").textContent = n === 1 ? "dag op rij" : "dagen op rij";
+  const sub = document.getElementById("banner-sub");
+  if (stand.vandaagGeleerd) sub.textContent = "Vandaag al geleerd. Je reeks staat.";
+  else if (n > 0) sub.textContent = "Eén les vandaag houdt je reeks levend.";
+  else sub.textContent = "Eén les per dag is genoeg. Kies een vak om te beginnen.";
+
+  const zin = document.getElementById("raf-zin");
+  if (stand.vandaagGeleerd && n >= 2) zin.textContent = `${n} dagen op rij. Ik begin onder de indruk te raken.`;
+  else if (stand.vandaagGeleerd) zin.textContent = "Dag één. Morgen weer?";
+  else if (n > 0) zin.textContent = "Je reeks wacht op je.";
+  else zin.textContent = "Ik hou je bij de les.";
+
+  const dag = vandaag();
+  const geleerd = new Set(stand.leerdagen);
+  const week = document.getElementById("reeks-week");
+  week.replaceChildren(...dezeWeek(dag).map((d) => {
+    const el = document.createElement("div");
+    el.className = "reeks__dag" + (geleerd.has(d.datum) ? " geleerd" : "") + (d.datum === dag ? " vandaag" : "");
+    el.title = d.datum;
+    el.append(document.createElement("i"), d.label);
+    return el;
+  }));
+}
+
 function toonGP(stand, animeer = false) {
+  toonReeks(stand);
   $("gp-totaal").textContent = stand.totaal.toLocaleString("nl-BE");
   $("gp-vandaag").textContent = stand.vandaag.toLocaleString("nl-BE");
   if (animeer) {

@@ -75,30 +75,6 @@ h1, h2, h3, p { margin: 0; }
 .gp--pop { animation: gp-pop 0.4s ease-out; }
 @keyframes gp-pop { 50% { transform: scale(1.15); } }
 
-/* Banner */
-.banner {
-  position: relative;
-  overflow: hidden;
-  background: #d9663a;
-  border-radius: 28px;
-  min-height: 280px;
-  display: flex;
-  align-items: center;
-  padding: 36px 48px;
-}
-.banner__tekst { position: relative; z-index: 1; max-width: 520px; display: flex; flex-direction: column; gap: 14px; }
-.banner__label { font-weight: 800; font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase; color: #ffe3bd; }
-.banner h2 { font-weight: 800; font-size: 44px; line-height: 1.1; color: #ffffff; }
-.banner__sub { font-weight: 700; font-size: 18px; color: #ffe9d6; }
-.banner__raf { position: absolute; right: 72px; bottom: -8px; height: 340px; width: auto; }
-.banner__ballon {
-  position: absolute; right: 270px; top: 28px; max-width: 190px;
-  background: #fff; color: var(--tekst);
-  font-weight: 700; font-size: 15px;
-  padding: 12px 16px;
-  border-radius: 16px 16px 16px 4px;
-}
-
 /* Vakken */
 .vakken__kop { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
 .vakken__kop h2 { font-weight: 800; font-size: 28px; }
@@ -130,14 +106,8 @@ h1, h2, h3, p { margin: 0; }
 /* Smalle schermen */
 @media (max-width: 720px) {
   .hub { padding: 16px 16px 48px; }
-  .banner { padding: 28px 24px 120px; min-height: 0; }
-  .banner h2 { font-size: 34px; }
-  .banner__raf { right: 16px; height: 190px; }
-  .banner__ballon { display: none; }
 }
 
-.banner__gp { font-weight: 700; font-size: 16px; color: #ffe9d6; }
-.banner__gp strong { color: #fff; font-size: 20px; }
 .knop--wit { align-self: flex-start; background: #fff; color: #a94a17; box-shadow: 0 4px 0 #b8521f; }
 
 .vak__delen a { color: inherit; text-decoration: none; }
@@ -148,3 +118,83 @@ h1, h2, h3, p { margin: 0; }
   padding: 8px 16px; border-radius: 999px; text-decoration: none;
 }
 .vak__start:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+
+/* ---------- Banner: links de inhoud, rechts Raf ---------- */
+.banner {
+  --raf-h: 330px; --raf-rechts: 56px;
+  position: relative; overflow: hidden;
+  background: #d9663a; border-radius: 28px;
+  min-height: 390px; padding: 40px 56px;
+  display: flex; align-items: center;
+}
+.banner__tekst { position: relative; z-index: 1; max-width: 560px; display: flex; flex-direction: column; gap: 12px; }
+.banner__label { font-weight: 800; font-size: 14px; letter-spacing: .1em; text-transform: uppercase; color: #ffe3bd; }
+.banner h2 { font-weight: 800; font-size: 48px; line-height: 1.05; color: #fff; }
+.banner__sub { font-weight: 700; font-size: 18px; color: #ffe9d6; }
+.banner__gp { font-weight: 700; font-size: 16px; color: #ffe9d6; }
+.banner__gp strong { color: #fff; font-size: 20px; }
+
+/* Raf + ballon die aan hem vastzit */
+.banner__raf { position: absolute; right: var(--raf-rechts); bottom: 0; height: var(--raf-h); width: auto; }
+.banner__ballon {
+  position: absolute; z-index: 1;
+  right: calc(var(--raf-rechts) + var(--raf-h) * .59 + 14px);
+  bottom: calc(var(--raf-h) * .64);
+  max-width: 210px;
+  background: #fff; color: var(--tekst);
+  font-weight: 800; font-size: 16px; line-height: 1.35;
+  padding: 14px 18px; border-radius: 18px;
+}
+.banner__ballon::after {
+  content: ""; position: absolute; right: -14px; top: 50%; transform: translateY(-50%);
+  border: 8px solid transparent; border-left: 14px solid #fff; border-right: 0;
+}
+
+/* Reeks: strook onder de tekst */
+.reeks {
+  margin-top: 10px; align-self: flex-start;
+  display: flex; align-items: center; gap: 20px;
+  background: #fff; border-radius: 20px; padding: 14px 20px; box-shadow: 0 6px 0 #b8521f;
+}
+.reeks__kop { display: flex; align-items: center; gap: 12px; }
+.reeks__kop svg { width: 48px; height: 33px; }
+.reeks__getal { font-weight: 800; font-size: 32px; line-height: 1; color: #a94a17; }
+.reeks__tekst { font-weight: 800; font-size: 13px; color: var(--stil); }
+.reeks__lijn { width: 2px; align-self: stretch; background: #f0e6d8; }
+.reeks__week { display: flex; gap: 8px; }
+.reeks__dag { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; font-weight: 800; color: var(--stil); }
+.reeks__dag i { width: 22px; height: 22px; border-radius: 50%; background: #e7e2d8; }
+.reeks__dag.geleerd i { background: #f4a21e; }
+.reeks__dag.vandaag i { box-shadow: 0 0 0 3px #fff, 0 0 0 5px #d9663a; }
+
+/* Tablet: nog twee kolommen, ballon boven Raf zijn kop */
+@media (min-width: 721px) and (max-width: 1180px) {
+  .banner { --raf-h: 300px; --raf-rechts: 32px; min-height: 430px; padding: 36px 40px; }
+  .banner__tekst { max-width: calc(100% - var(--raf-h) * .59 - var(--raf-rechts) - 32px); }
+  .banner h2 { font-size: 42px; }
+  .reeks { flex-direction: column; align-items: stretch; gap: 12px; }
+  .reeks__lijn { display: none; }
+  .reeks__week { justify-content: space-between; }
+  .banner__ballon { right: var(--raf-rechts); bottom: calc(var(--raf-h) + 14px); max-width: 230px; font-size: 15px; }
+  .banner__ballon::after { right: 60px; top: 100%; transform: none; border: 9px solid transparent; border-top: 14px solid #fff; border-bottom: 0; }
+}
+
+/* Gsm: alles boven elkaar, Raf onderaan rechts met de ballon ernaast */
+@media (max-width: 720px) {
+  .banner {
+    --raf-h: 270px; --raf-rechts: 18px;
+    display: block; min-height: 0;
+    padding: 26px 22px calc(var(--raf-h) + 14px);
+  }
+  .banner__tekst { max-width: none; }
+  .banner h2 { font-size: 36px; }
+  .banner__sub { font-size: 17px; }
+  .reeks { align-self: stretch; flex-direction: column; align-items: stretch; gap: 12px; }
+  .reeks__lijn { display: none; }
+  .reeks__week { justify-content: space-between; }
+  .reeks__dag i { width: 26px; height: 26px; }
+  .banner__ballon {
+    bottom: calc(var(--raf-h) * .52); font-size: 14px; padding: 12px 14px;
+    max-width: min(210px, calc(100% - var(--raf-rechts) - var(--raf-h) * .59 - 14px - 22px));
+  }
+}

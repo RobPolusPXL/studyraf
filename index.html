@@ -38,11 +38,19 @@
       <div class="banner__tekst">
         <p class="banner__label">Vandaag</p>
         <h2 id="welkom"></h2>
-        <p class="banner__sub">Eén les per dag is genoeg. Kies een vak om te beginnen.</p>
+        <p class="banner__sub" id="banner-sub">Eén les per dag is genoeg. Kies een vak om te beginnen.</p>
         <p class="banner__gp">Vandaag: <strong id="gp-vandaag">0</strong> <span class="js-gp-naam">GP</span></p>
         <button id="gp-test" class="knop knop--wit" type="button" hidden>Test: +10 GP</button>
+        <div class="reeks" aria-label="Je reeks">
+          <div class="reeks__kop">
+            <svg viewBox="0 0 64 44" width="56" height="39" aria-hidden="true"><path d="M4 40 H60" stroke="#d9663a" stroke-width="3.5" stroke-linecap="round"/><path d="M14 40 A18 18 0 0 1 50 40 Z" fill="#f4a21e"/><path d="M32 4 V10 M13 12 L17 16 M51 12 L47 16" stroke="#f4a21e" stroke-width="3.5" stroke-linecap="round"/></svg>
+            <div><div id="reeks-getal" class="reeks__getal">0</div><div id="reeks-tekst" class="reeks__tekst">dagen op rij</div></div>
+          </div>
+          <span class="reeks__lijn" aria-hidden="true"></span>
+          <div id="reeks-week" class="reeks__week"></div>
+        </div>
       </div>
-      <p class="banner__ballon">Ik hou je bij de les.</p>
+      <p class="banner__ballon" id="raf-zin">Ik hou je bij de les.</p>
       <img class="banner__raf" src="assets/raf/raf-neutral.png" alt="Raf, de giraf van Studyraf">
     </section>
 

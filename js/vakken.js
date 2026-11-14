@@ -2,7 +2,7 @@
 // beschikbaar: true  -> de cursus staat in de repo.
 // online: false      -> live (GitHub Pages, main) verborgen; lokaal blijft het bruikbaar om te testen.
 export const VAKKEN = [
-  { id: "java-advanced", naam: "Java Advanced", sub: "Spring Boot", kleur: "#a94a17", delen: ["Cursus", "Oefenlab"], links: { Cursus: "cursus.html", Oefenlab: "oefenlab.html" }, start: "Oefenlab", beschikbaar: true, online: true },
+  { id: "java-advanced", naam: "Java Advanced", sub: "Spring Boot", kleur: "#a94a17", delen: ["Cursus", "Oefenlab"], links: { Cursus: "cursus.html", Oefenlab: "oefenlab.html" }, start: "Oefenlab", beschikbaar: true, online: false },
   { id: "dotnet-advanced", naam: ".NET Advanced", sub: "C# en .NET", kleur: "#4b3bb0", delen: ["Cursus", "Oefenlab"], beschikbaar: false },
   { id: "devops", naam: "DevOps", sub: "CI/CD en GitHub Actions", kleur: "#1f5fbf", delen: ["Cursus", "Oefenlab", "Pipeline Lab"], beschikbaar: false },
   { id: "docker", naam: "Docker", sub: "Containers", kleur: "#11698c", delen: ["Cursus"], beschikbaar: false },

@@ -199,7 +199,7 @@ input.cell.bad{border-color:var(--bad);background:var(--bad-soft)}
 <link rel="icon" href="../../assets/raf/raf-neutral.png">
 </head>
 <body>
-<div class="studyraf-balk" role="navigation" aria-label="Studyraf"><a href="../../index.html"><img src="../../assets/raf/raf-neutral.png" alt="">&larr; Studyraf</a><a href="./stappenplan.html">PE-stappenplan &rarr;</a></div>
+<div class="studyraf-balk" role="navigation" aria-label="Studyraf"><a href="../../index.html"><img src="../../assets/raf/raf-neutral.png" alt="">&larr; Studyraf</a><span><a href="./oefenlab.html">Oefenlab</a> &nbsp; <a href="./stappenplan.html">PE-stappenplan</a></span></div>
 
 <div class="shell">
 <aside class="toc" aria-label="Inhoud">
@@ -1339,7 +1339,7 @@ function renderQuiz(chId, qs){
   const sec = document.getElementById(chId); if (!sec) return;
   const box = document.createElement('div'); box.className = 'quiz';
   const xp = qs.reduce((a,q)=>a+XPT[q.t],0);
-  box.innerHTML = `<h3 class="nonum">Test jezelf</h3><p class="qmeta">${qs.length} vragen · ${xp} GP</p>`;
+  box.innerHTML = `<h3 class="nonum">Test jezelf</h3><p class="qmeta">${qs.length} vragen · ${xp} GP · <a href="./oefenlab.html#${chId}">Oefen dit in het Oefenlab &rarr;</a></p>`;
   qs.forEach((q,i) => {
     const id = chId+'-'+i, solved = !!XS.solved[id];
     const el = document.createElement('div'); el.className = 'q'+(solved?' solved':''); el.dataset.id = id;

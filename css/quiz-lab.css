@@ -1,0 +1,41 @@
+/* Basis voor het vragen-Oefenlab; de balk, Raf en voortgang komen uit focus-lab.css */
+* { box-sizing: border-box; }
+body { margin: 0; background: #f6f4ef; color: #1b1f2b; font-family: "Nunito", system-ui, sans-serif; line-height: 1.45; }
+.wrap { max-width: 900px; margin: 0 auto; padding: 20px 24px 16px; }
+
+.ql-eyebrow { margin: 8px 0 0; font-weight: 800; font-size: 14px; letter-spacing: .1em; text-transform: uppercase; color: #b8521f; }
+.ql-titel { margin: 6px 0 0; font-size: 32px; font-weight: 800; line-height: 1.15; }
+.ql-sub { margin: 10px 0 0; font-size: 18px; font-weight: 600; color: #4a4034; }
+.ql-link { display: inline-block; margin-top: 18px; font-weight: 800; color: #a94a17; }
+.ql-alle { margin-top: 24px; background: #fff; border: 2px solid #e7e2d8; border-radius: 16px; padding: 12px 18px; }
+.ql-alle summary { cursor: pointer; font-weight: 800; }
+.ql-hoofdstukken { margin: 10px 0 4px; padding-left: 1.4em; display: grid; gap: 4px; }
+.ql-hoofdstukken a { color: #1b1f2b; text-decoration: none; font-weight: 600; }
+.ql-hoofdstukken a:hover { text-decoration: underline; }
+.ql-hoofdstukken a.nu { color: #b8521f; font-weight: 800; }
+.ql-hoofdstukken a.klaar::after { content: " ✓"; color: #1f7a3a; font-weight: 800; }
+
+.ql-kop { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+.ql-badge { flex: 0 0 auto; margin-top: 12px; font-size: 13px; font-weight: 800; color: #6b5a45; background: #f3ece0; padding: 4px 10px; border-radius: 999px; white-space: nowrap; }
+
+.opts { display: flex; flex-direction: column; gap: 10px; margin-top: 22px; }
+.opt { display: flex; width: 100%; text-align: left; cursor: pointer; font: inherit; color: inherit; }
+.opt:focus-visible, .ql-pijl:focus-visible { outline: 3px solid #2b1707; outline-offset: 2px; }
+
+.ql-volgorde { list-style: none; margin: 22px 0 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.ql-item {
+  display: flex; align-items: center; gap: 12px; padding: 12px 14px;
+  background: #fff; border: 2px solid #e7e2d8; border-radius: 16px; box-shadow: 0 3px 0 #e7e2d8;
+  font-size: 17px; font-weight: 700;
+}
+.ql-item .k { flex: 0 0 auto; width: 32px; height: 32px; border-radius: 10px; background: #f3ece0; color: #8a4a0c; display: flex; align-items: center; justify-content: center; font-weight: 800; }
+.ql-item-tekst { flex: 1 1 auto; }
+.ql-item.good { border-color: #1f7a3a; background: #d9f0df; box-shadow: 0 3px 0 #1f7a3a; }
+.ql-pijl { flex: 0 0 auto; width: 44px; height: 44px; border: 2px solid #e7e2d8; border-radius: 12px; background: #f6f4ef; font: inherit; font-size: 18px; font-weight: 800; color: #6b5a45; cursor: pointer; }
+.ql-pijl:disabled { opacity: .35; cursor: default; }
+
+@media (max-width: 720px) {
+  .ql-titel { font-size: 24px; }
+  .ql-kop { flex-direction: column; gap: 8px; }
+  .ql-badge { margin-top: 0; }
+}

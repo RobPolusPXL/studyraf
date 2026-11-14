@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Project Management Oefenlab · Studyraf</title>
+<link rel="icon" href="../../assets/raf/raf-neutral.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../css/quiz-lab.css">
+<link rel="stylesheet" href="../../css/focus-lab.css">
+<style>
+.studyraf-balk{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 20px;background:#d9663a;font:800 15px Nunito,system-ui,sans-serif}
+.studyraf-balk a{color:#fff;text-decoration:none;padding:6px 4px}
+.studyraf-balk a:hover,.studyraf-balk a:focus-visible{text-decoration:underline}
+.studyraf-balk img{height:28px;width:auto;vertical-align:middle;margin-right:6px}
+</style>
+</head>
+<body>
+<div class="studyraf-balk" role="navigation" aria-label="Studyraf"><a href="../../index.html"><img src="../../assets/raf/raf-neutral.png" alt="">&larr; Studyraf</a><a href="./cursus.html">Cursus</a></div>
+<div class="wrap"><main id="main"></main></div>
+<script type="module">
+import DATA from "./oefenlab-vragen.js";
+import { startQuizLab } from "../../js/quiz-lab.js";
+startQuizLab(DATA);
+</script>
+</body>
+</html>

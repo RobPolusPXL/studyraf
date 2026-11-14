@@ -188,6 +188,8 @@ input.cell.bad{border-color:var(--bad);background:var(--bad-soft)}
 :focus-visible{outline:3px solid var(--leaf);outline-offset:2px}
 </style>
 <style>
+.quiz-start{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.quiz-start .btn{text-decoration:none;flex:0 0 auto}
 .studyraf-balk{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 20px;background:#d9663a;font:800 15px Nunito,system-ui,sans-serif}
 .studyraf-balk a{color:#fff;text-decoration:none;padding:6px 4px}
 .studyraf-balk a:hover,.studyraf-balk a:focus-visible{text-decoration:underline}
@@ -199,7 +201,7 @@ input.cell.bad{border-color:var(--bad);background:var(--bad-soft)}
 <link rel="icon" href="../../assets/raf/raf-neutral.png">
 </head>
 <body>
-<div class="studyraf-balk" role="navigation" aria-label="Studyraf"><a href="../../index.html"><img src="../../assets/raf/raf-neutral.png" alt="">&larr; Studyraf</a><a href="./stappenplan.html">PE-stappenplan &rarr;</a></div>
+<div class="studyraf-balk" role="navigation" aria-label="Studyraf"><a href="../../index.html"><img src="../../assets/raf/raf-neutral.png" alt="">&larr; Studyraf</a><span><a href="./oefenlab.html">Oefenlab</a> &nbsp; <a href="./stappenplan.html">PE-stappenplan</a></span></div>
 
 <div class="shell">
 <aside class="toc" aria-label="Inhoud">
@@ -1320,6 +1322,7 @@ const QUIZ = {
 const XPT = {mc:10, multi:10, order:15};
 const BONUS = {ex1:40, ex2:40, 't-ex4':30, 't-ex5':30};
 const XS = Object.assign({solved:{}}, store.get('xp'));
+try { Object.assign(XS.solved, (JSON.parse(localStorage.getItem('studyraf-pm-oefenlab')) || {}).opgelost || {}); } catch(e) {}
 const TOTAL_XP = Object.values(QUIZ).flat().reduce((a,q)=>a+XPT[q.t],0) + Object.values(BONUS).reduce((a,b)=>a+b,0);
 const RANKS = [[0,'Starter'],[.15,'Planner'],[.35,'Netwerktekenaar'],[.6,'Kritiek-padvinder'],[.85,'Projectleider']];
 function xpTotal(){ let t=0; Object.entries(QUIZ).forEach(([c,qs])=>qs.forEach((q,i)=>{ if (XS.solved[c+'-'+i]) t+=XPT[q.t]; })); Object.keys(BONUS).forEach(k=>{ if (XS.solved[k]) t+=BONUS[k]; }); return t; }
@@ -1337,82 +1340,36 @@ function shuffleSeed(arr, seed){ let a = (seed*2654435761)>>>0; const rnd = () =
   const r = arr.slice(); for (let i = r.length-1; i > 0; i--){ const j = Math.floor(rnd()*(i+1)); [r[i], r[j]] = [r[j], r[i]]; } return r; }
 function renderQuiz(chId, qs){
   const sec = document.getElementById(chId); if (!sec) return;
-  const box = document.createElement('div'); box.className = 'quiz';
   const xp = qs.reduce((a,q)=>a+XPT[q.t],0);
-  box.innerHTML = `<h3 class="nonum">Test jezelf</h3><p class="qmeta">${qs.length} vragen · ${xp} GP</p>`;
-  qs.forEach((q,i) => {
-    const id = chId+'-'+i, solved = !!XS.solved[id];
-    const el = document.createElement('div'); el.className = 'q'+(solved?' solved':''); el.dataset.id = id;
-    const ty = {mc:'Meerkeuze', multi:'Meerdere juist', order:'Volgorde'}[q.t];
-    let body = '';
-    if (q.t === 'order'){
-      body = `<div class="seqbox"><div><div class="qlbl">Klik in de juiste volgorde</div><div class="pool"></div></div><div><div class="qlbl">Jouw volgorde</div><div class="seq"></div></div></div>`;
-    } else {
-      body = `<div class="opts">${q.o.map((o,k)=>`<button type="button" class="opt" data-k="${k}" aria-pressed="false"><span class="k">${'ABCDEF'[k]}</span><span>${o}</span></button>`).join('')}</div>`;
-    }
-    el.innerHTML = `<div class="badge"><span class="ty">${ty}</span><span class="st">${solved?'opgelost · +'+XPT[q.t]+' GP':XPT[q.t]+' GP'}</span></div>
-      <p class="qt">${q.q}</p>${body}
-      <div class="qact"><button type="button" class="btn primary" data-q="check">Controleer</button><button type="button" class="btn" data-q="reset">Opnieuw</button></div>
-      <div class="qfb" hidden></div>`;
-    box.appendChild(el);
-    if (q.t === 'order'){
-      const pool = el.querySelector('.pool'), seq = el.querySelector('.seq');
-      const items = shuffleSeed(q.o.map((t,k)=>({t,k})), i+chId.length);
-      const draw = () => {
-        const chosen = el._seq || [];
-        pool.innerHTML = items.filter(x=>!chosen.includes(x.k)).map(x=>`<button type="button" class="chip" data-k="${x.k}">${x.t}</button>`).join('');
-        seq.innerHTML = chosen.map((k,n)=>`<button type="button" class="chip" data-k="${k}"><span class="nr">${n+1}</span>${q.o[k]}</button>`).join('');
-      };
-      el._seq = []; el._draw = draw; draw();
-      pool.addEventListener('click', e => { const c = e.target.closest('.chip'); if (!c) return; el._seq.push(+c.dataset.k); draw(); });
-      seq.addEventListener('click', e => { const c = e.target.closest('.chip'); if (!c) return; el._seq = el._seq.filter(k=>k!==+c.dataset.k); draw(); });
-    }
-  });
+  const klaar = qs.filter((_,i)=>XS.solved[chId+'-'+i]).length;
+  const status = klaar === qs.length ? ' · alles opgelost ✓' : klaar ? ` · ${klaar} van ${qs.length} opgelost` : '';
+  const knop = klaar === qs.length ? 'Opnieuw oefenen' : klaar ? 'Verder oefenen' : 'Start';
+  const box = document.createElement('div'); box.className = 'quiz quiz-start'; box.id = 'test-' + chId;
+  box.innerHTML = `<div><h3 class="nonum">Test jezelf</h3><p class="qmeta">${qs.length} vragen · ${xp} GP${status}</p></div>
+    <a class="btn primary" href="./oefenlab.html?terug=1#${chId}">${knop}</a>`;
   sec.appendChild(box);
-
-  box.addEventListener('click', e => {
-    const card = e.target.closest('.q'); if (!card) return;
-    const i = +card.dataset.id.split('-').pop(), q = qs[i], fb = card.querySelector('.qfb');
-    const opt = e.target.closest('.opt');
-    if (opt && !opt.disabled){
-      if (q.t === 'mc') card.querySelectorAll('.opt').forEach(o => o.setAttribute('aria-pressed', o===opt ? 'true' : 'false'));
-      else opt.setAttribute('aria-pressed', opt.getAttribute('aria-pressed')==='true' ? 'false' : 'true');
-      card.querySelectorAll('.opt').forEach(o => o.classList.remove('wrong')); fb.hidden = true;
-      return;
-    }
-    const act = e.target.dataset.q; if (!act) return;
-    if (act === 'reset'){
-      card.querySelectorAll('.opt').forEach(o => { o.disabled=false; o.setAttribute('aria-pressed','false'); o.classList.remove('good','wrong'); });
-      if (card._draw){ card._seq = []; card._draw(); }
-      fb.hidden = true; return;
-    }
-    if (act === 'check'){
-      let good = false, picked = [];
-      if (q.t === 'order'){ good = card._seq.length === q.o.length && card._seq.every((k,n)=>k===n); if (card._seq.length < q.o.length){ fb.hidden=false; fb.className='qfb bad'; fb.textContent='Zet eerst alle stappen in een volgorde.'; return; } }
-      else {
-        picked = [...card.querySelectorAll('.opt')].filter(o=>o.getAttribute('aria-pressed')==='true').map(o=>+o.dataset.k);
-        if (!picked.length){ fb.hidden=false; fb.className='qfb bad'; fb.textContent='Kies eerst een antwoord.'; return; }
-        const want = q.t==='mc' ? [q.a] : q.a;
-        good = picked.length === want.length && want.every(k=>picked.includes(k));
-      }
-      fb.hidden = false;
-      if (good){
-        const gained = award(card.dataset.id);
-        card.classList.add('solved'); card.querySelector('.st').textContent = 'opgelost · +'+XPT[q.t]+' GP';
-        card.querySelectorAll('.opt').forEach(o => { o.disabled = true; if (o.getAttribute('aria-pressed')==='true') o.classList.add('good'); });
-        fb.className = 'qfb ok'; fb.innerHTML = `<strong>Juist.</strong> ${q.w}${gained?` <span class="xpgain">+${XPT[q.t]} GP</span>`:''}`;
-      } else {
-        card.querySelectorAll('.opt').forEach(o => { if (o.getAttribute('aria-pressed')==='true') o.classList.add('wrong'); });
-        fb.className = 'qfb bad'; fb.textContent = q.t==='multi' ? 'Nog niet juist. Let op: er kan meer dan één antwoord juist zijn.' : 'Nog niet juist. Probeer opnieuw.';
-      }
-    }
-  });
 }
+
 let QN = 0;
 function shuffleQs(qs, c){ return qs.map((q,i) => { if (q.t==='order') return q; QN++;
   let idx = shuffleSeed(q.o.map((_,k)=>k), i*7+c.length*3+1);
   if (q.t==='mc'){ const rest = idx.filter(k=>k!==q.a); const pos = (QN*3 + c.length) % q.o.length; rest.splice(pos, 0, q.a); idx = rest; } const o = idx.map(k=>q.o[k]); const a = q.t==='mc' ? idx.indexOf(q.a) : q.a.map(k=>idx.indexOf(k)); return Object.assign({}, q, {o, a}); }); }
 Object.entries(QUIZ).forEach(([c,qs]) => { QUIZ[c] = shuffleQs(qs, c); renderQuiz(c, QUIZ[c]); });
+if (location.hash.startsWith('#test-')) {
+  // Terug uit het Oefenlab: naar de test scrollen, ook nadat lettertypes en afbeeldingen de pagina verschoven hebben.
+  const naarTest = () => { const doel = document.getElementById(location.hash.slice(1)); if (doel) doel.scrollIntoView({block:'center', behavior:'instant'}); };
+  let volgen = true;
+  const stop = () => { volgen = false; };
+  ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(ev => window.addEventListener(ev, stop, {once:true, passive:true}));
+  const einde = performance.now() + 3000;
+  const bewaak = () => {
+    if (!volgen || performance.now() > einde) return;
+    const doel = document.getElementById(location.hash.slice(1));
+    if (doel) { const r = doel.getBoundingClientRect(); if (r.top < 0 || r.bottom > innerHeight) naarTest(); }
+    requestAnimationFrame(bewaak);
+  };
+  requestAnimationFrame(bewaak);
+}
 
 /* Inhoudstafel: hoofdstukken + genummerde secties (h3) */
 (function(){

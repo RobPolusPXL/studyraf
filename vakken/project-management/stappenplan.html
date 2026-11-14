@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PE Project Management stappenplan · Studyraf</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Layout: werkbank — vaste stappenlijst links, één stap tegelijk rechts. Okerkleurig accent (giraf), rood = kritiek pad. */
+:root{
+  --bg:#f3f4f1;
+  --surface:#ffffff;
+  --ink:#1d2421;
+  --muted:#5f6a64;
+  --line:#d9ddd6;
+  --accent:#a8650f;
+  --accent-soft:#f6ead7;
+  --crit:#c23a2b;
+  --ok:#2f7d4f;
+  --ok-soft:#e2f1e7;
+  --bad-soft:#f8e1dd;
+  --font-display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-body:"IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --font-mono:"IBM Plex Mono", ui-monospace, Consolas, monospace;
+  color-scheme: light;
+}
+
+
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.55}
+h1,h2,h3{font-family:var(--font-display);text-wrap:balance;line-height:1.2;margin:0}
+h1{font-size:1.5rem}
+h2{font-size:1.6rem}
+h3{font-size:1.05rem;margin-top:4px}
+code,.mono{font-family:var(--font-mono);font-size:.92em}
+a{color:var(--accent)}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.top{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:space-between;padding:18px 24px;border-bottom:1px solid var(--line);background:var(--surface)}
+.top .meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;border:1px solid var(--line);font-size:.85rem;color:var(--muted);background:var(--bg)}
+.pill strong{color:var(--ink);font-variant-numeric:tabular-nums}
+.pill.id{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+.progress{display:flex;align-items:center;gap:10px;min-width:220px}
+.bar{flex:1;height:8px;background:var(--line);border-radius:4px;overflow:hidden}
+.bar span{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+.progress small{font-variant-numeric:tabular-nums;color:var(--muted)}
+
+.wrap{display:grid;grid-template-columns:290px 1fr;gap:0;min-height:calc(100vh - 80px)}
+nav{border-right:1px solid var(--line);padding:16px 12px;background:var(--surface)}
+nav .group{font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:16px 8px 6px;font-weight:600}
+nav .group:first-child{margin-top:0}
+nav button.step{display:flex;gap:10px;width:100%;text-align:left;background:none;border:0;padding:7px 8px;border-radius:6px;cursor:pointer;font-size:.92rem;align-items:flex-start}
+nav button.step:hover{background:var(--bg)}
+nav button.step.active{background:var(--accent-soft);color:var(--ink);font-weight:600}
+nav .dot{flex:none;width:18px;height:18px;border-radius:50%;border:1.5px solid var(--line);margin-top:2px;display:grid;place-items:center;font-size:11px;color:transparent}
+nav .done .dot{background:var(--ok);border-color:var(--ok);color:#fff}
+nav .part .dot{border-color:var(--accent)}
+.mobile-nav{display:none}
+
+main{padding:28px 32px 48px;max-width:880px}
+.eyebrow{font-size:.8rem;color:var(--accent);font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.lead{color:var(--muted);max-width:65ch;margin:8px 0 0}
+.block{margin-top:22px;display:flex;flex-direction:column;gap:10px}
+.block p,.block li{max-width:68ch}
+.block ul,.block ol{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:4px}
+.path{font-family:var(--font-mono);font-size:.88rem;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:8px 12px;display:block;overflow-x:auto}
+.src{font-size:.85rem;color:var(--muted);border-left:3px solid var(--line);padding-left:10px}
+.think{border:1px solid var(--accent);background:var(--accent-soft);border-radius:8px;padding:12px 14px}
+.think strong{color:var(--accent)}
+.warn{border-left:3px solid var(--crit);padding:6px 12px;background:var(--bad-soft);border-radius:0 6px 6px 0}
+
+details{border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+details summary{cursor:pointer;padding:10px 14px;font-weight:500}
+details > div{padding:0 14px 12px}
+
+.checklist{list-style:none;padding:0!important;display:flex;flex-direction:column;gap:6px}
+.checklist label{display:flex;gap:10px;align-items:flex-start;cursor:pointer;padding:6px 10px;border-radius:6px;border:1px solid var(--line);background:var(--surface)}
+.checklist input{margin-top:4px;accent-color:var(--ok);width:16px;height:16px;flex:none}
+.checklist label.checked{background:var(--ok-soft);border-color:transparent}
+
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+th,td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{font-weight:600;color:var(--muted);font-size:.8rem;text-transform:uppercase;letter-spacing:.04em;background:var(--bg)}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;font-family:var(--font-mono)}
+tr:last-child td{border-bottom:0}
+input.cell{width:76px;padding:4px 8px;border:1px solid var(--line);border-radius:5px;background:var(--bg);text-align:right;font-family:var(--font-mono)}
+input.cell.ok{border-color:var(--ok);background:var(--ok-soft)}
+input.cell.bad{border-color:var(--crit);background:var(--bad-soft)}
+input.wide{width:150px;text-align:left}
+.crit-pick{display:flex;flex-wrap:wrap;gap:6px}
+.crit-pick label{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border:1px solid var(--line);border-radius:6px;cursor:pointer;font-family:var(--font-mono);background:var(--surface)}
+.crit-pick input{accent-color:var(--crit)}
+.crit-pick label.on{border-color:var(--crit);color:var(--crit)}
+
+.btns{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.btn{padding:8px 14px;border-radius:6px;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-weight:500}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.primary:hover{filter:brightness(1.08)}
+.feedback{font-size:.92rem;font-weight:500}
+.feedback.ok{color:var(--ok)}
+.feedback.bad{color:var(--crit)}
+.nextprev{display:flex;justify-content:space-between;gap:12px;margin-top:32px;padding-top:18px;border-top:1px solid var(--line)}
+
+@media (max-width: 820px){
+  .wrap{grid-template-columns:1fr}
+  nav{display:none}
+  .mobile-nav{display:block;padding:12px 16px;background:var(--surface);border-bottom:1px solid var(--line)}
+  .mobile-nav select{width:100%;padding:8px;border:1px solid var(--line);border-radius:6px;background:var(--bg)}
+  main{padding:20px 16px 40px}
+  .top{padding:14px 16px}
+}
+@media (prefers-reduced-motion: reduce){ .bar span{transition:none} }
+</style>
+<style>
+main{min-width:0}
+.studyraf-balk{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 20px;background:#d9663a;font:800 15px Nunito,system-ui,sans-serif}
+.studyraf-balk a{color:#fff;text-decoration:none;padding:6px 4px}
+.studyraf-balk a:hover,.studyraf-balk a:focus-visible{text-decoration:underline}
+.studyraf-balk img{height:28px;width:auto;vertical-align:middle;margin-right:6px}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../css/thema-vak.css">
+<link rel="icon" href="../../assets/raf/raf-neutral.png">
+</head>
+<body>
+<div class="studyraf-balk" role="navigation" aria-label="Studyraf"><a href="../../index.html"><img src="../../assets/raf/raf-neutral.png" alt="">&larr; Studyraf</a><a href="./cursus.html">Cursus</a></div>
+
+<header class="top">
+  <div>
+    <h1>PE Project Management, deel 1</h1>
+    <div class="meta" style="margin-top:6px">
+      <span class="pill id">Groep 01 · <strong>ID = 1</strong></span>
+      <span class="pill">Deadline <strong>vr 15-01-2027 17:30</strong></span>
+      <span class="pill" id="countdown">nog <strong>…</strong></span>
+    </div>
+  </div>
+  <div class="progress" aria-label="Voortgang">
+    <div class="bar"><span id="barfill"></span></div>
+    <small id="bartext">0%</small>
+  </div>
+</header>
+<div class="mobile-nav"><label for="stepselect" class="eyebrow">Stap</label><select id="stepselect"></select></div>
+<div class="wrap">
+  <nav id="nav" aria-label="Stappen"></nav>
+  <main id="main"></main>
+</div>
+
+<script>
+/* ---------- Gegevens uit de opgave (ID = 1) ---------- */
+const ID = 1;
+const TASKS = [
+  {id:'A', name:'Business- & Compliance-Analyse', pred:[], to:4, tl:10, tp:28},
+  {id:'B', name:'Architectuur- & AI-Ontwerp', pred:['A'], to:1, tl:2, tp:9},
+  {id:'C', name:'Webshop & E-commerce Ontwikkeling', pred:['B'], to:8, tl:11, tp:26},
+  {id:'D', name:'Integratie AI-Symptoomchecker', pred:['B'], to:4, tl:10, tp:28},
+  {id:'E', name:'Ontwikkeling LMS', pred:['B'], to:6, tl:10, tp:14},
+  {id:'F', name:'Community Platform & Netwerk Hub', pred:['B'], to:4, tl:8, tp:12},
+  {id:'G', name:'Integratie Betalingssysteem', pred:['C'], to:1, tl:3, tp:5},
+  {id:'H', name:'Productcatalogus & Voorraadbeheer', pred:['C'], to:3, tl:11, tp:25},
+  {id:'I', name:'Creatie Medische & IT-Cursussen', pred:['E'], to:2, tl:8, tp:20},
+  {id:'J', name:'Beveiligingsaudit', pred:['D','G','I','F'], fixed:3*ID},
+  {id:'K', name:'AI-Carrièreadviseur Module 2.0', pred:['I','F'], to:1, tl:8, tp:21},
+  {id:'L', name:'User Acceptance Testing', pred:['J','H'], to:6, tl:7, tp:20},
+  {id:'M', name:'Marketing & Officiële Go-Live', pred:['K','L'], to:1, tl:2, tp:3},
+];
+
+/* Pure PERT-berekening: Te, vroegste begin (ES), laatst toelaatbaar einde (LF), speling */
+function pert(tasks){
+  const te = {}, es = {}, ef = {}, lf = {}, ls = {};
+  tasks.forEach(t => te[t.id] = t.fixed !== undefined ? t.fixed : (t.to + 4*t.tl + t.tp)/6);
+  tasks.forEach(t => { es[t.id] = t.pred.length ? Math.max(...t.pred.map(p => ef[p])) : 0; ef[t.id] = es[t.id] + te[t.id]; });
+  const end = Math.max(...tasks.map(t => ef[t.id]));
+  [...tasks].reverse().forEach(t => {
+    const succ = tasks.filter(s => s.pred.includes(t.id));
+    lf[t.id] = succ.length ? Math.min(...succ.map(s => ls[s.id])) : end;
+    ls[t.id] = lf[t.id] - te[t.id];
+  });
+  const slack = {}; tasks.forEach(t => slack[t.id] = ls[t.id] - es[t.id]);
+  const critical = tasks.filter(t => Math.abs(slack[t.id]) < 1e-9).map(t => t.id);
+  return {te, es, ef, lf, ls, slack, critical, end};
+}
+const P = pert(TASKS);
+
+/* MS Project-taken met hun duur volgens de opgave */
+const MSP = [
+  {k:'A', name:'Business- & Compliance-Analyse', dur:P.te.A},
+  {k:'B', name:'Architectuur- & AI-ontwerp', dur:P.te.B},
+  {k:'E', name:'Ontwikkelen LMS-basisplatform', dur:P.te.E},
+  {k:'F', name:'Ontwikkelen community platform', dur:P.te.F},
+  {k:'I', name:'Creatie medische & IT-cursussen', dur:P.te.I},
+  {k:'WS', name:'Ontwikkelen webshop', dur:26},
+  {k:'EC', name:'Ontwikkelen e-commerce platform', dur:26},
+  {k:'D', name:'Integratie AI-symptoomchecker', dur:P.te.D},
+  {k:'G', name:'Integratie betalingssysteem', dur:P.te.G},
+  {k:'H', name:'Productcatalogus & voorraadbeheer (eindduur)', dur:P.te.H/2},
+  {k:'J', name:'Beveiligingsaudit', dur:P.te.J},
+  {k:'K', name:'AI-carrièreadviseur module 2.0', dur:P.te.K},
+  {k:'L', name:'User Acceptance Testing', dur:P.te.L},
+  {k:'M', name:'Marketing & officiële Go-Live', dur:P.te.M},
+];
+
+/* ---------- Opslag (alleen in deze browser) ---------- */
+const KEY = 'pe-pm-2tiw-g01';
+let S = {step:0, checks:{}, inputs:{}};
+try { const raw = localStorage.getItem(KEY); if (raw) S = Object.assign(S, JSON.parse(raw)); } catch(e) {}
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e) {} }
+
+/* ---------- Helpers ---------- */
+const num = v => { if (v === undefined || v === null) return NaN; const s = String(v).trim().replace(',', '.'); return s === '' ? NaN : Number(s); };
+const eq = (a,b) => Math.abs(a-b) < 0.01;
+const fmt = n => (Math.round(n*100)/100).toString().replace('.', ',');
+const path = s => `<code class="path">${s}</code>`;
+const think = s => `<div class="think"><strong>Denkvraag</strong> · ${s}</div>`;
+const src = s => `<div class="src">${s}</div>`;
+const reveal = (title, body) => `<details><summary>${title}</summary><div>${body}</div></details>`;
+
+/* ---------- Stappen ---------- */
+const STEPS = [
+/* ===== PERT ===== */
+{group:'1 · PERT', title:'Expected time per taak', eyebrow:'PERT · stap 1 van 6',
+ lead:'Bereken Te voor elke taak met de formule uit de cursus. Raffie schat optimistisch (To), Geoffrey meest waarschijnlijk (Tl), Melman pessimistisch (Tp).',
+ body:() => `
+  ${src('Cursus deel I, §2.2.2 Tijdsfactor, figuur 20 (formule expected time)')}
+  ${think('In welke kolom van de tabel staat Tp? Let op: de opgave zet de schatters in de volgorde Raffie, Geoffrey, Melman. Welk gewicht krijgt de meest waarschijnlijke schatting?')}
+  ${reveal('Hint: de formule', '<p>Te = (To + 4·Tl + Tp) / 6</p>')}
+  <div class="tablewrap"><table>
+   <thead><tr><th>Act.</th><th>Beschrijving</th><th class="num">To</th><th class="num">Tl</th><th class="num">Tp</th><th class="num">Jouw Te</th></tr></thead>
+   <tbody>${TASKS.map(t => `<tr><td class="mono">${t.id}</td><td>${t.name}</td>
+     ${t.fixed!==undefined ? `<td class="num" colspan="3" style="text-align:center;color:var(--muted)">vast: 3 × ID</td>` : `<td class="num">${t.to}</td><td class="num">${t.tl}</td><td class="num">${t.tp}</td>`}
+     <td class="num"><input class="cell" id="te-${t.id}" data-check="te" data-k="${t.id}" inputmode="decimal" aria-label="Te ${t.id}"></td></tr>`).join('')}</tbody>
+  </table></div>
+  <div class="btns"><button class="btn primary" data-action="check" data-set="te">Controleer</button><span class="feedback" id="fb-te"></span></div>
+  <ul class="checklist">${chk('p1a','Alle 13 Te-waarden zijn juist')}</ul>`},
+
+{group:'1 · PERT', title:'Netwerk opbouwen', eyebrow:'PERT · stap 2 van 6',
+ lead:'Zet de afhankelijkheden om naar een netwerk. In de cursus is een pijl een activiteit en een cirkel een knooppunt (gebeurtenis).',
+ body:() => `
+  ${src('Cursus deel I, §2.2.1 Hoofdbegrippen: knooppunt, activiteit, relatielijn (0-lijn), figuur 19 referentieschema')}
+  <ol>
+   <li>Begin met één startknooppunt. A vertrekt daar.</li>
+   <li>Na B vertrekken C, D, E en F uit hetzelfde knooppunt.</li>
+   <li>Werk taak per taak verder met de kolom “voorafgegaan door”.</li>
+  </ol>
+  ${think('J wacht op D, G, I én F. K wacht alleen op I en F. Kunnen I en F in hetzelfde knooppunt eindigen als D en G? Wat gebeurt er dan met K? Welk element uit de cursus lost dit op?')}
+  <div class="btns">Hoeveel relatielijnen (0-lijnen) heb je minimaal nodig? <input class="cell" id="dummies" data-k="dummies" inputmode="numeric" aria-label="Aantal relatielijnen"><button class="btn" data-action="check" data-set="dummies">Controleer</button><span class="feedback" id="fb-dummies"></span></div>
+  ${think('Hoeveel eindknooppunten mag een PERT-netwerk hebben?')}
+  <ul class="checklist">${chk('p2a','Elke activiteit is één pijl met letter en Te')}${chk('p2b','Eén start- en één eindknooppunt')}${chk('p2c','Relatielijn(en) gestippeld met een 0')}</ul>`},
+
+{group:'1 · PERT', title:'Voorwaartse gang (TE)', eyebrow:'PERT · stap 3 van 6',
+ lead:'Bereken voor elk knooppunt de TE: het vroegste tijdstip waarop het bereikt wordt. Komen er meerdere paden samen, dan neem je het grootste.',
+ body:() => `
+  ${src('Cursus deel I, §2.2.2 “TE = Earliest expected time”')}
+  <p>Vul hieronder de TE in van het knooppunt waar elke activiteit <em>vertrekt</em> (= het vroegste begin van die activiteit).</p>
+  ${think('Bij het knooppunt vóór J komen D, G, de relatielijn en (via die lijn) I en F samen. Welke waarde wint?')}
+  <div class="tablewrap"><table><thead><tr><th>Act.</th><th>Voorgangers</th><th class="num">TE beginknooppunt</th></tr></thead>
+  <tbody>${TASKS.map(t => `<tr><td class="mono">${t.id}</td><td class="mono">${t.pred.join(', ')||'/'}</td><td class="num"><input class="cell" id="es-${t.id}" data-check="es" data-k="${t.id}" inputmode="decimal" aria-label="TE ${t.id}"></td></tr>`).join('')}</tbody></table></div>
+  <div class="btns">Doorlooptijd project (TE eindknooppunt): <input class="cell" id="end" data-k="end" inputmode="decimal" aria-label="Doorlooptijd"> dagen</div>
+  <div class="btns"><button class="btn primary" data-action="check" data-set="es">Controleer</button><span class="feedback" id="fb-es"></span></div>
+  <ul class="checklist">${chk('p3a','TE staat bij elk knooppunt in mijn tekening')}</ul>`},
+
+{group:'1 · PERT', title:'Achterwaartse gang (TL)', eyebrow:'PERT · stap 4 van 6',
+ lead:'Start bij het eindknooppunt met TL = TE en reken terug. Vertrekken er meerdere pijlen uit een knooppunt, dan neem je het kleinste.',
+ body:() => `
+  ${src('Cursus deel I, §2.2.2 “TL = Latest allowable time” en “Speling”')}
+  <p>Vul de TL in van het knooppunt waar elke activiteit <em>aankomt</em> (= het laatst toelaatbare einde).</p>
+  ${think('Uit het knooppunt na I en F vertrekken K én de relatielijn naar J. Welke van de twee bepaalt de TL van dat knooppunt?')}
+  <div class="tablewrap"><table><thead><tr><th>Act.</th><th class="num">TL eindknooppunt</th><th class="num">Speling (TL − TE begin − Te)</th></tr></thead>
+  <tbody>${TASKS.map(t => `<tr><td class="mono">${t.id}</td><td class="num"><input class="cell" id="lf-${t.id}" data-check="lf" data-k="${t.id}" inputmode="decimal" aria-label="TL ${t.id}"></td><td class="num"><input class="cell" id="sl-${t.id}" data-check="sl" data-k="${t.id}" inputmode="decimal" aria-label="Speling ${t.id}"></td></tr>`).join('')}</tbody></table></div>
+  <div class="btns"><button class="btn primary" data-action="check" data-set="lf">Controleer</button><span class="feedback" id="fb-lf"></span></div>
+  <ul class="checklist">${chk('p4a','TL staat bij elk knooppunt in mijn tekening')}</ul>`},
+
+{group:'1 · PERT', title:'Kritieke pad', eyebrow:'PERT · stap 5 van 6',
+ lead:'Het kritieke pad is het langste pad van start tot einde. Op dat pad is de speling overal 0.',
+ body:() => `
+  ${src('Cursus deel I, §2.2.3 Kritieke pad')}
+  <p>Selecteer de activiteiten op het kritieke pad:</p>
+  <div class="crit-pick">${TASKS.map(t => `<label class="${S.inputs['cp-'+t.id]?'on':''}"><input type="checkbox" id="cp-${t.id}" data-k="cp-${t.id}"> ${t.id}</label>`).join('')}</div>
+  <div class="btns"><button class="btn primary" data-action="check" data-set="cp">Controleer</button><span class="feedback" id="fb-cp"></span></div>
+  ${think('Tel de Te’s van jouw pad op. Komt dat uit op de doorlooptijd uit stap 3?')}
+  <ul class="checklist">${chk('p5a','Kritieke pad is in kleur of dikker aangeduid in de tekening')}</ul>`},
+
+{group:'1 · PERT', title:'Tekening afwerken', eyebrow:'PERT · stap 6 van 6',
+ lead:'Werk het schema netjes uit. De opgave laat de tool vrij; bij Draw.io moet het .drawio-bestand mee in de zip.',
+ body:() => `
+  <ul>
+   <li>Knooppunt zoals in de cursusoefeningen: cirkel met links het nummer (Romeinse cijfers), rechts boven TE en rechts onder TL.</li>
+   <li>Pijl: letter van de activiteit + Te.</li>
+   <li>Legende voor het kritieke pad en de 0-lijn.</li>
+   <li>Vermeld de doorlooptijd van het project.</li>
+  </ul>
+  <ul class="checklist">${chk('p6a','Activiteiten, TE en TL bij elk knooppunt staan erop')}${chk('p6b','Kritieke pad en doorlooptijd staan erop')}${chk('p6c','Opgeslagen als PDF/PNG + bronbestand (.drawio)')}</ul>`},
+
+/* ===== MS PROJECT versie 1 ===== */
+{group:'2 · MS Project versie 1', title:'Nieuw project en projectgegevens', eyebrow:'MS Project · stap 1 van 12',
+ lead:'Maak het project aan, met startdatum en automatische taakmodus.',
+ body:() => `
+  ${src('Cursus 02, §2.3.7 Oefening blokhut, opgave les 2')}
+  ${path('Bestand › Nieuw › Leeg project')}
+  ${path('Project › Projectgegevens (Project Information) › Begindatum: ma 04-01-2027 · Plannen vanaf: Begindatum project')}
+  ${path('Bestand › Info › Projectgegevens › Geavanceerde eigenschappen › Titel: Melmans MMM 1')}
+  ${path('Bestand › Opties › Planning › Nieuwe taken gemaakt: Automatisch gepland')}
+  ${path('Opmaak › vinkje Projectsamenvattingstaak (Project Summary Task)')}
+  <ul class="checklist">${chk('m1a','Titel “Melmans MMM 1” en begindatum 04-01-2027')}${chk('m1b','Taakmodus automatisch')}${chk('m1c','Opgeslagen als versie 1 (.mpp)')}</ul>`},
+
+{group:'2 · MS Project versie 1', title:'Basiskalender MMMM 101', eyebrow:'MS Project · stap 2 van 12',
+ lead:'Maak een nieuwe basiskalender met de werkuren uit de opgave.',
+ body:() => `
+  ${src('Cursus 02, opgave les 3, “Kalenders”')}
+  ${path('Project › Werktijd wijzigen (Change Working Time) › Nieuwe kalender maken › Naam: MMMM 101 · Kopie maken van: Standaard')}
+  ${path('Tab Werkweken › [Standaard] › Details › dagen selecteren › “Dagen op deze specifieke werktijden instellen”')}
+  ${think('Op vrijdag begint iedereen een uur vroeger en stopt een uur vroeger, met dezelfde pauze. Hoeveel werkuren levert een vrijdag op, en hoeveel ma–do?')}
+  <div class="btns">Uren ma–do: <input class="cell" id="hmd" data-k="hmd" inputmode="decimal" aria-label="Uren maandag tot donderdag"> Uren vr: <input class="cell" id="hvr" data-k="hvr" inputmode="decimal" aria-label="Uren vrijdag"><button class="btn" data-action="check" data-set="hours">Controleer</button><span class="feedback" id="fb-hours"></span></div>
+  ${think('Bestand › Opties › Planning bevat “Uren per dag” en “Uren per week”. Kloppen die met jouw kalender? Wat gebeurt er met een duur van “1d” als ze niet kloppen?')}
+  <ul class="checklist">${chk('m2a','Ma–do en vr ingesteld met pauze 12:00–12:30')}${chk('m2b','Opties uren/dag en uren/week gecontroleerd')}</ul>`},
+
+{group:'2 · MS Project versie 1', title:'Vrije dagen in de kalender', eyebrow:'MS Project · stap 3 van 12',
+ lead:'Voeg de vakanties en feestdagen toe als uitzonderingen op MMMM 101.',
+ body:() => `
+  ${path('Project › Werktijd wijzigen › kalender MMMM 101 › tab Uitzonderingen (Exceptions) › naam + begin + einde')}
+  <p>Zoek eerst zelf de data op (Vlaamse schoolvakanties 2026–2027) en vergelijk daarna:</p>
+  ${reveal('Officiële data volgens vlaanderen.be', `<ul>
+    <li>Krokusvakantie: ma 08-02-2027 t.e.m. zo 14-02-2027</li>
+    <li>Paasvakantie: ma 29-03-2027 t.e.m. zo 11-04-2027</li>
+    <li>Dag van de Arbeid: za 01-05-2027</li>
+    <li>Hemelvaart: do 06-05-2027 (zonder brugdag, dus vrijdag 7 mei is een werkdag)</li></ul>
+    <p class="src">Bron: <a href="https://www.vlaanderen.be/onderwijs-en-vorming/wat-mag-en-moet-op-school/schoolvakanties-vrije-dagen-en-afwezigheden/schoolvakanties">vlaanderen.be – Schoolvakanties</a></p>`)}
+  ${think('1 mei 2027 valt op een zaterdag. Voor wie in het team maakt die uitzondering dan nog een verschil? Controleer in stap 5 of ze in zijn kalender doorwerkt.')}
+  <ul class="checklist">${chk('m3a','Krokus- en paasvakantie als uitzondering')}${chk('m3b','1 mei en Hemelvaart als uitzondering')}</ul>`},
+
+{group:'2 · MS Project versie 1', title:'Resourceblad', eyebrow:'MS Project · stap 4 van 12',
+ lead:'Voeg de vijf werkresources en de drie materiaalresources toe.',
+ body:() => `
+  ${src('Cursus 02, opgave les 3, “Resources”')}
+  ${path('Beeld › Resourceblad (Resource Sheet)')}
+  <div class="tablewrap"><table><thead><tr><th>Resource</th><th>Type</th><th class="num">Standaardtarief</th><th>Basiskalender</th></tr></thead><tbody>
+   <tr><td>Melman</td><td>Werk</td><td class="num">€ 80/u</td><td>MMMM 101</td></tr>
+   <tr><td>Geoffrey</td><td>Werk</td><td class="num">€ 75/u</td><td>MMMM 101</td></tr>
+   <tr><td>Raffie</td><td>Werk</td><td class="num">€ 65/u</td><td>MMMM 101</td></tr>
+   <tr><td>Bridget</td><td>Werk</td><td class="num">€ 70/u</td><td>MMMM 101</td></tr>
+   <tr><td>Leo</td><td>Werk</td><td class="num"><input class="cell" id="leo" data-k="leo" inputmode="decimal" aria-label="Tarief Leo"></td><td>MMMM 101</td></tr>
+   <tr><td>Licentie audit test platform</td><td>Materiaal</td><td class="num">€ 2.500</td><td>–</td></tr>
+   <tr><td>Databricks AI-agent system</td><td>Materiaal</td><td class="num">€ 4.000</td><td>–</td></tr>
+   <tr><td>QA test-environment</td><td>Materiaal</td><td class="num">€ 1.200</td><td>–</td></tr>
+  </tbody></table></div>
+  <div class="btns"><button class="btn" data-action="check" data-set="leo">Controleer Leo</button><span class="feedback" id="fb-leo"></span></div>
+  ${think('De materiaalkosten moeten aangerekend worden bij het begin van de taak. Welke kolom in het resourceblad regelt dat (Accrue At)? En wat is het verschil tussen Standaardtarief en Kosten/gebruik bij materiaal?')}
+  <ul class="checklist">${chk('m4a','8 resources met juist type en tarief')}${chk('m4b','Toerekenen = Begin voor de materialen')}${chk('m4c','Werkresources op basiskalender MMMM 101')}</ul>`},
+
+{group:'2 · MS Project versie 1', title:'Persoonlijke kalenders', eyebrow:'MS Project · stap 5 van 12',
+ lead:'Melman werkt ook op zaterdag, Raffie neemt een extra vrije dag.',
+ body:() => `
+  ${path('Resourceblad › dubbelklik resource › Werktijd wijzigen')}
+  <ul>
+   <li>Melman: tab Werkweken › Details › zaterdag 09:00–13:00.</li>
+   <li>Raffie: tab Uitzonderingen › [ID] dag(en) vanaf 1 maart.</li>
+  </ul>
+  <div class="btns">Raffie is vrij op: <input class="cell wide" id="raf" data-k="raf" placeholder="dd-mm-jjjj" aria-label="Vrije dag Raffie"> aantal dagen: <input class="cell" id="rafn" data-k="rafn" inputmode="numeric" aria-label="Aantal vrije dagen Raffie"><button class="btn" data-action="check" data-set="raf">Controleer</button><span class="feedback" id="fb-raf"></span></div>
+  ${think('Open de kalender van Melman en klik op zaterdag 1 mei 2027. Is dat een werkdag of niet? Wat zegt dat over hoe uitzonderingen van de basiskalender en werkweken van een resource samenwerken?')}
+  <ul class="checklist">${chk('m5a','Melman zaterdag 09:00–13:00')}${chk('m5b','Raffie vrije dag ingesteld')}${chk('m5c','1 mei bij Melman gecontroleerd')}</ul>`},
+
+{group:'2 · MS Project versie 1', title:'Taken en fases (WBS)', eyebrow:'MS Project · stap 6 van 12',
+ lead:'Bouw de structuur: samenvattingstaken voor de fases, subtaken en mijlpalen.',
+ body:() => `
+  ${src('Cursus 02, opgave les 2: taakniveaus, mijlpalen ter afsluiting van een fase')}
+  ${path('Taak › Taak laten inspringen (Indent) · mijlpaal = duur 0d')}
+  <p>Lees in de opgave welke taken in welke fase horen: Analysefase, Basis LMS, Basis webshop, plus drie losse taken achteraan.</p>
+  ${think('Webshop en e-commerce platform duren elk “net zo lang als initieel ingeschat bij taak C (Tp)”. Is dat de Te van C?')}
+  ${think('Productcatalogus & voorraadbeheer is “in de helft van de ingeschatte tijd klaar” met twee mensen. Zet je meteen de halve duur, of laat je MS Project dat doen via inspanningsgestuurd plannen? Wat is het verschil in Werk?')}
+  <div class="tablewrap"><table><thead><tr><th>Taak</th><th class="num">Duur (d)</th></tr></thead><tbody>
+   ${MSP.map(m => `<tr><td>${m.name}</td><td class="num"><input class="cell" id="d-${m.k}" data-check="dur" data-k="d-${m.k}" inputmode="decimal" aria-label="Duur ${m.name}"></td></tr>`).join('')}
+  </tbody></table></div>
+  <div class="btns"><button class="btn primary" data-action="check" data-set="dur">Controleer duren</button><span class="feedback" id="fb-dur"></span></div>
+  <ul class="checklist">${chk('m6a','Fases als samenvattingstaken')}${chk('m6b','Mijlpaal na elke fase en einde project')}${chk('m6c','Duren ingevuld')}</ul>`},
+
+{group:'2 · MS Project versie 1', title:'Taaktypes en notities', eyebrow:'MS Project · stap 7 van 12',
+ lead:'Stel de taken met vaste duur in en leg onzekere keuzes vast in notities.',
+ body:() => `
+  ${src('Cursus 02, “Vaste duur/vast werk”')}
+  ${path('Dubbelklik taak › Taakinformatie › Geavanceerd › Taaktype: Vaste duur (Fixed Duration)')}
+  ${path('Taakinformatie › tab Notities')}
+  ${think('Welke twee taken noemt de opgave expliciet “vaste duur”? Wat gebeurt er met het Werk als je bij zo’n taak een extra resource toevoegt?')}
+  ${think('Waar wijkt de tekst af van het PERT-schema of laat ze iets open? Denk aan de Beveiligingsaudit en de AI-symptoomchecker, en aan duren die niet uit de PERT-formule komen. Elke keuze die je daar maakt, verdient een notitie.')}
+  <ul class="checklist">${chk('m7a','Vaste duur bij de twee juiste taken')}${chk('m7b','Notities bij onzekere keuzes')}</ul>`},
+
+{group:'2 · MS Project versie 1', title:'Afhankelijkheden', eyebrow:'MS Project · stap 8 van 12',
+ lead:'Koppel de taken in de kolom Voorgaande taken (Predecessors), volgens de tekst van de opgave.',
+ body:() => `
+  ${path('Kolom Voorgaande taken · of Taak › Taken koppelen (Link Tasks)')}
+  ${think('“Zodra alle deliverables van de fase opgeleverd worden, starten twee nieuwe fases.” Koppel je de volgende taken aan de laatste taak of aan de mijlpaal van de fase? Wat is het voordeel van een mijlpaal?')}
+  ${reveal('Vergelijk pas nadat je zelf gekoppeld hebt', `<ul>
+    <li>Architectuur- & AI-ontwerp ← Business- & Compliance-Analyse</li>
+    <li>Mijlpaal einde analyse ← Architectuur- & AI-ontwerp</li>
+    <li>LMS-basisplatform, community platform, webshop, e-commerce platform, AI-symptoomchecker ← mijlpaal einde analyse</li>
+    <li>Creatie medische & IT-cursussen ← LMS-basisplatform</li>
+    <li>Mijlpaal einde LMS ← cursussen + community platform</li>
+    <li>Betalingssysteem en productcatalogus ← webshop + e-commerce platform</li>
+    <li>Beveiligingsaudit ← mijlpaal einde LMS + betalingssysteem + productcatalogus</li>
+    <li>Mijlpaal einde webshop ← beveiligingsaudit (en de symptoomchecker: jouw keuze, zet het in een notitie)</li>
+    <li>AI-carrièreadviseur ← mijlpaal einde LMS · UAT ← mijlpaal einde webshop</li>
+    <li>Marketing & Go-Live ← carrièreadviseur + UAT · Einde project ← Marketing & Go-Live</li></ul>`)}
+  <ul class="checklist">${chk('m8a','Alle koppelingen gelegd')}${chk('m8b','Geen taken zonder opvolger behalve het einde')}</ul>`},
+
+{group:'2 · MS Project versie 1', title:'Resources toewijzen', eyebrow:'MS Project · stap 9 van 12',
+ lead:'Wijs werk- en materiaalresources toe zoals de tekst beschrijft.',
+ body:() => `
+  ${path('Taak › Resources toewijzen (Assign Resources, Alt+F10) · materiaal: eenheden 1')}
+  ${think('Bij de productcatalogus moet de duur halveren. In welke volgorde wijs je Geoffrey en Raffie toe zodat inspanningsgestuurd plannen dat doet? Controleer of het Werk gelijk blijft.')}
+  ${reveal('Controlelijst toewijzingen', `<ul>
+    <li>Analyse: Melman, Geoffrey, Raffie · Architectuur: Geoffrey</li>
+    <li>LMS-basisplatform + cursussen: Bridget · Community platform: Leo</li>
+    <li>Webshop: Melman · E-commerce: Geoffrey · Symptoomchecker: Raffie + Databricks AI-agent system [1]</li>
+    <li>Betalingssysteem: Melman · Productcatalogus: Geoffrey + Raffie</li>
+    <li>Beveiligingsaudit: Melman + Licentie audit test platform [1]</li>
+    <li>Carrièreadviseur: Geoffrey · UAT: Melman + Bridget + QA test-environment [1] · Go-Live: Raffie</li></ul>`)}
+  <ul class="checklist">${chk('m9a','Alle taken hebben resources')}${chk('m9b','Materialen met 1 eenheid')}</ul>`},
+
+{group:'2 · MS Project versie 1', title:'Overbelasting nakijken', eyebrow:'MS Project · stap 10 van 12',
+ lead:'Kijk of er resources overbelast zijn. Rode resources in het resourceblad zijn een signaal.',
+ body:() => `
+  ${src('Cursus 02, §2.3.4 Toewijzing van hulpmiddelen; opgave les 3, resource herverdeling')}
+  ${path('Beeld › Resourcegebruik (Resource Usage) · Beeld › Resourcegrafiek · Resource › Herverdelen (Level)')}
+  ${think('Geoffrey werkt aan het e-commerce platform (26 dagen) en start met de carrièreadviseur zodra de LMS-fase klaar is. Hoe lang duurt de LMS-fase? Overlappen die twee?')}
+  ${think('De cursus geeft twee opties bij overbelasting: extra kosten om de doorlooptijd te houden, of de einddatum uitstellen. Welke kies jij, en waarom?')}
+  <ul class="checklist">${chk('m10a','Overbelasting bekeken en een keuze gemaakt')}${chk('m10b','Keuze toegelicht in een notitie')}</ul>`},
+
+{group:'2 · MS Project versie 1', title:'Kritieke pad tonen', eyebrow:'MS Project · stap 11 van 12',
+ lead:'Laat MS Project het kritieke pad in rood tonen.',
+ body:() => `
+  ${path('Opmaak › vinkje Kritieke taken (Critical Tasks)')}
+  ${path('Optioneel: kolom invoegen › Totale speling (Total Slack)')}
+  ${think('Is het kritieke pad in MS Project hetzelfde als in je PERT-schema? Zo niet: welke verschillen in de opgave verklaren dat (duren webshop, productcatalogus, koppeling audit)?')}
+  <ul class="checklist">${chk('m11a','Kritieke taken zichtbaar')}${chk('m11b','Verschil met PERT begrepen')}</ul>`},
+
+{group:'2 · MS Project versie 1', title:'Basislijn instellen', eyebrow:'MS Project · stap 12 van 12',
+ lead:'Sla de planning op als basislijn. Daarna is versie 1 klaar.',
+ body:() => `
+  ${src('Cursus 02, “Voortgangscontrole en beheer van kosten”: baseline')}
+  ${path('Project › Basislijn instellen › Basislijn instellen › Basislijn · Voor: Volledig project')}
+  ${think('Waarom moet je alle kosten ingeven vóór je de basislijn opslaat? Wat gebeurt er met een kost die je pas daarna toevoegt?')}
+  <ul class="checklist">${chk('m12a','Basislijn ingesteld voor het volledige project')}${chk('m12b','Versie 1 opgeslagen')}</ul>`},
+
+/* ===== MS PROJECT versie 2 ===== */
+{group:'3 · MS Project versie 2', title:'Kopie maken', eyebrow:'Versie 2 · stap 1 van 5',
+ lead:'Werk niet verder in versie 1.',
+ body:() => `
+  ${path('Bestand › Opslaan als › Melmans MMM 1 - versie 2.mpp')}
+  <ul class="checklist">${chk('v1a','Versie 2 is een aparte kopie')}</ul>`},
+
+{group:'3 · MS Project versie 2', title:'Extra teamlid op de cursussen', eyebrow:'Versie 2 · stap 2 van 5',
+ lead:'Plan een extra beschikbaar teamlid in bij “Creatie medische & IT-cursussen” en motiveer je keuze in een notitie.',
+ body:() => `
+  ${path('Beeld › Teamplanner of Resourcegebruik · om te zien wie vrij is in die periode')}
+  ${think('Wie heeft tijdens die taak geen werk? Wat kost elke kandidaat per uur?')}
+  ${think('Ligt deze taak op het kritieke pad? Wat levert het inkorten ervan dan op voor de einddatum van het project?')}
+  ${think('Als de LMS-fase vroeger klaar is, start de carrièreadviseur ook vroeger. Wat betekent dat voor Geoffrey (stap 10)?')}
+  ${think('Werken beide resources op dezelfde kalender? Wat als het extra teamlid op een andere dag vrij is?')}
+  <ul class="checklist">${chk('v2a','Extra resource toegewezen')}${chk('v2b','Notitie: wie, waarom, impact, problemen, oplossing')}</ul>`},
+
+{group:'3 · MS Project versie 2', title:'Laatste taak verlengen', eyebrow:'Versie 2 · stap 3 van 5',
+ lead:'Verhoog de duur van de laatste taak met 5 dagen.',
+ body:() => `
+  <div class="btns">Nieuwe duur Marketing & officiële Go-Live: <input class="cell" id="mnew" data-k="mnew" inputmode="decimal" aria-label="Nieuwe duur"> dagen <button class="btn" data-action="check" data-set="mnew">Controleer</button><span class="feedback" id="fb-mnew"></span></div>
+  ${think('Raffie voert die taak alleen uit. Hoeveel extra kosten verwacht je, uitgaande van zijn kalender en tarief?')}
+  <div class="btns">Verwachte kostenafwijking: € <input class="cell" id="var" data-k="var" inputmode="decimal" aria-label="Kostenafwijking"><button class="btn" data-action="check" data-set="var">Controleer</button><span class="feedback" id="fb-var"></span></div>
+  <ul class="checklist">${chk('v3a','Duur verhoogd met 5 dagen')}</ul>`},
+
+{group:'3 · MS Project versie 2', title:'Voortgang bijwerken', eyebrow:'Versie 2 · stap 4 van 5',
+ lead:'Werk het project bij als voltooid tot en met 31 januari 2027.',
+ body:() => `
+  ${src('Cursus 02, “Voortgangscontrole”: automatisch bijwerken')}
+  ${path('Project › Project bijwerken (Update Project) › Werk bijwerken als voltooid tot en met: 31-01-2027 · Volledig project')}
+  ${think('31 januari 2027 is een zondag. Welke taken zijn op dat moment volledig klaar, en welke maar deels? Kijk naar de voortgangsbalken in de Gantt.')}
+  <ul class="checklist">${chk('v4a','Project bijgewerkt tot 31-01-2027')}</ul>`},
+
+{group:'3 · MS Project versie 2', title:'Vergelijkende Gantt en screenshot', eyebrow:'Versie 2 · stap 5 van 5',
+ lead:'Toon de Tracking Gantt met de kostentabel, markeer de afwijking en neem een screenshot.',
+ body:() => `
+  ${src('Cursus 02, “Vergelijkende Gantt-chart (Tracking Gantt)” en “Beheer van kosten”')}
+  ${path('Beeld › Gantt-diagram ▾ › Vergelijkende Gantt (Tracking Gantt)')}
+  ${path('Beeld › Tabellen › Kosten (Cost)')}
+  ${path('Cel “Afwijking” van de verlengde taak selecteren › Taak › Achtergrondkleur (Background Color) › geel')}
+  ${path('Beeld › Zoomen › Volledig project (Entire Project)')}
+  ${path('Screenshot: Windows + Shift + S')}
+  ${think('Zie je de afwijking ook op de samenvattingstaken? Klopt het bedrag met wat je in stap 3 verwachtte?')}
+  <ul class="checklist">${chk('v5a','Vergelijkende Gantt met tabel Kosten')}${chk('v5b','Afwijkingscel geel')}${chk('v5c','Ingezoomd op volledig project + screenshot')}</ul>`},
+
+/* ===== OPLEVERING ===== */
+{group:'4 · Oplevering', title:'Zip en indienen', eyebrow:'Oplevering',
+ lead:'Dien in via Blackboard › Evaluaties, uiterlijk vrijdag 15 januari 2027 om 17:30. Te laat = 0.',
+ body:() => `
+  <p>Naam van de zip: <code>2TIW – 1.zip</code></p>
+  <ul class="checklist">
+   ${chk('z1','PERT-schema met doorlooptijd en kritieke pad (+ .drawio als je Draw.io gebruikte)')}
+   ${chk('z2','Melmans MMM 1 - versie 1.mpp')}
+   ${chk('z3','Melmans MMM 1 - versie 2.mpp')}
+   ${chk('z4','Screenshot Vergelijkende Gantt')}
+   ${chk('z5','Kosten- en batenanalyse (volgt in deel 2 van de opgave)')}
+   ${chk('z6','Zip ingediend in Blackboard')}
+  </ul>
+  <p class="src">Kosten-batenanalyse zit nog niet in deze gids: die opgave komt na de lessen erover.</p>`},
+];
+
+function chk(id, label){ const on = !!S.checks[id]; return `<li><label class="${on?'checked':''}"><input type="checkbox" data-chk="${id}" ${on?'checked':''}> <span>${label}</span></label></li>`; }
+
+/* ---------- Controles ---------- */
+const CHECKS = {
+  te(){ return cells('te', id => P.te[id]); },
+  es(){ const r = cells('es', id => P.es[id]); const e = mark('end', P.end); return combine(r, e); },
+  lf(){ const a = cells('lf', id => P.lf[id]); const b = cells('sl', id => P.slack[id]); return combine(a,b); },
+  dur(){ let ok=0, n=0; MSP.forEach(m => { const r = mark('d-'+m.k, m.dur); if (r!==null){ n++; if(r) ok++; } }); return {ok, n, total:MSP.length}; },
+  dummies(){ return single(mark('dummies', 1)); },
+  hours(){ return combine(asRes(mark('hmd', 8)), asRes(mark('hvr', 8)), 2); },
+  leo(){ return single(mark('leo', 20 + ID)); },
+  raf(){
+    const el = document.getElementById('raf'); const v = (el.value||'').trim();
+    const okDate = /^0?1[-\/.]0?3[-\/.](2027|27)$/.test(v);
+    el.classList.toggle('ok', okDate); el.classList.toggle('bad', v!=='' && !okDate);
+    const r2 = mark('rafn', ID);
+    return combine({ok:okDate?1:0, n:v?1:0, total:1}, asRes(r2), 2);
+  },
+  mnew(){ return single(mark('mnew', P.te.M + 5)); },
+  var(){ return single(mark('var', 5*8*65)); },
+  cp(){
+    const chosen = TASKS.filter(t => document.getElementById('cp-'+t.id).checked).map(t => t.id);
+    const right = chosen.length === P.critical.length && P.critical.every(c => chosen.includes(c));
+    return {ok:right?1:0, n:1, total:1, text: right ? 'Juist kritiek pad.' : `Nog niet juist (${chosen.length} gekozen). Kijk naar de speling uit stap 4.`};
+  },
+};
+function mark(id, expected){
+  const el = document.getElementById(id); if (!el) return null;
+  const v = num(el.value);
+  el.classList.remove('ok','bad');
+  if (isNaN(v)) return null;
+  const good = eq(v, expected); el.classList.add(good ? 'ok' : 'bad'); return good;
+}
+function cells(prefix, fn){ let ok=0, n=0; TASKS.forEach(t => { const r = mark(`${prefix}-${t.id}`, fn(t.id)); if (r!==null){ n++; if (r) ok++; } }); return {ok, n, total:TASKS.length}; }
+function asRes(r){ return {ok:r?1:0, n:r===null?0:1, total:1}; }
+function single(r){ return asRes(r); }
+function combine(a, b, total){ return {ok:a.ok+b.ok, n:a.n+b.n, total: total || (a.total+b.total)}; }
+function runCheck(set){
+  const r = CHECKS[set](); const fb = document.getElementById('fb-'+set); if (!fb) return;
+  if (r.text){ fb.textContent = r.text; fb.className = 'feedback ' + (r.ok===r.total ? 'ok' : 'bad'); return; }
+  if (r.n === 0){ fb.textContent = 'Vul eerst iets in.'; fb.className = 'feedback'; return; }
+  const all = r.ok === r.total;
+  fb.textContent = all ? 'Alles juist.' : `${r.ok} van ${r.total} juist${r.n < r.total ? ` (${r.total - r.n} nog leeg)` : ''}. Rood = herbekijk.`;
+  fb.className = 'feedback ' + (all ? 'ok' : 'bad');
+}
+
+/* ---------- Rendering ---------- */
+const nav = document.getElementById('nav'), main = document.getElementById('main'), sel = document.getElementById('stepselect');
+function stepChecks(i){ const m = STEPS[i].body().match(/data-chk="([^"]+)"/g) || []; return m.map(x => x.slice(10,-1)); }
+const STEP_IDS = STEPS.map((_, i) => stepChecks(i));
+function stepState(i){ const ids = STEP_IDS[i]; const d = ids.filter(id => S.checks[id]).length; return d === 0 ? '' : d === ids.length ? 'done' : 'part'; }
+
+function renderNav(){
+  let html = '', last = '';
+  STEPS.forEach((s, i) => {
+    if (s.group !== last){ html += `<div class="group">${s.group}</div>`; last = s.group; }
+    html += `<button class="step ${i===S.step?'active':''} ${stepState(i)}" data-go="${i}"><span class="dot">✓</span><span>${s.title}</span></button>`;
+  });
+  nav.innerHTML = html;
+  sel.innerHTML = STEPS.map((s,i) => `<option value="${i}" ${i===S.step?'selected':''}>${s.group} · ${s.title}${stepState(i)==='done'?' ✓':''}</option>`).join('');
+  const all = STEP_IDS.flat(); const done = all.filter(id => S.checks[id]).length;
+  const pct = Math.round(done / all.length * 100);
+  document.getElementById('barfill').style.width = pct + '%';
+  document.getElementById('bartext').textContent = `${pct}% · ${done}/${all.length}`;
+}
+function renderStep(){
+  const s = STEPS[S.step];
+  main.innerHTML = `<div class="eyebrow">${s.eyebrow}</div><h2>${s.title}</h2><p class="lead">${s.lead}</p>
+    <div class="block">${s.body()}</div>
+    <div class="nextprev">
+      <button class="btn" data-go="${S.step-1}" ${S.step===0?'disabled':''}>← Vorige</button>
+      <button class="btn primary" data-go="${S.step+1}" ${S.step===STEPS.length-1?'disabled':''}>Volgende →</button>
+    </div>`;
+  main.querySelectorAll('input[data-k]').forEach(el => {
+    const v = S.inputs[el.dataset.k];
+    if (el.type === 'checkbox') el.checked = !!v; else if (v !== undefined) el.value = v;
+  });
+}
+function go(i){ if (i<0 || i>=STEPS.length) return; S.step = i; save(); renderNav(); renderStep(); window.scrollTo({top:0}); }
+
+document.addEventListener('click', e => {
+  const g = e.target.closest('[data-go]'); if (g && !g.disabled){ go(+g.dataset.go); return; }
+  const a = e.target.closest('[data-action="check"]'); if (a){ runCheck(a.dataset.set); }
+});
+document.addEventListener('input', e => {
+  const el = e.target;
+  if (el.dataset.k){
+    S.inputs[el.dataset.k] = el.type === 'checkbox' ? el.checked : el.value;
+    if (el.type === 'checkbox') el.closest('label').classList.toggle('on', el.checked);
+    save();
+  }
+});
+document.addEventListener('change', e => {
+  const el = e.target;
+  if (el.dataset.chk){ S.checks[el.dataset.chk] = el.checked; el.closest('label').classList.toggle('checked', el.checked); save(); renderNav(); }
+});
+sel.addEventListener('change', () => go(+sel.value));
+
+/* Aftellen tot de deadline */
+function countdown(){
+  const ms = new Date('2027-01-15T17:30:00+01:00') - new Date();
+  const el = document.getElementById('countdown');
+  if (ms <= 0){ el.innerHTML = '<strong>deadline voorbij</strong>'; return; }
+  const d = Math.floor(ms/86400000);
+  el.innerHTML = `nog <strong>${d} dagen</strong>`;
+}
+countdown();
+renderNav(); renderStep();
+</script>
+</body>
+</html>

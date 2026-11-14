@@ -30,6 +30,8 @@ export function startQuizLab(DATA) {
   let gebruiker = null, gpTotaal = 0;
   let h = 0, stap = 0;                 // hoofdstuk, stap (0 = intro)
   let keuze = null;                    // huidige selectie van de gebruiker
+  const terug = new URLSearchParams(location.search).has("terug");   // geopend vanuit de cursus
+  const terugUrl = () => `${DATA.cursus}#test-${hst().id}`;
 
   // ---------- Vaste elementen ----------
   const top = el("div", "fl-top");
@@ -173,7 +175,7 @@ export function startQuizLab(DATA) {
     const laatste = stap === aantalStappen() - 1;
     titel.textContent = stap === 0 ? "Klaar om te oefenen?" : `Vraag ${stap} van ${aantalStappen() - 1}`;
     uitleg.textContent = stap === 0 ? "Eén vraag tegelijk. Raf kijkt mee." : "";
-    knopNeven.hidden = stap === 0;
+    knopNeven.hidden = stap === 0 || (terug && stap === 1 && !opVraag);
     knopNeven.textContent = opVraag ? "Overslaan" : "Vorige";
     knopNeven.dataset.actie = opVraag ? "volgende" : "vorige";
     if (opVraag) { knopHoofd.textContent = "Controleer"; knopHoofd.dataset.actie = "controleer"; }
@@ -181,6 +183,7 @@ export function startQuizLab(DATA) {
       knopHoofd.dataset.actie = "volgende";
       if (stap === 0) knopHoofd.textContent = "Start";
       else if (!laatste) knopHoofd.textContent = "Volgende";
+      else if (terug) knopHoofd.textContent = "Terug naar de cursus";
       else knopHoofd.textContent = h < DATA.hoofdstukken.length - 1 ? "Volgend hoofdstuk →" : "Klaar";
     }
     zetHoofdknop();
@@ -199,7 +202,8 @@ export function startQuizLab(DATA) {
     wachtRaf.hidden = true;
     knopNeven.hidden = true;
     knopHoofd.disabled = false;
-    knopHoofd.textContent = ok ? "Verder" : "Opnieuw";
+    const laatsteTerug = terug && stap === aantalStappen() - 1;
+    knopHoofd.textContent = ok ? (laatsteTerug ? "Terug naar de cursus" : "Verder") : "Opnieuw";
     knopHoofd.dataset.actie = ok ? "volgende" : "opnieuw";
     knopHoofd.focus({ preventScroll: true });
   }
@@ -246,11 +250,14 @@ export function startQuizLab(DATA) {
   function naarHoofdstuk(k, s = 0) {
     h = Math.max(0, Math.min(k, DATA.hoofdstukken.length - 1)); stap = s;
     history.replaceState(null, "", `#${hst().id}`);
+    const cursusLink = document.querySelector('.studyraf-balk a[href^="./cursus.html"], .studyraf-balk a[href^="cursus.html"]');
+    if (cursusLink) cursusLink.href = terug ? terugUrl() : DATA.cursus;
     toon();
   }
 
   function volgende() {
     if (stap < aantalStappen() - 1) { stap++; toon(); }
+    else if (terug) location.href = terugUrl();
     else if (h < DATA.hoofdstukken.length - 1) naarHoofdstuk(h + 1);
     else zetNeutraal();
   }
@@ -271,5 +278,10 @@ export function startQuizLab(DATA) {
   });
 
   const start = DATA.hoofdstukken.findIndex((x) => `#${x.id}` === location.hash);
-  naarHoofdstuk(start >= 0 ? start : 0);
+  if (terug && start >= 0) {
+    // Vanuit de cursus: meteen naar de eerste vraag die nog niet opgelost is.
+    h = start;
+    const open = hst().vragen.findIndex((_, i) => !isOpgelost(i));
+    naarHoofdstuk(start, open >= 0 ? open + 1 : 1);
+  } else naarHoofdstuk(start >= 0 ? start : 0);
 }

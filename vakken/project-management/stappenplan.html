@@ -359,7 +359,6 @@ const STEPS = [
  <h3>Het lastige stuk: de audit en de carrièreadviseur</h3>
  <p>De audit en de carrièreadviseur wachten allebei op de cursussen en het community platform, maar alleen de audit wacht ook op de symptoomchecker en het betalingssysteem. Dat is precies het geval waarvoor je een stippellijn met een 0 nodig hebt, net zoals bij de wanden en de deur van de blokhut (${C('nullijn','cursus, hoofdstuk 04')}).</p>
  <p>Laat je alle vier de taken in één cirkel eindigen en vertrekken de audit en de carrièreadviseur allebei uit die cirkel, dan staat er in je tekening dat de carrièreadviseur ook op de symptoomchecker en het betalingssysteem wacht. Dat staat niet in de opgave. Daarom geef je het moment "cursussen en community klaar" een eigen cirkel. Daaruit vertrekt de carrièreadviseur. De symptoomchecker en het betalingssysteem laat je eindigen in de cirkel waar de audit start, en vanuit "cursussen en community klaar" trek je een 0-lijn naar die auditcirkel.</p>
- ${fig('pe-f2','0 0 980 380','Het lastige stuk. K vertrekt uit de cirkel "I én F klaar". De 0-lijn zorgt dat J ook op I en F wacht, en niet alleen op D en G.')}
  <p>De rest is gewoon: de testing wacht op de audit en de productcatalogus, die samen in één cirkel mogen eindigen. Marketing wacht op de carrièreadviseur en de testing, die ook samen in één cirkel eindigen. Na marketing volgt één eindcirkel.</p>
  <div class="row">Hoeveel 0-lijnen heb je in totaal nodig? <input class="cell" id="dummies" data-k="dummies" inputmode="numeric" aria-label="Aantal 0-lijnen"><button class="btn" data-action="check" data-set="dummies">Controleer</button><span class="fb" id="fb-dummies"></span></div>
  ${think('Waarom mogen de audit en de productcatalogus wel samen in één cirkel eindigen, waaruit de testing vertrekt?','Omdat er maar één taak uit die cirkel vertrekt, de testing, en die wacht op allebei. Er is geen andere taak die maar op één van de twee wacht.')}
@@ -589,9 +588,6 @@ function drawFigures(){
   drawNet('pe-f1', {I:{x:50,y:180,num:'I',cap:'start',pos:'b'},II:{x:240,y:180,num:'II',cap:'A klaar',pos:'b'},III:{x:440,y:180,num:'III',cap:'B klaar',pos:'b'},
     w:{x:760,y:40,open:'verder: G en H'},s:{x:760,y:135,open:'verder: naar J'},l:{x:760,y:225,open:'verder: I'},c:{x:760,y:320,open:'verder: naar J en K'}},
     [['I','II','A · Analyse'],['II','III','B · Ontwerp'],['III','w','C · Webshop & e-commerce'],['III','s','D · AI-symptoomchecker'],['III','l','E · LMS'],['III','c','F · Community platform']]);
-  drawNet('pe-f2', {a:{x:80,y:60,cap:'E klaar',pos:'a'},b:{x:80,y:250,cap:'B klaar',pos:'b'},X:{x:400,y:150,cap:'I én F klaar',pos:'b'},
-    ws:{x:420,y:330,cap:'C klaar',pos:'b'},Y:{x:700,y:250,cap:'D, G, I en F klaar:|J kan starten',pos:'b'},k:{x:880,y:60,open:'verder: naar M'},z:{x:905,y:250,open:'verder: L'}},
-    [['a','X','I · Cursussen'],['b','X','F · Community platform'],['X','k','K · AI-carrièreadviseur'],['X','Y','0','h'],['b','Y','D · AI-symptoomchecker'],['ws','Y','G · Betalingssysteem'],['Y','z','J · Audit']]);
 }
 
 /* ---------- Weergave ---------- */

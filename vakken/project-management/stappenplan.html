@@ -274,7 +274,7 @@ const TASKS = [
 ];
 const NAME = Object.fromEntries(TASKS.map(t => [t.id, t.name]));
 const preds = t => t.pred.length ? t.pred.map(p => NAME[p]).join(', ') : 'meteen bij de start';
-const predsL = t => t.pred.length ? t.pred.map(p => `<span class="lt">${p}</span>${NAME[p]}`).join('<br>') : '<span style="color:var(--muted)">— (start)</span>';
+const predsL = t => t.pred.length ? t.pred.map(p => `<span class="lt">${p}</span>`).join('') : '<span style="color:var(--muted)">—</span>';
 function pert(tasks){
   const te = {}, es = {}, ef = {}, lf = {}, ls = {};
   tasks.forEach(t => te[t.id] = t.fixed !== undefined ? t.fixed : (t.to + 4*t.tl + t.tp)/6);

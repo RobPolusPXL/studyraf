@@ -274,6 +274,7 @@ const TASKS = [
 ];
 const NAME = Object.fromEntries(TASKS.map(t => [t.id, t.name]));
 const preds = t => t.pred.length ? t.pred.map(p => NAME[p]).join(', ') : 'meteen bij de start';
+const predsL = t => t.pred.length ? t.pred.map(p => `<span class="lt">${p}</span>${NAME[p]}`).join('<br>') : '<span style="color:var(--muted)">— (start)</span>';
 function pert(tasks){
   const te = {}, es = {}, ef = {}, lf = {}, ls = {};
   tasks.forEach(t => te[t.id] = t.fixed !== undefined ? t.fixed : (t.to + 4*t.tl + t.tp)/6);
@@ -339,15 +340,19 @@ const STEPS = [
  <p>Melman, Raffie en Geoffrey hebben elke taak geschat. Raffie is onervaren en schat alles optimistisch in: dat is de optimistische schatting t<sub>o</sub>. Geoffrey heeft jaren ervaring en geeft de meest waarschijnlijke schatting t<sub>l</sub>. Melman is een pessimist: zijn schatting is t<sub>p</sub>. De opgave zet ze in de volgorde Raffie, Geoffrey, Melman. Daaruit reken je de verwachte tijd:</p>
  <div class="formula">te = (Raffie + 4 · Geoffrey + Melman) / 6</div>
  <p>Een voorbeeld dat niet in de opgave staat: schat Raffie 2 dagen, Geoffrey 4 en Melman 12, dan is te = (2 + 16 + 12) / 6 = 5 dagen. De beveiligingsaudit is de uitzondering: daar zegt de opgave dat ze 3 × ID dagen duurt en dat je de formule niet toepast. Uitleg in de cursus: ${C('tijd','hoofdstuk 05')}.</p>
- <div class="tablewrap"><table><thead><tr><th>Taak</th><th class="num">Raffie</th><th class="num">Geoffrey</th><th class="num">Melman</th><th class="num">Jouw te</th></tr></thead><tbody>
- ${TASKS.map(t => `<tr><td><span class="lt">${t.id}</span> ${t.name}</td>${t.fixed!==undefined ? '<td class="num" colspan="3" style="text-align:center;color:var(--muted)">vast: 3 × ID</td>' : `<td class="num">${t.to}</td><td class="num">${t.tl}</td><td class="num">${t.tp}</td>`}<td class="num"><input class="cell" id="te-${t.id}" data-k="te-${t.id}" inputmode="decimal" aria-label="te ${t.name}"></td></tr>`).join('')}
+ <div class="tablewrap"><table><thead><tr><th>Taak</th><th>Voorafgegaan door</th><th class="num">Raffie</th><th class="num">Geoffrey</th><th class="num">Melman</th><th class="num">Jouw te</th></tr></thead><tbody>
+ ${TASKS.map(t => `<tr><td><span class="lt">${t.id}</span> ${t.name}</td><td class="small-cell">${predsL(t)}</td>${t.fixed!==undefined ? '<td class="num" colspan="3" style="text-align:center;color:var(--muted)">vast: 3 × ID</td>' : `<td class="num">${t.to}</td><td class="num">${t.tl}</td><td class="num">${t.tp}</td>`}<td class="num"><input class="cell" id="te-${t.id}" data-k="te-${t.id}" inputmode="decimal" aria-label="te ${t.name}"></td></tr>`).join('')}
  </tbody></table></div>
  ${checkBtn('te')}
  ${ticks(chk('p1a','Alle verwachte tijden zijn juist'))}`},
 
 {group:'Deel 1 · PERT', title:'Wie wacht op wie?', lead:'Voor je tekent, lees je de kolom "voorafgegaan door" als een verhaal.',
  body:() => `
- <p>Het project begint met de business- en compliance-analyse. Als die klaar is, maakt Geoffrey het architectuur- en AI-ontwerp. Na dat ontwerp kunnen vier dingen tegelijk starten: de webshop en e-commerce, de AI-symptoomchecker, het LMS en het community platform.</p>
+ <p>Dit is de tabel waarmee je tekent: elke taak met de taken die eraan voorafgaan, zoals in de opgave. De te vul je in met je uitkomst van de vorige stap.</p>
+ <div class="tablewrap"><table><thead><tr><th>Taak</th><th>Voorafgegaan door</th><th class="num">Jouw te</th></tr></thead><tbody>
+ ${TASKS.map(t => `<tr><td><span class="lt">${t.id}</span> ${t.name}</td><td class="small-cell">${predsL(t)}</td><td class="num">${S.inputs['te-'+t.id] ? String(S.inputs['te-'+t.id]) : '<span style="color:var(--muted)">nog niet ingevuld</span>'}</td></tr>`).join('')}
+ </tbody></table></div>
+ <p>Als verhaal gelezen: het project begint met de business- en compliance-analyse. Als die klaar is, maakt Geoffrey het architectuur- en AI-ontwerp. Na dat ontwerp kunnen vier dingen tegelijk starten: de webshop en e-commerce, de AI-symptoomchecker, het LMS en het community platform.</p>
  <p>Op het LMS volgen de medische en IT-cursussen. Op de webshop volgen twee dingen: het betalingssysteem en de productcatalogus met voorraadbeheer. De beveiligingsaudit wacht op vier taken: de symptoomchecker, het betalingssysteem, de cursussen en het community platform. De AI-carrièreadviseur wacht alleen op de cursussen en het community platform. De User Acceptance Testing wacht op de audit en de productcatalogus. Als laatste komt marketing en de officiële go-live, die wacht op de carrièreadviseur en de testing.</p>
  <p>Zo ziet het begin van je netwerk eruit. De duren laat ik weg; die zet je er zelf bij met je uitkomsten van de vorige stap.</p>
  ${fig('pe-f1','0 0 980 360','Het begin van het netwerk. Onder elke cirkel staat welk moment ze voorstelt. Na het ontwerp vertrekken vier taken uit dezelfde cirkel.')}

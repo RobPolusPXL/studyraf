@@ -354,8 +354,8 @@ const STEPS = [
  </tbody></table></div>
  <p>Als verhaal gelezen: het project begint met de business- en compliance-analyse. Als die klaar is, maakt Geoffrey het architectuur- en AI-ontwerp. Na dat ontwerp kunnen vier dingen tegelijk starten: de webshop en e-commerce, de AI-symptoomchecker, het LMS en het community platform.</p>
  <p>Op het LMS volgen de medische en IT-cursussen. Op de webshop volgen twee dingen: het betalingssysteem en de productcatalogus met voorraadbeheer. De beveiligingsaudit wacht op vier taken: de symptoomchecker, het betalingssysteem, de cursussen en het community platform. De AI-carrièreadviseur wacht alleen op de cursussen en het community platform. De User Acceptance Testing wacht op de audit en de productcatalogus. Als laatste komt marketing en de officiële go-live, die wacht op de carrièreadviseur en de testing.</p>
- <p>Zo ziet je volledige netwerk eruit, van de start tot het einde. De duren laat ik weg; die zet je er zelf bij met je uitkomsten van de vorige stap.</p>
- ${fig('pe-f1','0 0 1310 470','Het volledige netwerk met de letters uit de opgave: één startcirkel, één eindcirkel en één 0-lijn. Onder of boven elke cirkel staat welk moment ze voorstelt.')}
+ <p>Zo ziet het begin van je netwerk eruit. De duren laat ik weg; die zet je er zelf bij met je uitkomsten van de vorige stap.</p>
+ ${fig('pe-f1','0 0 980 360','Het begin van het netwerk, met de letters uit de opgave. Onder elke cirkel staat welk moment ze voorstelt. Na B vertrekken C, D, E en F uit dezelfde cirkel.')}
  <h3>Het lastige stuk: de audit en de carrièreadviseur</h3>
  <p>De audit en de carrièreadviseur wachten allebei op de cursussen en het community platform, maar alleen de audit wacht ook op de symptoomchecker en het betalingssysteem. Dat is precies het geval waarvoor je een stippellijn met een 0 nodig hebt, net zoals bij de wanden en de deur van de blokhut (${C('nullijn','cursus, hoofdstuk 04')}).</p>
  <p>Laat je alle vier de taken in één cirkel eindigen en vertrekken de audit en de carrièreadviseur allebei uit die cirkel, dan staat er in je tekening dat de carrièreadviseur ook op de symptoomchecker en het betalingssysteem wacht. Dat staat niet in de opgave. Daarom geef je het moment "cursussen en community klaar" een eigen cirkel. Daaruit vertrekt de carrièreadviseur. De symptoomchecker en het betalingssysteem laat je eindigen in de cirkel waar de audit start, en vanuit "cursussen en community klaar" trek je een 0-lijn naar die auditcirkel.</p>
@@ -579,20 +579,15 @@ function drawNet(svgId, nodes, edges){
   Object.entries(nodes).forEach(([k,n]) => {
     if (n.open){ s += `<text class="small" x="${n.x-22}" y="${n.y+4}" text-anchor="start">${n.open}</text>`; return; }
     s += `<circle class="node" cx="${n.x}" cy="${n.y}" r="${r}"/><line class="split" x1="${n.x}" y1="${n.y-r}" x2="${n.x}" y2="${n.y+r}"/><line class="split" x1="${n.x}" y1="${n.y}" x2="${n.x+r}" y2="${n.y}"/>`;
-    if (n.num) s += `<text class="lbl" x="${n.x-13}" y="${n.y+4}" text-anchor="middle"${n.num.length>3?' style="font-size:9px"':''}>${n.num}</text>`;
+    if (n.num) s += `<text class="lbl" x="${n.x-13}" y="${n.y+4}" text-anchor="middle">${n.num}</text>`;
     if (n.cap){ const ls = n.cap.split('|'), y0 = n.pos==='a' ? n.y - r - 10 - (ls.length-1)*13 : n.y + r + 16; ls.forEach((t,i) => s += `<text class="small" x="${n.x}" y="${y0+i*13}" text-anchor="middle">${t}</text>`); }
   });
   svg.innerHTML = s;
 }
 function drawFigures(){
-  drawNet('pe-f1', {
-    n1:{x:40,y:230,num:'I',cap:'start',pos:'b'}, n2:{x:185,y:230,num:'II',cap:'A klaar',pos:'b'}, n3:{x:330,y:230,num:'III',cap:'B klaar',pos:'b'},
-    n4:{x:500,y:400,num:'IV',cap:'C klaar',pos:'b'}, n5:{x:480,y:65,num:'V',cap:'E klaar',pos:'a'}, n6:{x:690,y:140,num:'VI',cap:'I én F klaar',pos:'a'},
-    n7:{x:850,y:290,num:'VII',cap:'D, G, I en F klaar',pos:'b'}, n8:{x:1010,y:345,num:'VIII',cap:'J en H klaar',pos:'b'},
-    n9:{x:1130,y:200,num:'IX',cap:'K en L klaar',pos:'a'}, n10:{x:1270,y:200,num:'X',cap:'einde',pos:'b'}},
-    [['n1','n2','A · Analyse'],['n2','n3','B · Ontwerp'],['n3','n4','C · Webshop'],['n3','n7','D · AI-symptoomchecker'],['n3','n5','E · LMS'],['n3','n6','F · Community'],
-     ['n4','n7','G · Betaling'],['n4','n8','H · Catalogus'],['n5','n6','I · Cursussen'],['n6','n7','0'],['n7','n8','J · Audit'],
-     ['n6','n9','K · Carrièreadviseur'],['n8','n9','L · Testing'],['n9','n10','M · Go-live']]);
+  drawNet('pe-f1', {I:{x:50,y:180,num:'I',cap:'start',pos:'b'},II:{x:240,y:180,num:'II',cap:'A klaar',pos:'b'},III:{x:440,y:180,num:'III',cap:'B klaar',pos:'b'},
+    w:{x:760,y:40,open:'verder: G en H'},s:{x:760,y:135,open:'verder: naar J'},l:{x:760,y:225,open:'verder: I'},c:{x:760,y:320,open:'verder: naar J en K'}},
+    [['I','II','A · Analyse'],['II','III','B · Ontwerp'],['III','w','C · Webshop & e-commerce'],['III','s','D · AI-symptoomchecker'],['III','l','E · LMS'],['III','c','F · Community platform']]);
 }
 
 /* ---------- Weergave ---------- */
